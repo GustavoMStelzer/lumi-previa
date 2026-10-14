@@ -1,0 +1,123 @@
+LUMI — ROTEIRO DAS FALAS
+
+Use a mesma voz feminina brasileira em todos os arquivos.
+Gere cada fala separadamente e salve com o nome indicado.
+Revisar a pronúncia e o conteúdo antes de um piloto com crianças.
+O MP3 enviado é uma prévia independente; seu conteúdo não foi recortado ou associado automaticamente a instruções.
+
+audio-001.mp3 | Jardim das letras · instrução
+Encontre a letra A.
+
+audio-002.mp3 | Jardim das letras · instrução
+Encontre a letra M.
+
+audio-003.mp3 | Jardim das letras · instrução
+Encontre a letra B.
+
+audio-004.mp3 | Jardim das letras · instrução
+Encontre a letra S.
+
+audio-005.mp3 | Detetive dos sons · instrução
+Qual palavra começa como MALA?
+
+audio-006.mp3 | Detetive dos sons · opção
+MACACO
+
+audio-007.mp3 | Detetive dos sons · opção
+GATO
+
+audio-008.mp3 | Detetive dos sons · opção
+BOLA
+
+audio-009.mp3 | Detetive dos sons · instrução
+Qual palavra começa como BOLA?
+
+audio-010.mp3 | Detetive dos sons · opção
+BOTA
+
+audio-011.mp3 | Detetive dos sons · opção
+MALA
+
+audio-012.mp3 | Detetive dos sons · opção
+SAPO
+
+audio-013.mp3 | Detetive dos sons · instrução
+Qual palavra começa como PATO?
+
+audio-014.mp3 | Detetive dos sons · opção
+PANELA
+
+audio-015.mp3 | Detetive dos sons · instrução
+Qual palavra começa como SAPO?
+
+audio-016.mp3 | Detetive dos sons · opção
+SACOLA
+
+audio-017.mp3 | Detetive dos sons · opção
+PATO
+
+audio-018.mp3 | Oficina de palavras · instrução
+Monte a palavra BOLA.
+
+audio-019.mp3 | Oficina de palavras · instrução
+Monte a palavra GATO.
+
+audio-020.mp3 | Oficina de palavras · instrução
+Monte a palavra MALA.
+
+audio-021.mp3 | Oficina de palavras · instrução
+Monte a palavra SAPO.
+
+audio-022.mp3 | Caminho da leitura · instrução
+Qual figura combina com esta palavra?
+
+audio-023.mp3 | Caminho da leitura · dica
+A palavra é BOLA.
+
+audio-024.mp3 | Caminho da leitura · retorno
+Isso! A palavra é BOLA.
+
+audio-025.mp3 | Caminho da leitura · dica
+A palavra é GATO.
+
+audio-026.mp3 | Caminho da leitura · retorno
+Isso! A palavra é GATO.
+
+audio-027.mp3 | Caminho da leitura · dica
+A palavra é MALA.
+
+audio-028.mp3 | Caminho da leitura · retorno
+Isso! A palavra é MALA.
+
+audio-029.mp3 | Caminho da leitura · dica
+A palavra é SAPO.
+
+audio-030.mp3 | Caminho da leitura · retorno
+Isso! A palavra é SAPO.
+
+audio-031.mp3 | A letra escondida · instrução
+Qual letra completa BOLA?
+
+audio-032.mp3 | A letra escondida · instrução
+Qual letra completa GATO?
+
+audio-033.mp3 | A letra escondida · instrução
+Qual letra completa MALA?
+
+audio-034.mp3 | A letra escondida · instrução
+Qual letra completa SAPO?
+
+audio-035.mp3 | Lumi e a sementinha · instrução
+Lumi encontrou uma semente no jardim. Ele colocou a semente na terra. O que Lumi encontrou?
+
+audio-036.mp3 | Lumi e a sementinha · instrução
+Lumi levou água para o jardim. A terra ficou molhada. O que Lumi levou para o jardim?
+
+audio-037.mp3 | Lumi e a sementinha · instrução
+Depois de alguns dias, nasceu uma planta. Lumi chamou seus amigos para olhar. O que nasceu no jardim?
+
+audio-038.mp3 | Retorno positivo
+Isso! Vamos para a próxima descoberta.
+
+audio-039.mp3 | Encerramento
+Aventura concluída! Agora, que tal brincar um pouco fora da tela?
