@@ -6,6 +6,7 @@ import {Writable} from 'node:stream';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {requestSpeech,describeConnectionError,diagnoseConnection} from './elevenlabs-http.mjs';
+import {narrationRequest,NARRATION_MODEL,NARRATION_FORMAT,PACING_REVISION} from './narration-settings.mjs';
 
 const projectRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const hash=data=>crypto.createHash('sha256').update(data).digest('hex');
@@ -47,12 +48,14 @@ export function describeApiError(status,raw,apiKey=''){
  return lines.join('\n');
 }
 
-export async function generateNarration({root=projectRoot,voiceId,apiKey,fetchImpl=requestSpeech,log=console.log}){
+export async function generateNarration({root=projectRoot,voiceId,apiKey,fetchImpl=requestSpeech,log=console.log,limit=null,onlyFiles=null}){
  if(!/^[A-Za-z0-9_-]{6,128}$/.test(voiceId||''))throw new Error('Copie o Voice ID da voz Lumi em My Voices → três pontos → Copy voice ID.');
  if(typeof apiKey!=='string'||!apiKey.trim()||/[^\x21-\x7e]/.test(apiKey))throw new Error('A chave está vazia ou contém caracteres inválidos. Copie somente a API key, sem espaços ou rótulos.');
- const entries=readCatalog(root),folder=path.join(root,'dist/assets/audio');
+ const catalog=readCatalog(root),known=new Set(catalog.map(e=>e.file));
+ if(onlyFiles!==null&&(!Array.isArray(onlyFiles)||!onlyFiles.length||onlyFiles.some(file=>!known.has(file))))throw new Error('O lote de áudio selecionado não está no catálogo.');
+ const selected=onlyFiles?catalog.filter(e=>onlyFiles.includes(e.file)):catalog,entries=limit?selected.slice(0,limit):selected,folder=path.join(root,'dist/assets/audio');
  const receiptPath=path.join(root,'.lumi-audio-generation.json');
- const signature=hash(JSON.stringify({voiceId,modelId:'eleven_multilingual_v2',outputFormat:'mp3_44100_128'}));
+ const signature=hash(JSON.stringify({voiceId,modelId:NARRATION_MODEL,outputFormat:NARRATION_FORMAT}));
  let receipt={signature,outputs:{}};
  if(fs.existsSync(receiptPath)){
   receipt=JSON.parse(fs.readFileSync(receiptPath,'utf8'));
@@ -60,14 +63,14 @@ export async function generateNarration({root=projectRoot,voiceId,apiKey,fetchIm
  }
  let generated=0,skipped=0;
  for(let index=0;index<entries.length;index++){
-  const entry=entries[index],file=path.join(folder,entry.file),textHash=hash(entry.text),saved=receipt.outputs[entry.file];
-  if(saved?.textHash===textHash&&fs.existsSync(file)&&hash(fs.readFileSync(file))===saved.audioHash){skipped++;log(`[${index+1}/${entries.length}] Já pronto: ${entry.file}`);continue;}
+  const entry=entries[index],file=path.join(folder,entry.file),textHash=hash(entry.text),request=narrationRequest(entry),requestHash=hash(JSON.stringify({pacing:PACING_REVISION,...request})),saved=receipt.outputs[entry.file];
+  if(saved?.textHash===textHash&&saved?.requestHash===requestHash&&fs.existsSync(file)&&hash(fs.readFileSync(file))===saved.audioHash){skipped++;log(`[${index+1}/${entries.length}] Já pronto: ${entry.file}`);continue;}
   log(`[${index+1}/${entries.length}] Gerando: ${entry.text}`);
   let response;
   try{
-   response=await fetchImpl('https://api.elevenlabs.io/v1/text-to-speech/'+encodeURIComponent(voiceId)+'?output_format=mp3_44100_128',{
+   response=await fetchImpl('https://api.elevenlabs.io/v1/text-to-speech/'+encodeURIComponent(voiceId)+'?output_format='+NARRATION_FORMAT,{
     method:'POST',headers:{'xi-api-key':apiKey,'Content-Type':'application/json',Accept:'audio/mpeg'},
-    body:JSON.stringify({text:entry.text,model_id:'eleven_multilingual_v2'}),signal:AbortSignal.timeout(120000)
+    body:JSON.stringify(request),signal:AbortSignal.timeout(120000)
    });
   }catch(error){throw new Error(describeConnectionError(error));}
   if(!response.ok){
@@ -79,7 +82,7 @@ export async function generateNarration({root=projectRoot,voiceId,apiKey,fetchIm
   const isMp3=audio.subarray(0,3).toString()==='ID3'||(audio[0]===255&&(audio[1]&224)===224);
   if(audio.length<512||!isMp3)throw new Error('O ElevenLabs não retornou um MP3 válido. A geração parou sem substituir este arquivo.');
   atomicWrite(file,audio);
-  receipt.outputs[entry.file]={textHash,audioHash:hash(audio)};
+  receipt.outputs[entry.file]={textHash,requestHash,audioHash:hash(audio)};
   atomicWrite(receiptPath,JSON.stringify(receipt,null,2)+'\n');
   generated++;
  }
@@ -97,22 +100,31 @@ async function ask(question,{secret=false}={}){
 }
 
 async function main(){
+ const refresh=spawnSync(process.execPath,[path.join(projectRoot,'scripts/audio-catalog.mjs')],{cwd:projectRoot,stdio:'inherit'});
+ if(refresh.status!==0)throw new Error('Não foi possível atualizar o catálogo. Confira se o ZIP foi extraído inteiro.');
  const entries=readCatalog(projectRoot);
- console.log(`Lumi — gerador v4 — ${entries.length} falas, ${entries.reduce((n,e)=>n+e.text.length,0)} caracteres.`);
+ console.log(`Lumi Família 0.6.0 — gerador com pausas — ${entries.length} falas, ${entries.reduce((n,e)=>n+e.text.length,0)} caracteres.`);
  if(process.argv.includes('--check')){console.log('Roteiro válido. Nenhuma chamada ao ElevenLabs foi feita.');return;}
  if(process.argv.includes('--diagnose')){await diagnoseConnection();return;}
  console.log('Conexão: '+(process.platform==='win32'?'cURL do Windows, com verificação HTTPS.':'HTTPS do Node.js, com verificação de certificado.'));
  console.log('A geração usa os créditos da sua assinatura. A chave não será salva nem incluída na prévia.');
+ const sample=process.argv.includes('--sample'),storySample=process.argv.includes('--sample-story');
+ const onlyFiles=storySample?entries.filter(e=>e.context==='Lumi e a borboleta · instrução').map(e=>e.file):null;
+ if(storySample&&!onlyFiles.length)throw new Error('O roteiro da história não foi encontrado no catálogo.');
+ console.log('Multilingual v2 · velocidade 0,88 · pausas de 0,35 e 0,5 segundo.');
+ console.log(storySample?'TESTE DE HISTÓRIA: serão geradas só as 4 partes de Lumi e a borboleta.':sample?'TESTE: serão geradas só as 3 primeiras falas.':'Falas compatíveis e verificadas serão reaproveitadas. As falas novas ou alteradas usam créditos.');
  const voiceId=await ask('Voice ID da voz Lumi: ');
  let apiKey=await ask('API key do ElevenLabs (entrada oculta): ',{secret:true});
  let result;
- try{result=await generateNarration({voiceId,apiKey});}finally{apiKey='';}
+ try{result=await generateNarration({voiceId,apiKey,limit:storySample?null:sample?3:null,onlyFiles});}finally{apiKey='';}
  for(const script of ['audio-catalog.mjs','export-preview.mjs']){
   const run=spawnSync(process.execPath,[path.join(projectRoot,'scripts',script)],{cwd:projectRoot,stdio:'inherit'});
   if(run.status!==0)throw new Error('Os MP3 foram salvos, mas o pacote não foi finalizado. Execute novamente.');
  }
- console.log(`Pronto: ${result.total} falas disponíveis. ${result.generated} geradas agora; ${result.skipped} reaproveitadas.`);
- console.log('Abra PREVIA_LOCAL.html para conferir. Envie outputs/Lumi_Voz_Completa.zip para atualizar a prévia aqui.');
+ console.log(`Pronto: ${result.total} falas deste lote disponíveis. ${result.generated} geradas agora; ${result.skipped} reaproveitadas.`);
+ console.log('Abra PREVIA_LOCAL.html para conferir. O ZIP atualizado está na pasta outputs.');
+ if(sample||storySample)console.log('Se o ritmo estiver bom, execute GERAR_VOZ_WINDOWS.bat. As falas deste teste serão reaproveitadas.');
+ else console.log('Publique o conteúdo de dist na web, ou use o pacote completo para atualizar seu repositório.');
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))main().catch(error=>{console.error('\n'+error.message);process.exitCode=1;});

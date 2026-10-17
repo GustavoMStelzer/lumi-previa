@@ -1,7 +1,15 @@
-import {ACTIVITIES,makeQuestions,answerIsCorrect} from './content.js';
-import {STORAGE_KEY,createState,restoreState,recordSession,profileStats,nextActivity,addAssignment,sessionsCSV} from './model.js';
+import {WORD_ART} from './illustrations.js';
+import {ACTIVITIES,makeQuestions,answerIsCorrect,SOUND_DEMO,MEMORY_NAMES} from './content.js';
+import {STORAGE_KEY,createState,restoreState,recordSession,profileStats,nextActivity,addAssignment,sessionsCSV,familyBackupJSON,parseFamilyBackup} from './model.js';
 import {Narrator} from './narration.js';
 import {RECORDED_NARRATION} from './audio-manifest.js';
+import {TEMPLATES,VISUALS,WRONG_FEEDBACK,allActivities,activityById,availableActivities,setAvailableActivities,saveTeachingActivity,questionsForActivity,newTeachingDraft,blankQuestion,validateTeachingActivity,exportTeachingPack,parseTeachingPack,importTeachingPack} from './teaching.js';
+import {activityManagerHTML,editorHTML,readEditorDraft} from './studio.js';
+import {FAMILY_SUPPORTS,PARTICIPATION,OFFLINE_ACTIVITIES,FAMILY_VOICE,SUGGESTED_AGES} from './family-data.js';
+import {updateFamilyProfile,normalizeFamilyProfile,recordFamilyObservation,familySummaryText,familyWeeklySummary} from './family-model.js';
+import {recordingSupported,startVoiceRecording,saveVoiceClip,listVoiceClips,deleteVoiceClip,VOICE_LIMIT_SECONDS} from './recorder.js';
+import {dailyTrail,gardenFor,familyShareText} from './family-model.js';
+import {familyHomeHTML,familyDiscoveriesHTML,familyProfileHTML,familyProfileFormHTML,familyGardenHTML,gardenSVG} from './family-ui.js';
 
 const $=s=>document.querySelector(s);
 const esc=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
@@ -9,9 +17,12 @@ const root=$('#app'),overlayRoot=$('#overlay-root');
 let state=createState(),storageAvailable=true;
 try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)state=restoreState(JSON.parse(raw));}catch{storageAvailable=false;}
 let view='adventure',filter='Todas',search='',game=null,lastCompletion=null,adultUntil=0,modalContext=null,returnFocus=null,toastTimer=null,pendingNavigation=null,previewPlaying=false;
+let teacherDraft=null,editorDirty=false,pendingTeachingPack=null;
+let pendingFamilyBackup=null;
+let nativeSpeechGeneration=0;
 const VOICE_PREVIEW='assets/audio/lumi-voz-preview.mp3';
-const narrator=new Narrator({clips:RECORDED_NARRATION,makeAudio:source=>new Audio(source),isEnabled:()=>state.settings.sound,speakFallback:speakNative,stopFallback:()=>{if('speechSynthesis' in window)speechSynthesis.cancel();},onError:toast,onState:({playing,source})=>{previewPlaying=playing&&source===VOICE_PREVIEW;for(const button of document.querySelectorAll('[data-action="voice-preview"]')){button.innerHTML=icon(previewPlaying?'close':'sound')+(previewPlaying?'Parar a prévia':'Ouvir a voz da Lumi');button.setAttribute('aria-pressed',String(previewPlaying));}}});
-const navigation=[['adventure','compass','Minha aventura'],['library','grid','Atividades'],['family','heart','Família'],['school','school','Escola']];
+const narrator=new Narrator({clips:RECORDED_NARRATION,makeAudio:source=>new Audio(source),isEnabled:()=>audioEnabled(),speakFallback:speakNative,stopFallback:stopNativeSpeech,onError:toast,onState:({playing,source})=>{previewPlaying=playing&&source===VOICE_PREVIEW;for(const button of document.querySelectorAll('[data-action="voice-preview"]')){button.innerHTML=icon(previewPlaying?'close':'sound')+(previewPlaying?'Parar a prévia':'Ouvir a voz da Lumi');button.setAttribute('aria-pressed',String(previewPlaying));}}});
+const navigation=[['adventure','compass','Hoje'],['library','grid','Brincar'],['family','sprout','Descobertas'],['profile','users','Perfil']];
 const iconPaths={
  compass:'<circle cx="12" cy="12" r="9"/><path d="m15 9-2 4-4 2 2-4Z"/>',
  grid:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
@@ -41,152 +52,326 @@ const iconPaths={
  lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/>',
  close:'<path d="m6 6 12 12M18 6 6 18"/>',
  repeat:'<path d="M3 11a9 9 0 1 1 3 8M3 4v7h7"/>',
+ paw:'<circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 11c-3 0-6 4-6 7 0 2 2 3 3 2.5 1-.5 2-1 3-1s2 .5 3 1c1 .5 3-.5 3-2.5 0-3-3-7-6-7Z"/>',
+ eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+ moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>',
+ cards:'<rect x="3" y="5" width="11" height="15" rx="2"/><path d="M17 5.5l3 .8a2 2 0 0 1 1.4 2.4l-2.8 10.6"/>',
+ scale:'<circle cx="7" cy="15" r="4"/><circle cx="17.5" cy="9.5" r="2.5"/>',
+ dots:'<circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><circle cx="12" cy="12" r="2"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+ stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+ share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+ trash:'<path d="M4 7h16M10 11v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
  hand:'<path d="M8 12V5a2 2 0 0 1 4 0v7-9a2 2 0 0 1 4 0v9-6a2 2 0 0 1 4 0v9c0 4-3 7-7 7h-1c-3 0-5-2-7-5l-3-4a2 2 0 0 1 3-3l3 2Z"/>'
 };
 function icon(name){return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${iconPaths[name]||iconPaths.star}</svg>`;}
-function picture(word){
- const pictures={
-  BOLA:'<circle cx="50" cy="50" r="36" fill="#F0C55E"/><path d="M20 29q23 18 51 3M26 77q25-22 55-15M50 14q-22 36 4 71" stroke="#FCF5D6" stroke-width="10"/><path d="M22 28q25 17 49 5M28 77q25-22 50-15M50 14q-20 33 3 70" stroke="#80A1AF" stroke-width="5"/>',
-  GATO:'<path d="M22 37 18 10 42 26m36 11 5-27-24 16" fill="#D9A979" stroke="#735B44" stroke-width="3"/><ellipse cx="50" cy="51" rx="34" ry="29" fill="#E6BA8D"/><ellipse cx="37" cy="46" rx="3" ry="5" fill="#594B3D"/><ellipse cx="63" cy="46" rx="3" ry="5" fill="#594B3D"/><path d="m46 57 4 4 4-4M50 61v7m-8-2q8 8 16 0M28 61 9 57m19 11L8 72m64-11 19-4m-19 11 20 4" stroke="#735B44" stroke-width="2.5" stroke-linecap="round"/>',
-  PATO:'<ellipse cx="48" cy="64" rx="32" ry="20" fill="#F2CE6F"/><circle cx="64" cy="37" r="21" fill="#F5D986"/><path d="m80 37 17 6-17 6" fill="#E39B5F"/><circle cx="70" cy="31" r="3" fill="#5D5740"/><path d="M34 56q-13 17 15 18M24 71 12 56" stroke="#CEAB57" stroke-width="3" stroke-linecap="round"/>',
-  MALA:'<rect x="15" y="29" width="70" height="52" rx="9" fill="#BC8F66" stroke="#735B44" stroke-width="3"/><path d="M36 29v-7q14-11 28 0v7M31 31v48m38-48v48" stroke="#735B44" stroke-width="5"/><rect x="44" y="50" width="12" height="10" rx="2" fill="#F9DC89"/>',
-  SAPO:'<ellipse cx="50" cy="56" rx="36" ry="26" fill="#80AC80"/><circle cx="29" cy="30" r="16" fill="#80AC80"/><circle cx="71" cy="30" r="16" fill="#80AC80"/><circle cx="30" cy="29" r="10" fill="#FFFCE9"/><circle cx="70" cy="29" r="10" fill="#FFFCE9"/><circle cx="31" cy="28" r="4" fill="#3D5D47"/><circle cx="69" cy="28" r="4" fill="#3D5D47"/><path d="M33 57q17 20 34 0" stroke="#3D5D47" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="56" rx="7" ry="4" fill="#DBAF95"/><ellipse cx="76" cy="56" rx="7" ry="4" fill="#DBAF95"/>',
-  MACACO:'<circle cx="17" cy="46" r="14" fill="#97704D"/><circle cx="83" cy="46" r="14" fill="#97704D"/><circle cx="50" cy="47" r="34" fill="#97704D"/><ellipse cx="38" cy="43" rx="17" ry="19" fill="#EED3AC"/><ellipse cx="62" cy="43" rx="17" ry="19" fill="#EED3AC"/><ellipse cx="50" cy="64" rx="22" ry="16" fill="#EED3AC"/><circle cx="37" cy="41" r="4" fill="#574737"/><circle cx="63" cy="41" r="4" fill="#574737"/><path d="M41 65q9 10 18 0M45 55h10" stroke="#574737" stroke-width="3" stroke-linecap="round"/>',
-  BOTA:'<path d="M31 14h39v46l17 9q12 17-9 17H22q-8-11 0-22l9-7Z" fill="#BC8F66" stroke="#735B44" stroke-width="3"/><path d="M30 30h40M20 79h66" stroke="#EFD4AC" stroke-width="7"/><path d="M34 50h12" stroke="#735B44" stroke-width="3"/>',
-  PANELA:'<path d="M21 41h58v29q-29 28-58 0Z" fill="#9AB0B6" stroke="#536F78" stroke-width="3"/><path d="M22 48H7v13h15m57-13h14v13H79M15 38h70M46 25h9v12" stroke="#536F78" stroke-width="5" stroke-linecap="round"/><path d="M29 50v18" stroke="#E4F0EB" stroke-width="4" stroke-linecap="round"/>',
-  SACOLA:'<path d="M22 35h56l8 51H14Z" fill="#D2B576" stroke="#8B754E" stroke-width="3"/><path d="M36 40V24q14-16 28 0v16" stroke="#8B754E" stroke-width="5" fill="none"/><path d="M42 57q8-10 16 0-2 16-8 16-6 0-8-16" fill="#719970"/>',
-  SEMENTE:'<ellipse cx="50" cy="55" rx="18" ry="28" fill="#B98257" transform="rotate(30 50 55)"/><path d="M38 75q11-22 22-43" stroke="#DBB07E" stroke-width="3"/><path d="M54 32q-6-23 17-21 5 19-17 21" fill="#85A96E"/>',
-  'ÁGUA':'<path d="M50 10 23 52c-15 29 12 46 27 46s42-17 27-46Z" fill="#8EBDC9"/><path d="M32 61q-6 18 10 23" stroke="#E2F3EC" stroke-width="5" stroke-linecap="round"/>',
-  LEITE:'<path d="m30 13 31 0 11 16v61H24V29Z" fill="#E2EDEB" stroke="#6B8589" stroke-width="3"/><path d="M24 29h48M31 13v16m-7 22h48v24H24" stroke="#8BB5C0" stroke-width="3"/><path d="M51 51q-13 14-2 20 12 0 2-20" fill="#8BB5C0"/>',
-  SUCO:'<path d="m21 26 10 64h38l10-64Z" fill="#EBBA65" stroke="#B78A4C" stroke-width="3"/><path d="m58 42 7-30h18" stroke="#7CA37B" stroke-width="5" fill="none"/><path d="M26 52h48" stroke="#F8DC92" stroke-width="6"/><circle cx="37" cy="68" r="6" fill="#F3D18A"/>',
-  PLANTA:'<path d="M50 65V22" stroke="#639465" stroke-width="5"/><path d="M50 44q-30 7-29-22 24-4 29 22M50 34q29 3 28-22-24-4-28 22" fill="#83AB78"/><path d="m23 65 8 29h38l8-29Z" fill="#C8956B"/><path d="M21 65h58" stroke="#A67350" stroke-width="7" stroke-linecap="round"/>'
- };
- return `<svg class="word-picture" viewBox="0 0 100 100" aria-hidden="true">${pictures[word]||pictures.PLANTA}</svg>`;
+function picture(word,visual=null){
+ if(visual&&VISUALS.includes(visual)){if(!/^[A-ZÁÉÍÓÚÂÊÔÃÕÇ]+$/.test(visual))return `<span class="word-picture emoji-picture" role="img" aria-label="${esc(word)}">${visual}</span>`;word=visual;}
+
+ return `<svg class="word-picture" viewBox="0 0 100 100" fill="none" aria-hidden="true">${WORD_ART[word]||WORD_ART.PLANTA}</svg>`;
 }
+function seeArt(spec){
+ if(!spec)return '';
+ if(spec.dots)return `<span class="dot-card" aria-hidden="true">${Array.from({length:spec.dots},()=>'<span class="dot"></span>').join('')}<span class="dot-number">${spec.dots}</span></span>`;
+ const one=`<svg class="word-picture" viewBox="0 0 100 100" fill="none" aria-hidden="true">${WORD_ART[spec.key]||WORD_ART.PLANTA}</svg>`;
+ if(spec.count)return `<span class="count-group count-${spec.count}" aria-hidden="true">${Array.from({length:spec.count},()=>one).join('')}</span>`;
+ return `<span class="see-art ${spec.mode?'mode-'+spec.mode:''}" aria-hidden="true">${one}</span>`;
+}
+function optionLabel(q,option){return q.labels?.[option]||String(option).split('~')[0].toLocaleLowerCase('pt-BR');}
 function avatar(profile){return `<span class="avatar">${profile.avatar==='fox'?'<img src="assets/lumi.svg" alt="">':({cat:'🐱',frog:'🐸',owl:'🦉'}[profile.avatar]||'🦊')}</span>`;}
 function active(){return state.profiles.find(p=>p.id===state.activeProfile)||state.profiles[0];}
 function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));storageAvailable=true;}catch{storageAvailable=false;toast('Não foi possível salvar neste navegador. O progresso ficará disponível enquanto esta página estiver aberta.');}}
 function toast(message){clearTimeout(toastTimer);const node=$('#toast');node.textContent=message;node.classList.add('show');toastTimer=setTimeout(()=>node.classList.remove('show'),5500);}
-function speakNative(text){
- if(!state.settings.sound){toast('O áudio está desligado. Ative o som no botão do alto da página.');return false;}
- if(!('speechSynthesis' in window)){toast('A narração não está disponível neste aparelho. Um adulto pode ler as instruções.');return false;}
- try{speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang='pt-BR';utterance.rate=.8;utterance.pitch=1.05;const voices=speechSynthesis.getVoices();const voice=voices.find(v=>v.lang.toLowerCase()==='pt-br')||voices.find(v=>v.lang.toLowerCase().startsWith('pt'));if(voice)utterance.voice=voice;utterance.onerror=e=>{if(!['canceled','interrupted'].includes(e.error))toast('O aparelho não conseguiu narrar. Um adulto pode ler com você.');};speechSynthesis.speak(utterance);return true;}catch{toast('A narração não está disponível agora. Um adulto pode ler com você.');return false;}
+function stopNativeSpeech(){
+ nativeSpeechGeneration++;
+ try{window.speechSynthesis?.cancel?.();}catch{}
 }
+function speakNative(text){
+ if(!audioEnabled()){toast('O áudio está desligado. Ative o som no botão do alto da página.');return false;}
+ if(!('speechSynthesis' in window)){toast('A narração não está disponível neste aparelho. Um adulto pode ler as instruções.');return false;}
+ stopNativeSpeech();const generation=nativeSpeechGeneration;
+ try{
+  const utterance=new SpeechSynthesisUtterance(text);utterance.lang='pt-BR';utterance.rate=.8;utterance.pitch=1.05;
+  const voices=speechSynthesis.getVoices(),voice=voices.find(v=>v.lang.toLowerCase()==='pt-br')||voices.find(v=>v.lang.toLowerCase().startsWith('pt'));
+  if(voice)utterance.voice=voice;
+  utterance.onerror=event=>{if(generation===nativeSpeechGeneration&&!['canceled','interrupted'].includes(event.error))toast('O aparelho não conseguiu narrar. Um adulto pode ler com você.');};
+  speechSynthesis.speak(utterance);return true;
+ }catch{toast('A narração não está disponível agora. Um adulto pode ler com você.');return false;}
+}
+
 function speak(text){return narrator.speak(text);}
 function stopSpeech(){narrator.stop();}
-function settingsClass(){document.body.classList.toggle('reduced-motion',state.settings.reducedMotion);document.body.classList.toggle('large-text',state.settings.largeText);}
+function audioEnabled(){return state.settings.sound&&!active().supports?.quietMode;}
+function settingsClass(){const supports=active().supports||{};document.body.classList.toggle('reduced-motion',state.settings.reducedMotion||supports.reducedMotion);document.body.classList.toggle('large-text',state.settings.largeText);document.body.classList.toggle('large-targets',supports.largeTargets);document.body.classList.toggle('high-contrast',supports.highContrast);}
 function adultBanner(){return `<div class="adult-banner">${icon('info')}<div><strong>Ambiente de demonstração.</strong> Use apelidos fictícios. ${storageAvailable?'Os registros ficam somente neste navegador; a troca entre escola e casa é simulada.':'Este navegador não permite salvar os registros.'} O conteúdo pedagógico ainda precisa de revisão profissional antes do uso com crianças.</div></div>`;}
 function layout(content){
  const p=active();
- return `<div class="shell"><aside class="sidebar"><button class="brand" data-action="nav" data-view="adventure" aria-label="Lumi, voltar à aventura"><img src="assets/lumi.svg" alt=""><div><div class="brand-name">lum<span>i</span><span style="color:#d9aa50">.</span></div><div class="brand-sub">Aventuras de leitura</div></div></button><div class="nav-label">UM MUNDO PARA DESCOBRIR</div><nav class="nav" aria-label="Navegação principal">${navigation.map(([id,i,label],n)=>`${n===2?'<div class="nav-separator"></div>':''}<button class="nav-item ${view===id?'active':''}" data-action="nav" data-view="${id}" ${view===id?'aria-current="page"':''}>${icon(i)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-note"><img src="assets/lumi.svg" alt=""><strong>Cada descoberta conta.</strong><p>Aprender fica mais gostoso quando a gente brinca junto.</p></div><div class="sidebar-footer"><span>Versão inicial</span><button class="text-button" data-action="help">Sobre a Lumi</button></div></aside><main class="main" id="main" tabindex="-1"><header class="topbar"><div class="topbar-left"><span class="small-dot"></span><span>${['family','school'].includes(view)?'Espaço do adulto · demonstração':'Pequenas descobertas, todos os dias'}</span></div><div class="topbar-actions"><button class="icon-button" data-action="mute" aria-label="${state.settings.sound?'Desligar':'Ligar'} áudio" title="${state.settings.sound?'Áudio ligado':'Áudio desligado'}">${icon(state.settings.sound?'sound':'muted')}</button><button class="icon-button" data-action="settings" aria-label="Preferências de acessibilidade" title="Preferências">${icon('settings')}</button>${view==='play'?'':`<button class="profile-button" data-action="profiles" aria-label="Trocar perfil de demonstração">${avatar(p)}<span class="profile-name">${esc(p.name)}</span>${icon('chevron')}</button>`}</div></header><div class="page-content">${content}</div></main></div>`;
+ const audioButton=`<button class="icon-button" data-action="mute" aria-label="${audioEnabled()?'Desligar':'Ligar'} áudio" title="Áudio">${icon(audioEnabled()?'sound':'muted')}</button>`;
+ const brand=`<button class="brand" data-action="nav" data-view="adventure" aria-label="Lumi, ir para Hoje"><img src="assets/lumi.svg" alt=""><div><div class="brand-name">lum<span>i</span><span style="color:#d9aa50">.</span></div><div class="brand-sub">Descobertas em família</div></div></button>`;
+ if(view==='play')return `<div class="family-app is-playing"><header class="family-topbar">${brand}<div class="topbar-actions">${audioButton}<button class="icon-button" data-action="settings" aria-label="Preferências">${icon('settings')}</button></div></header><main id="main" class="family-main family-game-main" tabindex="-1">${content}</main></div>`;
+ return `<div class="family-app"><header class="family-topbar">${brand}<div class="topbar-actions">${audioButton}<button class="profile-button" data-action="profiles" aria-label="Trocar perfil">${avatar(p)}<span class="profile-name">${esc(p.name)}</span>${icon('chevron')}</button></div></header><nav class="family-nav" aria-label="Navegação principal">${navigation.map(([id,i,label])=>`<button class="family-nav-item ${view===id||(id==='adventure'&&view==='garden')?'active':''}" data-action="nav" data-view="${id}" ${view===id?'aria-current="page"':''}>${icon(i)}<span>${label}</span></button>`).join('')}</nav><main id="main" class="family-main" tabindex="-1">${content}</main><footer class="family-app-footer"><span>Lumi · prévia Família 0.7.0</span><button class="text-button" data-action="help">Sobre esta experiência</button></footer></div>`;
 }
 function activityCard(a,large=false){
- const completed=profileStats(state,state.activeProfile).completed.has(a.id);
- return `<button class="activity-card" data-action="play" data-id="${a.id}" aria-label="Jogar ${esc(a.name)}${completed?', já explorada':''}"><div class="activity-art ${a.color}">${icon(a.icon)}${completed?`<span class="completed-badge" title="Atividade explorada">${icon('check')}</span>`:''}</div><div class="activity-copy">${large?`<div class="eyebrow" style="font-size:9px;letter-spacing:1px;margin-bottom:8px">${a.tag}</div>`:''}<h3>${a.name}</h3><p>${a.description}</p><div class="activity-meta">${icon('clock')}<span>${a.duration}</span><span class="go">${icon('arrow')}</span></div></div></button>`;
+ const completed=profileStats(state,state.activeProfile).completed.has(a.id),ages=a.age&&a.age!=='mixed'?[a.age]:(SUGGESTED_AGES[a.id]||[3,4,5]);
+ return `<button class="activity-card" data-action="play" data-id="${a.id}" aria-label="Jogar ${esc(a.name)}${completed?', já explorada':''}"><div class="activity-art ${a.color}">${a.storyArt?`<img class="story-thumbnail" src="${esc(a.storyArt)}" alt="" loading="lazy">`:icon(a.icon)}${completed?`<span class="completed-badge" title="Atividade explorada">${icon('check')}</span>`:''}</div><div class="activity-copy">${large?`<div class="activity-tag">${esc(a.tag)}</div>`:''}<h3>${esc(a.name)}</h3><p>${esc(a.description)}</p><span class="activity-age">${ages.length>1?ages[0]+' a '+ages.at(-1):ages[0]} anos</span><div class="activity-meta">${icon('clock')}<span>${a.duration}</span><span class="go">${icon('arrow')}</span></div></div></button>`;
 }
-function adventure(){
- const stats=profileStats(state,state.activeProfile),next=nextActivity(state,state.activeProfile);
- return `<div class="page-heading"><div><div class="eyebrow">OLÁ, EXPLORADOR!</div><h1>Vamos descobrir palavras?</h1><p>Escolha uma aventura. A Lumi vai com você.</p></div><div class="heading-sticker">${icon('star')}Uma descoberta de cada vez</div></div><section class="hero" aria-label="A aventura da Lumi"><div class="hero-copy"><span class="pill">${icon('leaf')}A floresta das descobertas</span><h2>Uma pequena aventura.<br>Uma grande descoberta.</h2><p>Há letras, palavras e histórias pelo caminho. Vamos explorar juntos?</p><button class="primary" data-action="play" data-id="${next.id}">${icon('compass')}${stats.total?'Continuar aventura':'Vamos brincar!'}${icon('arrow')}</button><button class="voice-preview" data-action="voice-preview" aria-pressed="${previewPlaying}">${icon(previewPlaying?'close':'sound')}${previewPlaying?'Parar a prévia':'Ouvir a voz da Lumi'}</button></div><div class="hero-art"><img src="assets/forest.svg" alt="Lumi, uma raposa de cachecol verde, lendo um livro na floresta"><span class="hero-label">Um mundo de palavras espera por você</span></div></section><div class="section-heading"><div><h2>Sua trilha de descobertas</h2><p>Comece pelas letras ou escolha o que quer explorar.</p></div><button class="quiet" data-action="nav" data-view="library">Ver atividades${icon('arrow')}</button></div><div class="adventure-layout"><section class="journey" aria-label="Atividades da trilha"><div class="journey-top"><h3>Uma aventura em seis paradas</h3><span>${stats.completed.size} de 6 exploradas</span></div><div class="journey-path" aria-hidden="true">${ACTIVITIES.map(a=>`<span class="journey-dot ${stats.completed.has(a.id)?'done':a.id===next.id?'current':''}"></span>`).join('')}</div><div class="activity-grid">${ACTIVITIES.map(a=>activityCard(a)).join('')}</div></section><aside class="side-stack"><section class="story-card"><div class="eyebrow">HISTÓRIA DA LUMI</div><h3>Uma sementinha.<br>Muitas descobertas.</h3><p>Leia, ouça e converse com alguém que você gosta.</p><div class="story-preview" aria-hidden="true"><img src="assets/lumi.svg" alt="">${picture('PLANTA')}</div><button class="secondary" data-action="play" data-id="story">${icon('book')}Abrir a história${icon('arrow')}</button></section><section class="offline-card"><div class="icon-circle">${icon('hand')}</div><h3>A aventura continua fora da tela</h3><p>Um papel, algumas letras e alguém para brincar junto.</p><button class="quiet" data-action="print">Atividade para imprimir${icon('arrow')}</button></section></aside></div><div class="session-note">${icon('heart')}Brinque acompanhado de um adulto. Depois, faça uma pausa e leve suas descobertas para fora da tela.</div>`;
-}
+function adventure(){return familyHomeHTML(state,active(),{icon,activityCard});}
 function library(){
- const selected=ACTIVITIES.filter(a=>(filter==='Todas'||a.category===filter)&&`${a.name} ${a.description} ${a.skill}`.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));
- return `<div class="page-heading"><div><div class="eyebrow">ESCOLHA SUA PRÓXIMA DESCOBERTA</div><h1>Pequenas atividades.<br>Grandes aventuras.</h1><p>Letras, palavras e uma história para explorar no seu ritmo.</p></div></div><div class="library-controls"><div class="tabs" role="group" aria-label="Filtrar atividades">${['Todas','Letras','Palavras','Histórias'].map(f=>`<button class="tab ${filter===f?'active':''}" aria-pressed="${filter===f}" data-action="filter" data-filter="${f}">${f}</button>`).join('')}</div><label class="search-input">${icon('search')}<input id="activity-search" type="search" placeholder="Buscar uma atividade" aria-label="Buscar uma atividade" value="${esc(search)}"></label></div><div class="library-grid" id="library-results">${selected.length?selected.map(a=>activityCard(a,true)).join(''):'<div class="empty-state" style="grid-column:1/-1"><h3>Nenhuma atividade encontrada</h3><p>Tente buscar por letras, palavras ou história.</p></div>'}</div><div class="session-note">${icon('info')}Os tempos indicados são estimativas. Não há corrida: cada descoberta acontece no seu ritmo.</div>`;
+ const selected=availableActivities(state).filter(a=>(filter==='Todas'||a.category===filter)&&`${a.name} ${a.description} ${a.skill}`.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));
+ return `<div class="page-heading"><div><h1>Qual será a descoberta de hoje?</h1><p>Escolha uma experiência para brincar com um adulto. A faixa etária é uma sugestão para começar.</p></div></div><div class="library-controls"><div class="tabs" role="group" aria-label="Filtrar atividades">${['Todas',...new Set(availableActivities(state).map(a=>a.category))].map(f=>`<button class="tab ${filter===f?'active':''}" aria-pressed="${filter===f}" data-action="filter" data-filter="${f}">${f}</button>`).join('')}</div><label class="search-input">${icon('search')}<input id="activity-search" type="search" placeholder="Buscar uma atividade" aria-label="Buscar uma atividade" value="${esc(search)}"></label></div><div id="library-results">${libraryResults(selected)}</div><div class="session-note">${icon('info')}Os tempos indicados são estimativas. Não há corrida: cada descoberta acontece no seu ritmo.</div>`;
+}
+// Atividades da idade do perfil aparecem primeiro; as que exigem letras ou leitura ficam em um grupo separado, com apoio do adulto.
+function activityAges(a){return a.age&&a.age!=='mixed'?[Number(a.age)]:(SUGGESTED_AGES[a.id]||[3,4,5]);}
+function libraryResults(selected){
+ if(!selected.length)return '<div class="empty-state"><h3>Nenhuma atividade encontrada</h3><p>Tente buscar por bichos, histórias, cores ou números.</p></div>';
+ const age=active().age;if(!age)return `<div class="library-grid">${selected.map(a=>activityCard(a,true)).join('')}</div>`;
+ const fits=selected.filter(a=>activityAges(a).includes(age)),later=selected.filter(a=>!activityAges(a).includes(age));
+ return `${fits.length?`<h2 class="library-group-title">Para ${age} anos</h2><div class="library-grid">${fits.map(a=>activityCard(a,true)).join('')}</div>`:''}${later.length?`<h2 class="library-group-title">Para quando a criança se interessar por letras e números</h2><p class="library-group-note">Estas propostas pedem reconhecer letras, ler ou contar mais. Brinque junto e pare quando deixar de ser divertido.</p><div class="library-grid is-later">${later.map(a=>activityCard(a,true)).join('')}</div>`:''}`;
 }
 function statCard(label,value,caption,i){return `<section class="stat-card"><div class="stat-top"><span>${label}</span>${icon(i)}</div><div class="stat-value">${value}</div><div class="stat-caption">${caption}</div></section>`;}
 function historyHTML(profileId){
  const sessions=profileStats(state,profileId).sessions.slice(-8).reverse();
  if(!sessions.length)return `<div class="empty-state">${icon('book')}<h3>A primeira descoberta começa aqui</h3><p>Depois de concluir uma atividade, seus registros aparecerão neste espaço.</p><button class="primary" data-action="play" data-id="letters">Explorar as letras${icon('arrow')}</button></div>`;
- return `<div class="history-list">${sessions.map(s=>{const a=ACTIVITIES.find(a=>a.id===s.activityId);return `<div class="history-row"><div class="history-icon ${a.color}">${icon(a.icon)}</div><div class="history-info"><strong>${a.name}</strong><span>${formatDate(s.createdAt)} · ${formatDuration(s.seconds)} · ${s.rounds.length} desafios</span></div><span class="badge">Explorada</span></div>`;}).join('')}</div>`;
+ return `<div class="history-list">${sessions.map(s=>{const a=activityById(state,s.activityId,{includeDrafts:true});return `<div class="history-row"><div class="history-icon ${a.color}">${icon(a.icon)}</div><div class="history-info"><strong>${esc(s.activityName||a.name)}</strong><span>${formatDate(s.createdAt)} · ${formatDuration(s.seconds)} · ${s.rounds.length} desafios</span></div><span class="badge">Explorada</span></div>`;}).join('')}</div>`;
 }
 function profileSelect(){return `<select class="small-select" id="adult-profile" aria-label="Selecionar perfil de demonstração">${state.profiles.map(p=>`<option value="${esc(p.id)}" ${p.id===state.activeProfile?'selected':''}>${esc(p.name)}</option>`).join('')}</select>`;}
-function family(){
- const p=active(),stats=profileStats(state,p.id),next=nextActivity(state,p.id),pending=state.assignments.filter(a=>a.profileId===p.id&&a.status==='pending');
- return `${adultBanner()}<div class="page-heading adult-heading"><div><div class="eyebrow">APRENDER TAMBÉM É ESTAR JUNTO</div><h1>Um olhar sobre as descobertas.</h1><p>Acompanhe o que foi praticado por ${esc(p.name)}.</p></div><div class="button-row">${profileSelect()}<button class="secondary" data-action="export" data-profile="${esc(p.id)}">${icon('download')}Exportar</button></div></div><div class="stats-grid">${statCard('Atividades exploradas',`${stats.completed.size}<span style="font-size:15px;color:var(--muted)"> / 6</span>`,'Diversidade de atividades','compass')}${statCard('Sessões concluídas',stats.total,'Registros neste aparelho','book')}${statCard('Tempo nas atividades',Math.round(stats.seconds/60)+'<span style="font-size:14px"> min</span>','Somente tempo de jogo ativo','clock')}${statCard('Áudios solicitados',stats.helps,'Instruções e dicas ouvidas','sound')}</div><div class="adult-columns"><section class="panel"><div class="panel-heading"><div><h3>O que já foi explorado</h3><p>Atividades organizadas por objetivo.</p></div>${icon('sprout')}</div>${ACTIVITIES.map(a=>{const count=stats.sessions.filter(s=>s.activityId===a.id).length;return `<div class="skill-row"><div class="skill-row-top"><span>${a.skill}</span><span>${count?`${count} ${count===1?'sessão':'sessões'}`:'Ainda não explorada'}</span></div><div class="progress-bar" aria-label="${a.name}: ${count?'explorada':'não explorada'}"><span style="width:${count?100:0}%"></span></div></div>`;}).join('')}<div class="metric-note">Esses registros descrevem o uso da plataforma. Concluir um jogo ou acertar uma resposta não comprova domínio da leitura e não constitui avaliação ou diagnóstico.</div></section><section class="panel"><div class="panel-heading"><div><h3>Para brincar juntos</h3><p>${pending.length?'Há uma sugestão da escola para continuar em casa.':'Uma sugestão para a próxima atividade.'}</p></div>${icon('heart')}</div><div class="recommendation"><div class="eyebrow" style="margin-bottom:5px;font-size:9px">${pending.length?'SUGESTÃO DA ESCOLA':'PRÓXIMA DESCOBERTA'}</div><h4>${next.name}</h4><p>${next.description} Acompanhe a criança e observe como ela participa.</p><button class="quiet" data-action="play" data-id="${next.id}">Abrir atividade${icon('arrow')}</button></div><div class="family-tip"><strong>Uma ideia para fora da tela</strong>Escolham um objeto de casa e conversem sobre seu nome. Depois, escrevam a palavra juntos em um papel e procurem letras que vocês já conhecem.</div><div class="spacer"></div><button class="secondary" data-action="print">${icon('print')}Imprimir uma atividade</button></section></div><section class="panel history-panel"><div class="panel-heading"><h3>Últimas atividades</h3><span class="text-muted">Até oito registros recentes</span></div>${historyHTML(p.id)}</section>`;
+function family(){return familyDiscoveriesHTML(state,active(),icon,{voices:recordingSupported()});}
+function shareFamilySummary(){
+ const text=familyShareText(state,active().id);
+ if(navigator.share){navigator.share({title:'Lumi: resumo da semana',text}).catch(()=>{});return;}
+ const link=document.createElement('a');link.href='https://wa.me/?text='+encodeURIComponent(text);link.target='_blank';link.rel='noopener';document.body.append(link);link.click();link.remove();
 }
-function school(){
- const total=state.sessions.length,pending=state.assignments.filter(a=>a.status==='pending').length,participating=state.profiles.filter(p=>profileStats(state,p.id).total>0).length;
- return `${adultBanner()}<div class="page-heading adult-heading"><div><div class="eyebrow">CADA CRIANÇA TEM SEU CAMINHO</div><h1>Turma das descobertas.</h1><p>Uma turma de demonstração para testar acompanhamento e atividades.</p></div><div class="school-actions"><button class="secondary" data-action="teacher-review">${icon('book')}Avaliar a prévia</button><button class="secondary" data-action="add-profile">${icon('plus')}Adicionar perfil</button><button class="primary" data-action="assign">${icon('plus')}Sugerir atividade</button></div></div><div class="stats-grid">${statCard('Perfis da turma',state.profiles.length,'Somente perfis fictícios','users')}${statCard('Já participaram',participating,'Com uma sessão concluída','compass')}${statCard('Sessões concluídas',total,'Todas as atividades da turma','book')}${statCard('Sugestões pendentes',pending,'Para continuar em casa','sign')}</div><section class="panel"><div class="panel-heading"><div><h3>Acompanhamento da turma</h3><p>Selecione um perfil para ver seus registros.</p></div><button class="quiet" data-action="export">${icon('download')}Exportar turma</button></div><div class="school-table-wrap"><table class="school-table"><thead><tr><th>Perfil de demonstração</th><th>Atividades exploradas</th><th>Última atividade</th><th>Sugestões</th><th>Registros</th></tr></thead><tbody>${state.profiles.map(p=>{const stats=profileStats(state,p.id),last=stats.sessions.at(-1),pending=state.assignments.filter(a=>a.profileId===p.id&&a.status==='pending').length;return `<tr><td>${avatar(p)}<strong>${esc(p.name)}</strong></td><td><div class="mini-progress"><div class="progress-bar"><span style="width:${stats.completed.size/6*100}%"></span></div><span class="text-muted">${stats.completed.size} de 6 atividades</span></div></td><td>${last?ACTIVITIES.find(a=>a.id===last.activityId).name:'Ainda não participou'}</td><td><span class="status-chip ${!pending&&stats.total?'done':''}">${pending?`${pending} pendente${pending>1?'s':''}`:'Sem pendências'}</span></td><td><button class="text-button" data-action="view-profile" data-profile="${esc(p.id)}">Ver registros →</button></td></tr>`;}).join('')}</tbody></table></div></section><section class="panel history-panel"><div class="panel-heading"><div><h3>Escola e casa, no mesmo caminho</h3><p>Sugestões aparecem na área da família do perfil selecionado.</p></div>${icon('heart')}</div>${state.assignments.length?`<div class="assignment-list">${state.assignments.slice(-8).reverse().map(a=>{const activity=ACTIVITIES.find(x=>x.id===a.activityId),profile=state.profiles.find(p=>p.id===a.profileId);return `<div class="assignment-row"><div class="icon-circle">${icon(activity.icon)}</div><div><strong>${activity.name}</strong><p>${esc(profile.name)} · sugerida em ${formatDate(a.createdAt)}</p></div><span class="status-chip ${a.status==='done'?'done':''}">${a.status==='done'?'Concluída':'Pendente'}</span></div>`;}).join('')}</div>`:'<div class="empty-state"><h3>Que tal sugerir a primeira atividade?</h3><p>Escolha um perfil e uma atividade. Ela aparecerá como próxima sugestão na área da família.</p></div>'}<div class="teacher-notes"><strong>Para o piloto:</strong> a integração funciona entre as áreas deste mesmo navegador. Contas reais, sincronização entre aparelhos, permissões institucionais e conteúdo pedagógico validado são etapas seguintes.</div></section>`;
-}
+function school(){return `<div class="page-heading"><div><div class="eyebrow">ÁREA DE REVISÃO DO CONTEÚDO</div><h1>Conteúdo da prévia.</h1><p>Selecione as experiências disponíveis ou prepare uma atividade a partir de um modelo.</p></div><button class="secondary" data-action="nav" data-view="profile">${icon('back')}Voltar ao perfil</button></div>${activityManagerHTML(state,icon)}`;}
 function render(){
  settingsClass();let html;
- switch(view){case 'library':html=library();break;case 'family':html=family();break;case 'school':html=school();break;case 'play':html=game?.completed?completion():gameHTML();break;default:html=adventure();}
+ switch(view){case 'library':html=library();break;case 'family':html=family();break;case 'profile':html=familyProfileHTML(state,active(),icon);break;case 'school':html=school();break;case 'garden':html=familyGardenHTML(state,active(),icon);break;case 'editor':html=editorHTML(teacherDraft,icon);break;case 'play':html=game?.completed?completion():gameHTML();break;default:html=adventure();}
  root.innerHTML=layout(html);
- document.title=`${view==='play'&&game?game.activity.name:view==='family'?'Família':view==='school'?'Escola':view==='library'?'Atividades':'Aventuras de leitura'} · Lumi`;
+ if(view==='family')hydrateVoices();
+ document.title=`${view==='play'&&game?game.activity.name:view==='family'?'Descobertas':view==='profile'?'Perfil':view==='school'?'Conteúdo':view==='library'?'Atividades':view==='garden'?'Jardim':'Descobertas em família'} · Lumi`;
 }
 function navigate(target,{confirmed=false}={}){
- if(!navigation.some(([id])=>id===target))return;
+ if(!navigation.some(([id])=>id===target)&&!['school','garden'].includes(target))return;
+ if(view==='editor'&&editorDirty&&!confirmed){pendingNavigation=()=>navigate(target,{confirmed:true});openModal('Sair da edição?',`<p class="modal-description">Há alterações que ainda não foram salvas. Você pode continuar preparando a atividade.</p><div class="button-row"><button class="primary" data-action="close-modal">Continuar editando</button><button class="secondary" data-action="confirm-navigation">Sair sem salvar</button></div>`);return;}
  if(view==='play'&&game&&!game.completed&&!confirmed){pendingNavigation=()=>navigate(target,{confirmed:true});openModal('Voltar à aventura?',`<p class="modal-description">Esta atividade ainda está acontecendo. Você pode sair e recomeçar depois. O registro é salvo quando a atividade é concluída.</p><div class="button-row"><button class="primary" data-action="close-modal">Continuar brincando</button><button class="secondary" data-action="confirm-navigation">Sair da atividade</button></div>`);return;}
- if(['family','school'].includes(target)&&Date.now()>adultUntil){showGate(()=>navigate(target,{confirmed:true}));return;}
- closeModal();stopSpeech();view=target;game=null;render();window.scrollTo({top:0,behavior:'instant'});$('#main').focus({preventScroll:true});
+ if(['family','school','profile'].includes(target)&&Date.now()>adultUntil){showGate(()=>navigate(target,{confirmed:true}));return;}
+ closeModal();stopSpeech();view=target;game=null;editorDirty=false;render();window.scrollTo({top:0,behavior:'instant'});$('#main').focus({preventScroll:true});
 }
-function startActivity(id){
- const activity=ACTIVITIES.find(a=>a.id===id);if(!activity)return;
- closeModal();stopSpeech();view='play';game={activity,profileId:state.activeProfile,questions:makeQuestions(id),index:0,rounds:[],attempts:0,helps:0,seconds:0,sinceBreak:0,build:[],solved:false,lastWrong:null,feedback:'',completed:false};render();window.scrollTo({top:0,behavior:'instant'});$('#main').focus({preventScroll:true});if(state.settings.sound)speakInitial();
+function startActivity(id,{preview=false,activity:override=null,returnView='school'}={}){
+ const activity=override||activityById(state,id,{includeDrafts:preview});if(!activity||(!preview&&!availableActivities(state).some(a=>a.id===id))){toast('Essa atividade não está disponível na seleção atual.');return;}
+ const source=override?{...state,customActivities:[...(state.customActivities||[]).filter(a=>a.id!==id),override]}:state;
+ closeModal();stopSpeech();view='play';game={activity,preview,returnView,intro:id==='sounds'&&!preview,profileId:state.activeProfile,questions:questionsForActivity(source,id),index:0,rounds:[],attempts:0,helps:0,seconds:0,sinceBreak:0,build:[],buildIndices:[],flipped:[],matched:[],solved:false,lastWrong:null,feedback:'',completed:false};clearTimeout(memoryTimer);render();window.scrollTo({top:0,behavior:'instant'});$('#main').focus({preventScroll:true});if(audioEnabled())speakInitial();
 }
-function speakInitial(){if(!game||game.completed)return;const q=game.questions[game.index];speak(q.type==='story'?q.text+' '+q.prompt:q.prompt);}
+function speakInitial(){if(!game||game.completed)return;if(game.intro){speak(SOUND_DEMO);return;}const q=game.questions[game.index];speak(q.type==='story'?q.text+' '+q.prompt:q.prompt);}
 function gameHTML(){
- if(!game)return adventure();const q=game.questions[game.index],a=game.activity;
+ if(!game)return adventure();if(game.intro)return soundIntroHTML();const q=game.questions[game.index],a=game.activity;
  const listenLabel=q.type==='read'?'Ouvir uma dica':q.type==='story'?'Ouvir a história':'Ouvir instrução';
  let stage='';
- if(q.type==='story')stage=`<div class="story-scene"><img src="assets/lumi.svg" alt="Lumi no jardim">${picture(q.scene==='seed'?'SEMENTE':q.scene==='water'?'ÁGUA':'PLANTA')}</div><p class="story-text">${esc(q.text)}</p><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button><div class="story-question">${q.prompt}</div>${optionsHTML(q,true)}`;
- else if(q.type==='build')stage=`<h1>Vamos construir uma palavra?</h1><div class="build-picture">${picture(q.target)}</div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button><div class="build-slots" aria-label="Sílabas escolhidas: ${esc(game.build.join(' ')||'nenhuma')}">${Array.from({length:q.slots},(_,i)=>`<span class="build-slot ${game.build[i]?'filled':''}">${esc(game.build[i]||'—')}</span>`).join('')}</div><div class="syllable-options">${q.options.map((s,i)=>`<button class="syllable-button" data-action="syllable" data-index="${i}" aria-label="Adicionar sílaba ${esc(s)}" ${game.solved||game.build.includes(s)||game.build.length>=q.slots?'disabled':''}>${s}</button>`).join('')}</div><div class="build-actions"><button class="secondary" data-action="undo" ${!game.build.length||game.solved?'disabled':''}>${icon('back')}Desfazer</button><button class="primary" data-action="check-build" ${game.build.length!==q.slots||game.solved?'disabled':''}>Conferir${icon('check')}</button></div>`;
- else stage=`<h1>${q.type==='read'?'Qual figura combina?':q.type==='missing'?'Qual letra está faltando?':q.type==='sound'?'Quem tem o mesmo começo?':q.prompt}</h1>${q.type==='sound'?`<div class="reference-word">${picture(q.reference)}${q.reference}</div>`:''}${['read','missing'].includes(q.type)?`<div class="word-target">${q.type==='missing'?q.gap:q.target}</div>${q.type==='missing'?`<div class="build-picture" style="margin-bottom:14px">${picture(q.target)}</div>`:''}`:''}<div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button></div>${optionsHTML(q)}`;
- const finalRound=game.index===game.questions.length-1;
- return `<div class="game-wrap"><div class="game-header"><button class="quiet" data-action="nav" data-view="adventure">${icon('back')}Voltar</button><div class="game-title">${icon(a.icon)}${a.name}</div><span class="text-muted">${game.index+1} / ${game.questions.length}</span></div><div class="game-progress" aria-label="Desafio ${game.index+1} de ${game.questions.length}">${game.questions.map((_,i)=>`<span class="${i<game.index?'done':i===game.index?'current':''}"></span>`).join('')}</div><section class="game-card ${q.type==='story'?'is-story':''}"><div class="game-eyebrow">${q.type==='story'?'LEITURA ACOMPANHADA · LEIA COM UM ADULTO':'UMA DESCOBERTA DE CADA VEZ'}</div>${stage}<div class="feedback ${game.lastWrong?'neutral':''}" role="status" aria-live="polite">${game.feedback?`<span class="feedback-message">${icon(game.solved?'check':'leaf')}${esc(game.feedback)}</span>`:'<span class="text-muted">Pode experimentar. A Lumi está aqui com você.</span>'}${game.solved?`<button class="primary" data-action="next">${finalRound?'Terminar aventura':'Próxima descoberta'}${icon('arrow')}</button>`:''}</div></section><div class="game-footer">${icon('heart')}Sem pressa. Você pode ouvir de novo e tentar outra vez.</div></div>`;
+ if(q.type==='story'){
+  const visual=a.storyArt?`<img class="story-landscape" src="${esc(a.storyArt)}" alt="${esc(a.storyAlt||'Ilustração do cenário da história')}">`:q.visual!==undefined?(q.visual?picture(q.correct,q.visual):''):picture(q.scene==='seed'?'SEMENTE':q.scene==='water'?'ÁGUA':'PLANTA');
+  stage=`<div class="story-scene ${a.storyArt?'story-panorama':''}">${a.storyArt?'':'<img src="assets/lumi.svg" alt="Lumi no jardim">'}${visual}</div><p class="story-text">${esc(q.text)}</p><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button><div class="story-question">${esc(q.prompt)}</div>${optionsHTML(q,true)}`;
+ }else if(q.type==='build'){
+  const illustration=q.visual!==undefined?(q.visual?picture(q.target,q.visual):''):picture(q.target);
+  stage=`<h1>${esc(q.prompt)}</h1><div class="build-picture">${illustration}</div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button><div class="build-slots" aria-label="Sílabas escolhidas: ${esc(game.build.join(' ')||'nenhuma')}">${Array.from({length:q.slots},(_,i)=>game.build[i]?`<button class="build-slot filled" data-action="remove-piece" data-index="${i}" aria-label="Retirar sílaba ${esc(game.build[i])}" ${game.solved?'disabled':''}>${esc(game.build[i])}</button>`:'<span class="build-slot">—</span>').join('')}</div><div class="syllable-options">${q.options.map((syllable,i)=>`<div class="syllable-card"><button class="syllable-button" data-action="syllable" data-index="${i}" aria-label="Adicionar sílaba ${esc(syllable)}" ${game.solved||game.buildIndices.includes(i)||game.build.length>=q.slots?'disabled':''}>${esc(syllable)}</button><button class="option-sound syllable-sound" data-action="listen-syllable" data-index="${i}" ${game.solved?'disabled':''} aria-label="Ouvir sílaba ${esc(syllable)}">${icon('sound')}Ouvir</button></div>`).join('')}</div><div class="build-actions"><button class="secondary" data-action="undo" ${!game.build.length||game.solved?'disabled':''}>${icon('back')}Desfazer</button></div><p class="build-instruction">Escolha as sílabas na ordem. Ao completar, a Lumi confere para você.</p>`;
+ }else if(q.type==='see'){
+  const reference=q.reference?`<div class="see-reference ${q.reference.count?'is-count':''}" role="img" aria-label="${esc(q.reference.count?q.reference.count+' figuras para contar':optionLabel(q,q.reference.key))}">${seeArt(q.reference)}</div>`:'';
+  stage=`<h1>${esc(q.prompt)}</h1>${reference}<div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button></div>${optionsHTML(q)}`;
+ }else if(q.type==='memory'){
+  const open=new Set([...(game.matched||[]),...(game.flipped||[])]);
+  stage=`<h1>${esc(q.prompt)}</h1><div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button></div><div class="memory-grid cards-${q.cards.length}">${q.cards.map((card,i)=>{const key=card.split('~')[0],shown=open.has(i),done=(game.matched||[]).includes(i);return `<button class="memory-card ${shown?'is-open':''} ${done?'is-matched':''}" data-action="flip" data-index="${i}" aria-label="Carta ${i+1}${shown?': '+esc(MEMORY_NAMES[key]||key.toLocaleLowerCase('pt-BR')):', virada para baixo'}" ${done||game.solved||game.flipped?.includes(i)?'aria-disabled="true"':''}><span class="memory-back" aria-hidden="true"><img src="assets/lumi.svg" alt=""></span><span class="memory-front" aria-hidden="true"><svg class="word-picture" viewBox="0 0 100 100" fill="none">${WORD_ART[key]}</svg></span></button>`;}).join('')}</div>`;
+ }else{
+  const title=q.type==='read'?'Qual figura combina?':q.type==='missing'?'Qual letra está faltando?':q.type==='sound'?(a.id==='rhymes'?'Quais palavras rimam?':'Qual nome começa com o mesmo som?'):q.prompt;
+  stage=`<h1>${esc(title)}</h1>${q.type==='sound'?`<div class="reference-word">${picture(q.reference)}${esc(q.reference)}</div>`:''}${['read','missing'].includes(q.type)?`<div class="word-target">${esc(q.type==='missing'?q.gap:q.target)}</div>${q.type==='missing'?`<div class="build-picture">${picture(q.target)}</div>`:''}`:''}<div><button class="audio-prompt" data-action="listen">${icon('sound')}${listenLabel}</button></div>${optionsHTML(q)}`;
+ }
+ return `<div class="game-wrap ${game.solved?'has-dock':''}">${game.preview?'<div class="preview-banner">Teste da professora · esta sessão não gera registros.<button class="text-button" data-action="preview-back">Voltar à preparação</button></div>':''}<div class="game-header"><button class="quiet" data-action="nav" data-view="adventure">${icon('back')}Voltar</button><div class="game-title">${icon(a.icon)}${esc(a.name)}</div><span class="text-muted">${game.index+1} / ${game.questions.length}</span></div><div class="game-progress" aria-label="Desafio ${game.index+1} de ${game.questions.length}">${game.questions.map((_,i)=>`<span class="${i<game.index?'done':i===game.index?'current':''}"></span>`).join('')}</div><section class="game-card ${q.type==='story'?'is-story':''} ${game.solved?'celebrating':''}" tabindex="-1">${q.type==='story'?`<div class="game-hint">${icon('users')}Leiam juntos com um adulto.</div>`:''}${game.solved?`<div class="discovery-sparkles" aria-hidden="true">${Array.from({length:6},(_,i)=>`<span style="--sparkle:${i}">${icon(i%2?'star':'sprout')}</span>`).join('')}</div>`:''}${stage}<div class="feedback ${game.lastWrong?'neutral':''}" role="status" aria-live="polite">${game.feedback?`<span class="feedback-message">${icon(game.solved?'check':'leaf')}${esc(game.feedback)}</span>`:'<span class="text-muted">Pode experimentar. A Lumi está aqui com você.</span>'}</div></section><div class="game-footer">${icon('heart')}Sem pressa. Você pode ouvir de novo e tentar outra vez.</div>${game.solved?`<div class="continue-dock" role="region" aria-label="Próximo passo"><img class="continue-lumi" src="assets/lumi.svg" alt=""><div class="continue-copy"><strong>${game.index===game.questions.length-1?'Você conseguiu!':'Isso!'}</strong><span>Toque em Continuar.</span></div><button class="continue-button" data-action="next">${game.index===game.questions.length-1?'Concluir':'Continuar'}${icon('arrow')}</button></div>`:''}</div>`;
+}
+function soundIntroHTML(){
+ return `<div class="game-wrap"><div class="game-header"><button class="quiet" data-action="nav" data-view="adventure">${icon('back')}Voltar</button><div class="game-title">${icon('search')}Detetive dos sons</div></div><section class="game-card sound-intro"><div class="game-eyebrow">UM EXEMPLO ANTES DE COMEÇAR</div><h1>Vamos escutar o comecinho?</h1><p>Bola e bota começam de um jeito parecido. Ouça os nomes com um adulto.</p><div class="sound-example"><div>${picture('BOLA')}<strong>BOLA</strong></div><span>${icon('sound')}</span><div>${picture('BOTA')}<strong>BOTA</strong></div></div><button class="secondary" data-action="sound-demo">${icon('sound')}Ouvir o exemplo</button><p class="sound-example-note">No jogo, ouça o nome apresentado e depois cada opção. Escolha a figura cujo nome começa com o mesmo som.</p><button class="primary" data-action="start-sound-round">Vamos experimentar${icon('arrow')}</button></section></div>`;
 }
 function optionsHTML(q,story=false){
- const isLetter=['letter','missing'].includes(q.type),showNames=['sound','story'].includes(q.type);
- return `<div class="answer-options ${story?'story-options':''}">${q.options.map((option,i)=>`<div><button class="answer-button ${isLetter?'letter':''} ${game.solved&&option===q.correct?'correct':game.lastWrong===option?'wrong':''}" data-action="answer" data-index="${i}" aria-label="Escolher ${esc(option)}" ${game.solved?'disabled':''}>${isLetter?option:`${picture(option)}${showNames?`<span>${option}</span>`:''}`}</button>${q.type==='sound'?`<button class="option-sound" data-action="listen-option" data-index="${i}" ${game.solved?'disabled':''} aria-label="Ouvir ${esc(option)}">${icon('sound')}Ouvir</button>`:''}</div>`).join('')}</div>`;
+ if(q.type==='see')return `<div class="answer-options see-options options-${q.options.length}">${q.options.map((option,i)=>`<div><button class="answer-button see-button ${game.solved&&option===q.correct?'correct':game.lastWrong===option?'wrong':''}" data-action="answer" data-index="${i}" aria-label="Escolher ${esc(optionLabel(q,option))}" ${game.solved?'disabled':''}>${seeArt(q.art?.[option])}</button>${q.say?`<button class="option-sound" data-action="listen-option" data-index="${i}" ${game.solved?'disabled':''} aria-label="Ouvir ${esc(q.say[option])}">${icon('sound')}Ouvir</button>`:''}</div>`).join('')}</div>`;
+ const isLetter=['letter','missing'].includes(q.type),showNames=['sound','story','choice'].includes(q.type);
+ return `<div class="answer-options ${story?'story-options':''}">${q.options.map((option,i)=>{
+  const art=q.visuals?(q.visuals[option]?picture(option,q.visuals[option]):''):picture(option);
+  return `<div><button class="answer-button ${isLetter?'letter':''} ${game.solved&&option===q.correct?'correct':game.lastWrong===option?'wrong':''}" data-action="answer" data-index="${i}" aria-label="Escolher ${esc(option)}" ${game.solved?'disabled':''}>${isLetter?esc(option):`${art}${showNames?`<span class="option-text">${esc(option)}</span>`:''}`}</button>${['sound','choice'].includes(q.type)?`<button class="option-sound" data-action="listen-option" data-index="${i}" ${game.solved?'disabled':''} aria-label="Ouvir ${esc(option)}">${icon('sound')}Ouvir</button>`:''}</div>`;
+ }).join('')}</div>`;
 }
 function submitAnswer(answer){
- if(!game||game.solved||game.completed)return;const q=game.questions[game.index];game.attempts++;
+ if(!game||game.intro||game.solved||game.completed)return;const q=game.questions[game.index];if(q.type==='memory'){if(answer!=='pairs'||(game.matched||[]).length!==q.cards.length)return;}else game.attempts++;
  if(answerIsCorrect(q,answer)){
   game.solved=true;game.lastWrong=null;game.feedback=q.type==='story'?'Isso! Você descobriu uma parte da história.':'Isso! Mais uma descoberta no caminho.';
-  game.rounds.push({prompt:q.type==='story'?q.prompt:q.type==='read'?q.target:q.prompt,answer:Array.isArray(answer)?answer.join(' '):answer,attempts:game.attempts,helps:game.helps});
-  if(state.settings.sound)speak(q.type==='read'?`Isso! A palavra é ${q.target}.`:'Isso! Vamos para a próxima descoberta.');
- }else{game.lastWrong=Array.isArray(answer)?'build':answer;game.feedback=q.type==='build'?'Vamos ajustar as sílabas? Você pode desfazer e ouvir a palavra.':'Vamos olhar de novo? Você pode ouvir a dica e tentar outra vez.';}
- render();if(game.solved)requestAnimationFrame(()=>$('[data-action="next"]')?.focus({preventScroll:true}));
+  game.rounds.push({prompt:q.type==='story'?q.prompt:q.type==='read'?q.target:q.prompt,answer:Array.isArray(answer)?answer.join(' '):q.type==='memory'?'Todos os pares encontrados':q.type==='see'?optionLabel(q,answer):answer,attempts:game.attempts,helps:game.helps});
+  if(audioEnabled())speak(q.type==='read'?`Isso! A palavra é ${q.target}.`:'Isso! Vamos para a próxima descoberta.');
+ }else{game.lastWrong=Array.isArray(answer)?'build':answer;game.feedback=q.type==='build'?WRONG_FEEDBACK.build:WRONG_FEEDBACK.default;if(audioEnabled())speak(game.feedback);}
+ render();
 }
 function nextQuestion(){
- if(!game||!game.solved)return;stopSpeech();
+ if(!game||!game.solved||game.completed)return;stopSpeech();
  if(game.index===game.questions.length-1){finishActivity();return;}
- game.index++;game.solved=false;game.attempts=0;game.helps=0;game.build=[];game.feedback='';game.lastWrong=null;render();if(state.settings.sound)speakInitial();
+ game.index++;game.solved=false;game.attempts=0;game.helps=0;game.build=[];game.buildIndices=[];game.flipped=[];game.matched=[];clearTimeout(memoryTimer);game.feedback='';game.lastWrong=null;render();requestAnimationFrame(()=>$('.game-card')?.focus({preventScroll:true}));if(audioEnabled())speakInitial();
 }
+let memoryTimer=null;
+function flipCard(index){
+ if(!game||game.completed||game.solved)return;const q=game.questions[game.index];if(q.type!=='memory'||!(index>=0&&index<q.cards.length))return;
+ game.flipped=game.flipped||[];game.matched=game.matched||[];
+ if(game.matched.includes(index)||game.flipped.includes(index)||game.flipped.length>=2)return;
+ game.flipped.push(index);const key=q.cards[index].split('~')[0];
+ if(game.flipped.length===2){
+  game.attempts++;const [a,b]=game.flipped.map(i=>q.cards[i].split('~')[0]);
+  if(a===b){game.matched.push(...game.flipped);game.flipped=[];
+   if(game.matched.length===q.cards.length){submitAnswer('pairs');focusAfterAnswer(null);return;}
+   game.feedback='Achou um par! Continue procurando.';game.lastWrong=null;
+  }else{game.feedback='Não é par. Olhe de novo e tente outra carta.';game.lastWrong='memory';clearTimeout(memoryTimer);memoryTimer=setTimeout(()=>{if(game&&game.flipped?.length===2){game.flipped=[];render();focusSelector(`[data-action="flip"][data-index="${index}"]`);}},1600);}
+ }else{game.feedback='';game.lastWrong=null;}
+ if(audioEnabled()&&!game.solved)speak(key);
+ render();focusSelector(`[data-action="flip"][data-index="${index}"]`);
+}
+function focusSelector(selector){if(!selector)return;try{requestAnimationFrame(()=>document.querySelector(selector)?.focus?.({preventScroll:true}));}catch{}}
+// Após responder, o foco vai para Continuar (acerto) ou volta à opção tocada (nova tentativa).
+function focusAfterAnswer(fallback){if(!game)return;focusSelector(game.solved?'[data-action="next"]':fallback);}
 function finishActivity(){
- state=recordSession(state,{profileId:game.profileId,activityId:game.activity.id,rounds:game.rounds,seconds:game.seconds});save();game.completed=true;lastCompletion={...game};render();window.scrollTo({top:0,behavior:'instant'});if(state.settings.sound)speak('Aventura concluída! Agora, que tal brincar um pouco fora da tela?');
+ if(!game.preview){state=recordSession(state,{profileId:game.profileId,activityId:game.activity.id,rounds:game.rounds,seconds:game.seconds});save();game.savedSessionId=state.sessions.at(-1).id;}game.completed=true;lastCompletion={...game};render();window.scrollTo({top:0,behavior:'instant'});if(audioEnabled())speak('Aventura concluída! Agora, que tal brincar um pouco fora da tela?');
+}
+function completionGarden(c){
+ const trail=dailyTrail(state,c.profileId||active().id),garden=gardenFor(state,c.profileId||active().id);
+ return `<div class="completion-garden">${gardenSVG(garden,{compact:true})}<div><strong>Uma planta nova nasceu no jardim!</strong><span>${trail.complete?'Trilha de hoje completa: uma estrela brilhou no céu do jardim.':`Trilha de hoje: ${trail.done} de ${trail.steps.length} paradas.`}</span></div></div>`;
 }
 function completion(){
  const c=lastCompletion||game;
- return `<section class="completion"><div class="completion-hero">${icon('star')}<img src="assets/lumi.svg" alt="Lumi sorrindo">${icon('sprout')}</div><div class="eyebrow">MAIS UMA DESCOBERTA NO CAMINHO</div><h1>Você e a Lumi foram longe!</h1><p>Você explorou <strong>${c.activity.name}</strong>. Cada tentativa fez parte da aventura.</p><div class="completion-summary"><div><strong>${c.rounds.length}</strong>desafios explorados</div><div><strong>${formatDuration(c.seconds)}</strong>tempo de brincadeira</div></div><div class="completion-offline"><strong>A próxima descoberta pode ser fora da tela.</strong>Escolha uma palavra da atividade e desenhe o que ela representa. Convide um adulto para escrever a palavra com você.</div><div class="completion-actions"><button class="primary" data-action="nav" data-view="adventure">Voltar à aventura${icon('arrow')}</button><button class="secondary" data-action="print">${icon('print')}Levar para o papel</button></div><div class="session-note" style="justify-content:center">${icon('check')}O registro da atividade aparece na área da família.</div></section>`;
+ if(c.preview)return `<section class="completion"><div class="completion-hero"><img src="assets/lumi.svg" alt="Lumi sorrindo">${icon('check')}</div><div class="eyebrow">TESTE DA PROFESSORA CONCLUÍDO</div><h1>Como ficou a sua atividade?</h1><p>Você experimentou <strong>${esc(c.activity.name)}</strong>. Este teste não entrou nos registros dos perfis.</p><div class="spacer"></div><button class="primary" data-action="preview-back">Voltar à preparação${icon('arrow')}</button></section>`;
+ return `<section class="completion"><div class="completion-hero">${icon('star')}<img src="assets/lumi.svg" alt="Lumi sorrindo">${icon('sprout')}</div><div class="eyebrow">MAIS UMA DESCOBERTA NO CAMINHO</div><h1>Você e a Lumi foram longe!</h1><p>Você explorou <strong>${esc(c.activity.name)}</strong>. Cada tentativa fez parte da aventura.</p><div class="completion-summary"><div><strong>${c.rounds.length}</strong>desafios explorados</div><div><strong>${formatDuration(c.seconds)}</strong>tempo de brincadeira</div></div>${completionGarden(c)}${c.activity.category==='Histórias'&&recordingSupported()?`<div class="retell-callout"><div><strong>Conte para a Lumi!</strong><span>Grave a criança recontando a parte de que mais gostou. O áudio fica só neste aparelho.</span></div><button class="secondary" data-action="record-retell">${icon('mic')}Gravar o reconto</button></div>`:''}<div class="completion-actions"><button class="primary" data-action="nav" data-view="adventure">Voltar para Hoje${icon('arrow')}</button><button class="secondary" data-action="observe-session" data-session="${esc(c.savedSessionId)}">${icon('heart')}Responsável: contar como foi</button></div><div class="session-note" style="justify-content:center">${icon('check')}Esta experiência já aparece em Descobertas.</div></section>`;
 }
 function formatDuration(seconds){const n=Math.max(0,Math.round(seconds));return n<60?`${n}s`:`${Math.floor(n/60)}min${n%60?' '+n%60+'s':''}`;}
 function formatDate(iso){const date=new Date(iso);return Number.isNaN(date.valueOf())?'Data indisponível':new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(date);}
+function openTeacherEditor(activity=null,template=null){
+ requireAdult(()=>{
+  closeModal();stopSpeech();game=null;view='editor';editorDirty=false;
+  teacherDraft=activity?JSON.parse(JSON.stringify(activity)):template?newTeachingDraft(template,'teacher-'+(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36))):null;
+  render();window.scrollTo({top:0,behavior:'instant'});$('#main').focus({preventScroll:true});
+ });
+}
+function captureTeacherDraft(){if(teacherDraft&&view==='editor')teacherDraft=readEditorDraft(document,teacherDraft);return teacherDraft;}
+function saveTeacherDraft(publish=false){
+ requireAdult(()=>{
+  try{
+   const raw=captureTeacherDraft();if(!raw)return;
+   const candidate={...raw,published:publish||raw.published,updatedAt:new Date().toISOString()};
+   state=saveTeachingActivity(state,candidate);save();teacherDraft=activityById(state,candidate.id,{includeDrafts:true});editorDirty=false;view='school';render();
+   toast(storageAvailable?(candidate.published?'Atividade disponibilizada. Ela já pode ser escolhida na aventura.':'Rascunho salvo. Você pode editar e testar antes de disponibilizar.'):'Atividade disponível nesta sessão. Exporte o pacote para guardar uma cópia.');
+  }catch(error){$('#editor-error').textContent=error.message;$('#editor-error').focus();}
+ });
+}
+function previewTeacherActivity(id=null){
+ requireAdult(()=>{
+  try{
+   const source=id?activityById(state,id,{includeDrafts:true}):validateTeachingActivity(captureTeacherDraft());
+   if(!source)return;
+   startActivity(source.id,{preview:true,activity:source,returnView:id?'school':'editor'});
+  }catch(error){$('#editor-error').textContent=error.message;$('#editor-error').focus();}
+ });
+}
+function leaveTeacherPreview(){
+ if(!game?.preview)return;const destination=game.returnView;
+ requireAdult(()=>{stopSpeech();closeModal();game=null;view=destination==='editor'?'editor':'school';render();$('#main').focus({preventScroll:true});});
+}
+function downloadText(filename,text,type='application/json;charset=utf-8'){
+ const url=URL.createObjectURL(new Blob([text],{type})),link=document.createElement('a');link.href=url;link.download=filename;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function loadTeachingPack(file){
+ if(!file)return;
+ try{
+  if(file.size>1024*1024)throw new Error('Use um pacote com até 1 MB.');
+  const pack=parseTeachingPack(await file.text());pendingTeachingPack=pack;
+  const replacing=pack.activities.filter(a=>state.customActivities.some(x=>x.id===a.id)).length;
+  openModal('Importar atividades da professora',`<p class="modal-description">O pacote contém ${pack.activities.length} atividades. ${replacing?`${replacing} já existem neste aparelho e serão atualizadas.`:'As atividades serão adicionadas à prévia deste aparelho.'} Os perfis e registros existentes serão preservados.</p><ul class="import-preview">${pack.activities.map(a=>`<li>${esc(a.name)} · ${a.questions.length} desafios · ${a.published?'disponibilizada':'rascunho'}</li>`).join('')}</ul><div class="button-row"><button class="primary" data-action="confirm-teaching-import">Importar atividades${icon('check')}</button><button class="secondary" data-action="close-modal">Cancelar</button></div>`);
+ }catch(error){toast(error.message);}
+}
 function openModal(title,body,context={}){
  stopSpeech();if(!overlayRoot.innerHTML)returnFocus=document.activeElement;modalContext=context;
  overlayRoot.innerHTML=`<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-header"><h2 id="modal-title">${title}</h2><button class="modal-close" data-action="close-modal" aria-label="Fechar janela">${icon('close')}</button></div>${body}</section></div>`;
  requestAnimationFrame(()=>{const target=$('.modal [autofocus]')||$('.modal-close');target?.focus();});
 }
-function closeModal(){overlayRoot.innerHTML='';modalContext=null;if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});returnFocus=null;}
+function closeModal(){if(modalContext?.voice)stopVoiceSession();overlayRoot.innerHTML='';modalContext=null;if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});returnFocus=null;}
 function showGate(callback){
  const a=7+Math.floor(Math.random()*6),b=4+Math.floor(Math.random()*6);
  openModal('Um instante para o adulto',`<div class="gate-visual"><img src="assets/lumi.svg" alt=""></div><p class="modal-description">Esta área é para quem acompanha a aventura. Peça a um adulto para continuar.</p><form id="gate-form"><div class="gate-question" aria-label="Quanto é ${a} mais ${b}?">${a} + ${b} = ?</div><div class="form-field"><label for="gate-answer">Resposta</label><input id="gate-answer" inputmode="numeric" type="text" pattern="[0-9]+" required autocomplete="off" autofocus></div><div id="form-error" class="form-error" role="alert"></div><button class="primary full" type="submit">Continuar${icon('arrow')}</button></form><p class="modal-footer-note">Este passo evita trocas acidentais de área. A demonstração não oferece autenticação de contas reais.</p>`,{gate:a+b,callback});
 }
 function requireAdult(callback){if(Date.now()>adultUntil)showGate(callback);else callback();}
 function showProfiles(){
- openModal('Quem vai explorar?',`<p class="modal-description">Escolha um dos perfis fictícios para testar a aventura.</p><div class="profile-list">${state.profiles.map(p=>`<button class="profile-option ${p.id===state.activeProfile?'active':''}" data-action="select-profile" data-profile="${esc(p.id)}">${avatar(p)}${esc(p.name)}${p.id===state.activeProfile?icon('check'):icon('arrow')}</button>`).join('')}</div><p class="modal-footer-note">O progresso de cada perfil fica separado neste navegador.</p>`);
+ openModal('Quem vai explorar?',`<p class="modal-description">Cada perfil tem suas preferências e seus registros.</p><div class="profile-list">${state.profiles.map(p=>`<button class="profile-option ${p.id===state.activeProfile?'active':''}" data-action="select-profile" data-profile="${esc(p.id)}">${avatar(p)}<span>${esc(p.name)}${p.age?` · ${p.age} anos`:''}</span>${p.id===state.activeProfile?icon('check'):icon('arrow')}</button>`).join('')}</div><button class="secondary full" data-action="new-family-profile">${icon('plus')}Adicionar perfil</button><p class="modal-footer-note">Os registros ficam separados neste navegador.</p>`);
+}
+function showFamilyProfileForm(profile=active()){
+ requireAdult(()=>openModal(profile?'Ajustar o perfil':'Um novo explorador',familyProfileFormHTML(profile,icon),{familyProfileId:profile?.id||'profile-'+(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36))}));
+}
+// ——— Reconto gravado (0.7) ———
+let voiceSession=null,voiceUrls=[];
+function stopVoiceSession(){if(voiceSession?.controller)voiceSession.controller.stop();if(voiceSession?.url)URL.revokeObjectURL(voiceSession.url);voiceSession=null;}
+function showRetellRecorder(){
+ const c=lastCompletion;if(!c||!recordingSupported())return;stopVoiceSession();
+ voiceSession={profileId:c.profileId||active().id,activityId:c.activity.id,activityName:c.activity.name};
+ openModal('Gravar o reconto',`<div class="retell-modal"><img src="assets/lumi.svg" alt=""><p class="modal-description">Peça para a criança contar a parte da história de que mais gostou. Vale contar do jeito dela, com poucas palavras ou mostrando com gestos.</p><p class="family-profile-note">A gravação fica só neste aparelho. Ninguém recebe o áudio, e você pode apagar quando quiser em Descobertas. Ela não entra na cópia dos registros.</p><div id="retell-stage">${retellIdleHTML()}</div></div>`,{voice:true});
+ requestAnimationFrame(()=>{if(audioEnabled())speak(FAMILY_VOICE.retell);});
+}
+function retellIdleHTML(){return `<div class="button-row retell-actions"><button class="secondary" data-action="retell-prompt">${icon('sound')}Ouvir o pedido da Lumi</button><button class="record-button" data-action="start-recording">${icon('mic')}Começar a gravar</button></div>`;}
+function setRetellStage(html){const node=$('#retell-stage');if(node)node.innerHTML=html;}
+function startRetellRecording(){
+ if(!voiceSession)return;stopSpeech();if(voiceSession.url){URL.revokeObjectURL(voiceSession.url);voiceSession.url=null;}
+ setRetellStage(`<div class="recording-live" role="status"><span class="rec-dot" aria-hidden="true"></span><strong>Gravando…</strong><span id="rec-time">0 s de ${VOICE_LIMIT_SECONDS} s</span></div><button class="record-button is-stop" data-action="stop-recording">${icon('stop')}Parar</button>`);
+ voiceSession.controller=startVoiceRecording({onTick:sec=>{const t=$('#rec-time');if(t)t.textContent=`${sec} s de ${VOICE_LIMIT_SECONDS} s`;},
+  onDone:({blob,seconds})=>{if(!voiceSession)return;voiceSession.controller=null;voiceSession.blob=blob;voiceSession.seconds=seconds;voiceSession.url=URL.createObjectURL(blob);setRetellStage(`<audio controls src="${voiceSession.url}"></audio><div class="button-row retell-actions"><button class="primary" data-action="save-recording">${icon('check')}Guardar</button><button class="secondary" data-action="start-recording">${icon('repeat')}Gravar de novo</button><button class="quiet" data-action="close-modal">Descartar</button></div>`);$('[data-action="save-recording"]')?.focus();},
+  onError:error=>{if(!voiceSession)return;voiceSession.controller=null;setRetellStage(`<p class="form-error" role="alert">${esc(error.message)}</p>${retellIdleHTML()}`);}});
+}
+function saveRetell(){
+ const v=voiceSession;if(!v?.blob)return;
+ saveVoiceClip({id:'voz-'+Date.now().toString(36),profileId:v.profileId,activityId:v.activityId,activityName:v.activityName,seconds:v.seconds,blob:v.blob}).then(()=>{closeModal();toast('Reconto guardado em Descobertas, só neste aparelho.');}).catch(()=>toast('Não foi possível guardar neste navegador. O armazenamento pode estar cheio ou bloqueado.'));
+}
+function hydrateVoices(){
+ const panel=$('#voices-panel');if(!panel||!recordingSupported())return;
+ for(const url of voiceUrls)URL.revokeObjectURL(url);voiceUrls=[];
+ listVoiceClips(active().id).then(clips=>{
+  const list=$('#voices-list');if(!list)return;
+  list.innerHTML=clips.length?clips.map(c=>{const url=URL.createObjectURL(c.blob);voiceUrls.push(url);return `<li><div><strong>${esc(c.activityName||'Reconto')}</strong><small>${formatDate(c.createdAt)} · ${c.seconds} s</small></div><audio controls preload="none" src="${url}" aria-label="Reconto de ${esc(c.activityName||'história')}"></audio><button class="quiet" data-action="delete-voice" data-id="${esc(c.id)}" aria-label="Apagar reconto de ${esc(c.activityName||'história')}">${icon('trash')}Apagar</button></li>`;}).join(''):'<li class="text-muted">Ainda não há recontos gravados. Depois de uma história, toque em Gravar o reconto.</li>';
+ }).catch(()=>{const list=$('#voices-list');if(list)list.innerHTML='<li class="text-muted">Este navegador não permite guardar áudios.</li>';});
+}
+function showOfflineActivity(id){
+ const activity=OFFLINE_ACTIVITIES.find(a=>a.id===id);if(!activity)return;
+ openModal(activity.name,`<div class="offline-detail"><div class="eyebrow">PARA BRINCAR COM UM ADULTO · FORA DA TELA</div><p>${esc(activity.description)}</p><h3>O que separar</h3><p>${esc(activity.materials)}</p><h3>Vamos experimentar?</h3><ol>${activity.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol><p class="family-profile-note">Adapte o convite ao conforto da criança. Ela pode falar, apontar, usar seu recurso de comunicação ou participar com apoio.</p><div class="button-row"><button class="secondary" data-action="listen-offline" data-id="${activity.id}">${icon('sound')}Ouvir o convite</button><button class="primary" data-action="observe-offline" data-id="${activity.id}">Contar como foi${icon('arrow')}</button></div></div>`);
+}
+function showFamilyObservation({sessionId=null,offlineId=null}={}){
+ const profileId=active().id;
+ requireAdult(()=>{
+  const session=state.sessions.find(s=>s.id===sessionId&&s.profileId===profileId),outside=OFFLINE_ACTIVITIES.find(a=>a.id===offlineId);
+  if(!session&&!outside){toast('Escolha uma experiência deste perfil.');return;}
+  const previous=session?(state.observations||[]).find(o=>o.sessionId===session.id):null;
+  const activityId=session?.activityId||outside.id,name=session?.activityName||outside?.name||'Brincadeira';
+  openModal('Como foi esse momento?',`<p class="modal-description"><strong>${esc(name)}</strong> · ${esc(active().name)}<br>Este é o seu relato sobre a participação, separado dos registros do jogo.</p><form id="family-observation-form"><div class="form-field"><label for="family-participation">O que você acompanhou?</label><select id="family-participation" required><option value="">Escolha...</option>${PARTICIPATION.map(([value,label])=>`<option value="${value}" ${previous?.participation===value?'selected':''}>${label}</option>`).join('')}</select></div><div class="form-field"><label for="family-observation-note">Algo para lembrar? <span class="text-muted">(opcional)</span></label><textarea id="family-observation-note" maxlength="400" rows="3" placeholder="Por exemplo: apontou para os animais e quis repetir a brincadeira.">${esc(previous?.note||'')}</textarea></div><div id="family-observation-error" class="form-error" role="alert"></div><button class="primary full" type="submit">Guardar este momento${icon('heart')}</button></form>`,{familyObservation:{id:previous?.id||'observation-'+(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)),profileId,activityId,sessionId:session?.id||null,kind:session?'digital':'offline'}});
+ });
+}
+async function loadFamilyBackup(file){
+ if(!file)return;
+ try{
+  if(file.size>5*1024*1024)throw new Error('Escolha uma cópia com até 5 MB.');
+  const restored=parseFamilyBackup(await file.text());pendingFamilyBackup=restored;
+  openModal('Restaurar estes registros?',`<p class="modal-description">A cópia contém ${restored.profiles.length} perfis, ${restored.sessions.length} brincadeiras digitais e ${restored.observations.length} observações. Ao continuar, os registros deste navegador serão substituídos pelos da cópia.</p><p>Se quiser guardar os registros atuais, baixe uma cópia antes de continuar.</p><div class="button-row"><button class="secondary" data-action="backup-family">${icon('download')}Baixar registros atuais</button><button class="primary" data-action="confirm-family-restore">Restaurar esta cópia${icon('check')}</button></div>`);
+ }catch(error){pendingFamilyBackup=null;toast(error.message);}
+}
+function printFamilySummary(){
+ requireAdult(()=>{
+  const text=familySummaryText(state,active().id),win=window.open('','_blank','width=800,height=900');if(!win){toast('Permita a janela de impressão e tente novamente.');return;}
+  win.opener=null;win.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Lumi — Descobertas em família</title><style>body{font:15px/1.7 Arial,sans-serif;color:#243f35;max-width:760px;margin:30px auto;padding:20px}pre{font:inherit;white-space:pre-wrap;overflow-wrap:anywhere}button{padding:14px;border:0;background:#247c63;color:white;border-radius:8px}@media print{button{display:none}@page{margin:18mm}}</style></head><body><pre>${esc(text)}</pre><button onclick="window.print()">Imprimir ou salvar em PDF</button></body></html>`);win.document.close();
+ });
 }
 function showSettings(){
- openModal('Um jeito de brincar para você',`<p class="modal-description">Ajuste o áudio, o movimento e o tamanho do texto.</p>${[['sound','Áudio e narração','Instruções faladas pela voz disponível no aparelho.'],['reducedMotion','Menos movimento','Reduz transições e animações da interface.'],['largeText','Texto maior','Aumenta textos e elementos das atividades.']].map(([key,label,desc])=>`<div class="settings-row"><div><label id="label-${key}">${label}</label><p>${desc}</p></div><button class="toggle ${state.settings[key]?'on':''}" role="switch" aria-checked="${state.settings[key]}" aria-labelledby="label-${key}" data-action="setting" data-setting="${key}"></button></div>`).join('')}<div class="settings-row"><div><label for="session-minutes">Lembrete de pausa</label><p>Uma pausa depois de alguns minutos de atividade.</p></div><select id="session-minutes" class="small-select">${[5,10,15].map(n=>`<option value="${n}" ${state.settings.sessionMinutes===n?'selected':''}>${n} min</option>`).join('')}</select></div><div class="spacer"></div><button class="secondary" style="width:100%;margin-bottom:12px" data-action="voice-preview">${icon('sound')}Ouvir a voz da Lumi</button><button class="primary full" data-action="close-modal">Pronto${icon('check')}</button><p class="modal-footer-note">A prévia usa o áudio da Lumi enviado do ElevenLabs. Nas atividades, falas com MP3 correspondente usam gravações; as demais continuam com a voz do aparelho.</p>`);
+ openModal('Um jeito de brincar para você',`<p class="modal-description">Ajuste as preferências deste navegador. Os apoios específicos da criança ficam em Perfil.</p>${[['sound','Áudio e narração','Instruções faladas pela voz disponível no aparelho.'],['reducedMotion','Menos movimento','Reduz transições e animações da interface.'],['largeText','Texto maior','Aumenta textos e elementos das atividades.']].map(([key,label,desc])=>`<div class="settings-row"><div><label id="label-${key}">${label}</label><p>${desc}</p></div><button class="toggle ${state.settings[key]?'on':''}" role="switch" aria-checked="${state.settings[key]}" aria-labelledby="label-${key}" data-action="setting" data-setting="${key}"></button></div>`).join('')}<div class="settings-row"><div><label for="session-minutes">Lembrete de pausa</label><p>Uma pausa depois de alguns minutos de atividade.</p></div><select id="session-minutes" class="small-select">${[5,10,15].map(n=>`<option value="${n}" ${state.settings.sessionMinutes===n?'selected':''}>${n} min</option>`).join('')}</select></div><div class="spacer"></div><button class="secondary" style="width:100%;margin-bottom:12px" data-action="voice-preview">${icon('sound')}Ouvir a voz da Lumi</button><button class="primary full" data-action="close-modal">Pronto${icon('check')}</button><p class="modal-footer-note">A prévia usa o áudio da Lumi enviado do ElevenLabs. Nas atividades, falas com MP3 correspondente usam gravações; as demais continuam com a voz do aparelho.</p>`);
 }
 function showAssignment(){
- openModal('Sugerir uma descoberta',`<p class="modal-description">A atividade aparecerá na área da família do perfil escolhido, neste mesmo navegador.</p><form id="assignment-form"><div class="form-field"><label for="assignment-profile">Perfil de demonstração</label><select id="assignment-profile">${state.profiles.map(p=>`<option value="${esc(p.id)}" ${p.id===state.activeProfile?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div><div class="form-field"><label for="assignment-activity">Atividade</label><select id="assignment-activity">${ACTIVITIES.map(a=>`<option value="${a.id}">${a.name}</option>`).join('')}</select></div><button class="primary full" type="submit">Sugerir atividade${icon('arrow')}</button></form>`);
+ openModal('Sugerir uma descoberta',`<p class="modal-description">A atividade aparecerá na área da família do perfil escolhido, neste mesmo navegador.</p><form id="assignment-form"><div class="form-field"><label for="assignment-profile">Perfil de demonstração</label><select id="assignment-profile">${state.profiles.map(p=>`<option value="${esc(p.id)}" ${p.id===state.activeProfile?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div><div class="form-field"><label for="assignment-activity">Atividade</label><select id="assignment-activity">${availableActivities(state).map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div><button class="primary full" type="submit">Sugerir atividade${icon('arrow')}</button></form>`);
 }
 function showAddProfile(){
  if(state.profiles.length>=30){toast('A demonstração permite até 30 perfis.');return;}
  openModal('Adicionar perfil de teste',`<p class="modal-description">Use apenas um apelido fictício. Esta versão não foi preparada para cadastrar dados reais de crianças.</p><form id="profile-form"><div class="form-field"><label for="profile-name">Apelido fictício</label><input id="profile-name" maxlength="30" minlength="2" placeholder="Explorador ${state.profiles.length+1}" required autofocus></div><div class="form-field"><label for="profile-avatar">Companheiro</label><select id="profile-avatar"><option value="fox">Raposa</option><option value="cat">Gato</option><option value="frog">Sapo</option><option value="owl">Coruja</option></select></div><div id="form-error" class="form-error" role="alert"></div><button class="primary full" type="submit">Adicionar perfil${icon('plus')}</button></form>`);
 }
 function showHelp(){
- openModal('Olá, somos a Lumi.',`<div class="help-content"><p>Uma primeira versão para explorar letras, palavras e histórias com acompanhamento de um adulto.</p><ul><li><strong>Minha aventura:</strong> cinco jogos e uma história interativa.</li><li><strong>Família:</strong> registros das atividades realizadas e sugestões para acompanhar.</li><li><strong>Escola:</strong> perfis fictícios e sugestões que aparecem na área da família.</li></ul><p>O progresso fica neste navegador. Não há contas reais, sincronização entre aparelhos nem cobrança. O conteúdo é uma demonstração e precisa de revisão por um alfabetizador antes de um piloto com crianças.</p><div class="print-help">Depois de um primeiro acesso com internet, o aplicativo tenta disponibilizar as atividades sem conexão. A narração depende do aparelho.</div><div class="button-row"><button class="secondary" data-action="teacher-review">${icon('book')}Avaliar a prévia</button><button class="secondary" data-action="plans">Conhecer a proposta de planos${icon('arrow')}</button><button class="secondary" data-action="audio-roadmap">${icon('download')}Roteiro das falas</button></div></div>`);
+ openModal('Olá, somos a Lumi.',`<div class="help-content"><p>Uma primeira versão para explorar letras, palavras e histórias com acompanhamento de um adulto.</p><ul><li><strong>Hoje e Brincar:</strong> sugestões por faixa etária, jogos e convites fora da tela.</li><li><strong>Descobertas:</strong> registros das brincadeiras e observações do responsável, sem notas ou comparações.</li><li><strong>Perfil:</strong> interesses, apoios de acesso e cópia dos registros.</li></ul><p>O progresso fica neste navegador. Não há contas reais, sincronização entre aparelhos nem cobrança. O conteúdo é uma demonstração e precisa de revisão pedagógica antes de um piloto com crianças.</p><div class="print-help">Depois de um primeiro acesso com internet, o aplicativo tenta disponibilizar as atividades sem conexão. A narração depende do aparelho.</div><div class="button-row"><button class="secondary" data-action="teacher-review">${icon('book')}Avaliar a prévia</button><button class="secondary" data-action="plans">Conhecer a proposta de planos${icon('arrow')}</button><button class="secondary" data-action="audio-roadmap">${icon('download')}Roteiro das falas</button></div></div>`);
 }
 const REVIEW_QUESTIONS=[
  'Para qual idade ou etapa escolar estas atividades parecem adequadas?',
@@ -199,7 +384,7 @@ const REVIEW_QUESTIONS=[
 function showReview(){
  openModal('Um olhar de professora',`<p class="modal-description">Esta prévia é para avaliação de um adulto. Teste os jogos e a voz, registre suas observações e baixe a avaliação para compartilhar com Gustavo.</p><form id="review-form">${REVIEW_QUESTIONS.map((question,i)=>`<div class="form-field"><label for="review-${i}">${i+1}. ${question}</label><textarea id="review-${i}" maxlength="2000" rows="3" placeholder="Sua observação..."></textarea></div>`).join('')}<button class="primary full" type="submit">${icon('download')}Baixar avaliação</button></form><p class="modal-footer-note">As observações são baixadas como arquivo de texto. Não são enviadas automaticamente. A voz do ElevenLabs está disponível na prévia; os jogos ainda usam a voz do aparelho quando não há um MP3 correspondente.</p>`);
 }
-function showPlans(){openModal('Uma proposta para crescer juntos',`<p class="modal-description">Preços hipotéticos para validar com famílias e escolas. Não há contratação nem cobrança nesta demonstração.</p><div class="price-grid"><section class="price-card"><h3>Para a família</h3><div class="price-number">R$ 29,90<span> / mês</span></div><p>Proposta: uma criança, atividades e acompanhamento do responsável.</p></section><section class="price-card"><h3>Para a escola</h3><div class="price-number">R$ 399<span> / mês</span></div><p>Proposta: até 30 crianças, professores e acesso em casa incluído.</p></section></div><div class="spacer"></div><button class="primary full" data-action="close-modal">Continuar explorando${icon('arrow')}</button>`);}
+function showPlans(){openModal('Uma proposta para crescer juntos',`<p class="modal-description">Proposta inicial para validar com famílias. Não há contratação nem cobrança nesta demonstração.</p><div class="price-grid"><section class="price-card"><h3>Para a família</h3><div class="price-number">R$ 29,90<span> / mês</span></div><p>Proposta: uma criança, atividades e acompanhamento do responsável.</p></section></div><div class="spacer"></div><button class="primary full" data-action="close-modal">Continuar explorando${icon('arrow')}</button>`);}
 function exportCSV(profileId){
  const data=sessionsCSV(state,profileId||null),url=URL.createObjectURL(new Blob([data],{type:'text/csv;charset=utf-8;'}));
  const link=document.createElement('a');link.href=url;link.download='lumi-registros-demonstracao.csv';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Registros de demonstração exportados em CSV.');
@@ -214,28 +399,66 @@ function printSheet(){
 document.addEventListener('click',event=>{
  const button=event.target.closest('[data-action]');if(!button||button.disabled)return;const action=button.dataset.action;
  switch(action){
+  case 'browse-stories':filter='Histórias';search='';navigate('library');break;
+  case 'sound-demo':if(game?.intro)speak(SOUND_DEMO);break;
+  case 'start-sound-round':if(game?.intro){game.intro=false;stopSpeech();render();if(audioEnabled())speakInitial();}break;
+  case 'family-welcome':speak(FAMILY_VOICE.welcome);break;
+  case 'edit-family-profile':showFamilyProfileForm();break;
+  case 'new-family-profile':showFamilyProfileForm(null);break;
+  case 'offline-activity':showOfflineActivity(button.dataset.id);break;
+  case 'listen-offline':{const activity=OFFLINE_ACTIVITIES.find(a=>a.id===button.dataset.id);if(activity)speak(activity.narration);break;}
+  case 'observe-offline':showFamilyObservation({offlineId:button.dataset.id});break;
+  case 'observe-session':showFamilyObservation({sessionId:button.dataset.session});break;
+  case 'export-family-summary':requireAdult(()=>downloadText('Lumi_Descobertas_7_Dias.txt',familySummaryText(state,active().id)));break;
+  case 'print-family-summary':printFamilySummary();break;
+  case 'backup-family':requireAdult(()=>downloadText('Lumi_Copia_Registros.json',familyBackupJSON(state)));break;
+  case 'restore-family':requireAdult(()=>$('#family-backup-file').click());break;
+  case 'confirm-family-restore':requireAdult(()=>{if(!pendingFamilyBackup)return;stopSpeech();state=pendingFamilyBackup;pendingFamilyBackup=null;game=null;view='profile';save();closeModal();render();toast('Cópia restaurada neste navegador.');});break;
   case 'voice-preview':if(previewPlaying)stopSpeech();else narrator.playFile(VOICE_PREVIEW);break;
   case 'audio-roadmap':requireAdult(()=>{closeModal();const link=document.createElement('a');link.href='assets/audio/roteiro-narracao.txt';link.download='Lumi_Roteiro_Narracao.txt';document.body.append(link);link.click();link.remove();});break;
   case 'teacher-review':requireAdult(showReview);break;
+  case 'create-activity':openTeacherEditor(null,button.dataset.template||null);break;
+  case 'choose-template':if(TEMPLATES.some(t=>t.id===button.dataset.template))openTeacherEditor(null,button.dataset.template);break;
+  case 'edit-activity':openTeacherEditor(activityById(state,button.dataset.id,{includeDrafts:true}));break;
+  case 'add-question':if(teacherDraft&&teacherDraft.questions.length<12){captureTeacherDraft();teacherDraft.questions.push(blankQuestion(teacherDraft.template));editorDirty=true;render();requestAnimationFrame(()=>$('#question-'+(teacherDraft.questions.length-1)+'-prompt')?.focus());}break;
+  case 'remove-question':if(teacherDraft){if(teacherDraft.questions.length===1){toast('Mantenha pelo menos um desafio.');break;}captureTeacherDraft();teacherDraft.questions.splice(Number(button.dataset.index),1);editorDirty=true;render();}break;
+  case 'save-teacher':saveTeacherDraft(false);break;
+  case 'test-editor':previewTeacherActivity();break;
+  case 'preview-teacher':previewTeacherActivity(button.dataset.id);break;
+  case 'preview-back':leaveTeacherPreview();break;
+  case 'editor-back':navigate('school');break;
+  case 'export-activities':requireAdult(()=>{downloadText('Lumi_Atividades_Professora.json',exportTeachingPack(state));toast('Pacote exportado. Importe-o na Lumi do outro aparelho.');});break;
+  case 'import-activities':requireAdult(()=>$('#teacher-pack-file').click());break;
+  case 'confirm-teaching-import':{const pack=pendingTeachingPack;if(pack)requireAdult(()=>{try{state=importTeachingPack(state,pack);save();pendingTeachingPack=null;closeModal();view='school';render();toast('Atividades importadas. Confira a seleção disponível para brincar.');}catch(error){toast(error.message);}});break;}
   case 'nav':navigate(button.dataset.view);break;
   case 'play':startActivity(button.dataset.id);break;
-  case 'mute':state.settings.sound=!state.settings.sound;save();stopSpeech();render();toast(state.settings.sound?'Áudio ligado.':'Áudio desligado.');break;
+  case 'mute':if(view==='editor')captureTeacherDraft();if(active().supports?.quietMode){toast('Este perfil está configurado para brincar sem som. Um adulto pode ajustar essa preferência em Perfil.');break;}state.settings.sound=!state.settings.sound;save();stopSpeech();render();toast(audioEnabled()?'Áudio ligado.':'Áudio desligado.');break;
   case 'settings':showSettings();break;
-  case 'profiles':showProfiles();break;
-  case 'select-profile':if(state.profiles.some(p=>p.id===button.dataset.profile)){state.activeProfile=button.dataset.profile;save();closeModal();render();}break;
+  case 'profiles':requireAdult(showProfiles);break;
+  case 'select-profile':requireAdult(()=>{if(view==='editor')captureTeacherDraft();if(state.profiles.some(p=>p.id===button.dataset.profile)){stopSpeech();state.activeProfile=button.dataset.profile;save();closeModal();render();}});break;
   case 'filter':filter=button.dataset.filter;render();break;
-  case 'answer':if(game&&!game.completed){const q=game.questions[game.index];submitAnswer(q.options[Number(button.dataset.index)]);}break;
-  case 'syllable':if(game&&!game.solved){const q=game.questions[game.index],value=q.options[Number(button.dataset.index)];if(value&&game.build.length<q.slots&&!game.build.includes(value)){game.build.push(value);game.lastWrong=null;game.feedback='';render();}}break;
-  case 'undo':if(game&&!game.solved){game.build.pop();game.feedback='';game.lastWrong=null;render();}break;
+  case 'answer':if(game&&!game.completed){const q=game.questions[game.index],index=Number(button.dataset.index);submitAnswer(q.options[index]);focusAfterAnswer(`[data-action="answer"][data-index="${index}"]`);}break;
+  case 'syllable':if(game&&!game.solved&&!game.completed){const q=game.questions[game.index],index=Number(button.dataset.index),value=q.options[index];if(value&&game.build.length<q.slots&&!game.buildIndices.includes(index)){game.build.push(value);game.buildIndices.push(index);game.lastWrong=null;game.feedback='';if(game.build.length===q.slots){submitAnswer([...game.build]);focusAfterAnswer('[data-action="undo"]');}else render();}}break;
+  case 'listen-syllable':if(game&&!game.solved&&!game.completed){const value=game.questions[game.index].options[Number(button.dataset.index)];if(value)speak(value.toLocaleLowerCase('pt-BR'));}break;
+  case 'remove-piece':if(game&&!game.solved){const index=Number(button.dataset.index);game.build.splice(index,1);game.buildIndices.splice(index,1);game.feedback='';game.lastWrong=null;render();}break;
+  case 'undo':if(game&&!game.solved){game.build.pop();game.buildIndices.pop();game.feedback='';game.lastWrong=null;render();}break;
   case 'check-build':if(game&&game.build.length===game.questions[game.index].slots)submitAnswer([...game.build]);break;
   case 'next':nextQuestion();break;
   case 'listen':if(game&&!game.completed){const q=game.questions[game.index];const text=q.type==='story'?q.text+' '+q.prompt:q.type==='read'?`A palavra é ${q.target}.`:q.prompt;if(speak(text))game.helps++;}break;
-  case 'listen-option':if(game&&!game.completed){const q=game.questions[game.index];if(speak(q.options[Number(button.dataset.index)]))game.helps++;}break;
+  case 'listen-option':if(game&&!game.completed){const q=game.questions[game.index],option=q.options[Number(button.dataset.index)];if(option!==undefined&&speak(q.say?.[option]??option))game.helps++;}break;
+  case 'flip':flipCard(Number(button.dataset.index));break;
   case 'close-modal':closeModal();break;
+  case 'record-retell':requireAdult(showRetellRecorder);break;
+  case 'retell-prompt':speak(FAMILY_VOICE.retell);break;
+  case 'start-recording':startRetellRecording();break;
+  case 'stop-recording':voiceSession?.controller?.stop();break;
+  case 'save-recording':saveRetell();break;
+  case 'delete-voice':requireAdult(()=>{deleteVoiceClip(button.dataset.id).then(()=>{toast('Reconto apagado deste aparelho.');hydrateVoices();}).catch(()=>toast('Não foi possível apagar agora.'));});break;
+  case 'share-summary':requireAdult(shareFamilySummary);break;
   case 'confirm-navigation':{const cb=pendingNavigation;pendingNavigation=null;closeModal();cb?.();break;}
   case 'setting':{const key=button.dataset.setting;if(!['sound','reducedMotion','largeText'].includes(key))break;state.settings[key]=!state.settings[key];save();settingsClass();button.classList.toggle('on',state.settings[key]);button.setAttribute('aria-checked',String(state.settings[key]));if(key==='sound'){stopSpeech();const mute=$('[data-action="mute"]');if(mute){mute.innerHTML=icon(state.settings.sound?'sound':'muted');mute.setAttribute('aria-label',state.settings.sound?'Desligar áudio':'Ligar áudio');}}break;}
   case 'assign':requireAdult(showAssignment);break;
-  case 'add-profile':requireAdult(showAddProfile);break;
+  case 'add-profile':requireAdult(()=>showFamilyProfileForm(null));break;
   case 'view-profile':if(state.profiles.some(p=>p.id===button.dataset.profile)){state.activeProfile=button.dataset.profile;save();navigate('family');}break;
   case 'export':requireAdult(()=>exportCSV(button.dataset.profile));break;
   case 'print':printSheet();break;
@@ -246,7 +469,21 @@ document.addEventListener('click',event=>{
  }
 });
 document.addEventListener('submit',event=>{
- if(!['gate-form','assignment-form','profile-form','review-form'].includes(event.target.id))return;event.preventDefault();
+ if(!['gate-form','assignment-form','profile-form','review-form','availability-form','teacher-editor-form','family-profile-form','family-observation-form'].includes(event.target.id))return;event.preventDefault();
+ if(event.target.id==='family-profile-form'){
+  const id=modalContext?.familyProfileId,name=$('#family-name').value,age=$('#family-age').value,avatar=$('#family-avatar').value,school=$('#family-school').value;
+  const interests=[...document.querySelectorAll('input[name="family-interest"]:checked')].map(n=>n.value),selected=[...document.querySelectorAll('input[name="family-support"]:checked')].map(n=>n.value),supports=Object.fromEntries(FAMILY_SUPPORTS.map(([key])=>[key,selected.includes(key)]));
+  requireAdult(()=>{try{state=updateFamilyProfile(state,{id,name,age,avatar,attendsSchool:school==='yes'?true:school==='no'?false:null,interests,supports});save();stopSpeech();closeModal();render();toast('Perfil salvo. As sugestões e os apoios já foram ajustados.');}catch(error){const target=$('#family-form-error');if(target)target.textContent=error.message;else toast(error.message);}});return;
+ }
+ if(event.target.id==='family-observation-form'){
+  const details=modalContext?.familyObservation,participation=$('#family-participation').value,note=$('#family-observation-note').value;
+  requireAdult(()=>{try{if(!details)throw new Error('Abra novamente a experiência para registrar.');state=recordFamilyObservation(state,{...details,participation,note});save();closeModal();render();toast('Seu relato foi guardado nas Descobertas deste perfil.');}catch(error){const target=$('#family-observation-error');if(target)target.textContent=error.message;else toast(error.message);}});return;
+ }
+ if(event.target.id==='teacher-editor-form'){saveTeacherDraft(true);return;}
+ if(event.target.id==='availability-form'){
+  const ids=[...document.querySelectorAll('#availability-form input:checked')].map(input=>input.value);
+  requireAdult(()=>{try{state=setAvailableActivities(state,ids);save();render();toast('Seleção salva. As sugestões e a área Brincar já foram atualizadas.');}catch(error){$('#availability-error').textContent=error.message;}});return;
+ }
  if(event.target.id==='review-form'){
   const sections=REVIEW_QUESTIONS.map((question,i)=>`${i+1}. ${question}\n${$('#review-'+i).value.trim()||'(Sem observação)'}`);
   const text='LUMI — AVALIAÇÃO DA PRÉVIA\nData: '+new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date())+'\n\n'+sections.join('\n\n')+'\n';
@@ -264,17 +501,21 @@ document.addEventListener('submit',event=>{
  }
 });
 document.addEventListener('change',event=>{
+ if(event.target.id==='teacher-pack-file'){const file=event.target.files?.[0];event.target.value='';requireAdult(()=>loadTeachingPack(file));}
+ if(event.target.id==='family-backup-file'){const file=event.target.files?.[0];event.target.value='';requireAdult(()=>loadFamilyBackup(file));}
+ if(view==='editor'&&event.target.closest?.('#teacher-editor-form'))editorDirty=true;
  if(event.target.id==='adult-profile'&&state.profiles.some(p=>p.id===event.target.value)){state.activeProfile=event.target.value;save();render();}
  if(event.target.id==='session-minutes'){state.settings.sessionMinutes=Number(event.target.value);save();}
 });
 document.addEventListener('input',event=>{
- if(event.target.id!=='activity-search')return;search=event.target.value;const selected=ACTIVITIES.filter(a=>(filter==='Todas'||a.category===filter)&&`${a.name} ${a.description} ${a.skill}`.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));$('#library-results').innerHTML=selected.length?selected.map(a=>activityCard(a,true)).join(''):'<div class="empty-state" style="grid-column:1/-1"><h3>Nenhuma atividade encontrada</h3><p>Tente buscar por letras, palavras ou história.</p></div>';
+ if(view==='editor'&&event.target.closest?.('#teacher-editor-form')){editorDirty=true;return;}
+ if(event.target.id!=='activity-search')return;search=event.target.value;const selected=availableActivities(state).filter(a=>(filter==='Todas'||a.category===filter)&&`${a.name} ${a.description} ${a.skill}`.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));$('#library-results').innerHTML=libraryResults(selected);
 });
 document.addEventListener('keydown',event=>{
  const modal=$('.modal');if(!modal)return;
  if(event.key==='Escape'){event.preventDefault();closeModal();return;}
  if(event.key==='Tab'){
-  const items=[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),a[href],[tabindex="0"]')];if(!items.length)return;
+  const items=[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),a[href],[tabindex="0"]')];if(!items.length)return;
   const first=items[0],last=items.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
  }
 });

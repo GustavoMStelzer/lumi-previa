@@ -1,55 +1,53 @@
-# Lumi — Aventuras de leitura
+# Lumi — Descobertas em família · 0.7.0
 
-Primeira versão navegável de uma plataforma de apoio à alfabetização para famílias e escolas. Identidade e preços são provisórios. Público da trilha demonstrada: aproximadamente 5 a 7 anos, com acompanhamento de adulto e adaptação profissional às habilidades individuais.
+Prévia web para celular. Crianças de 3 a 5 anos brincam acompanhadas por um adulto. Não exige banco de dados, conta nem serviço de IA: os registros ficam no navegador. A voz gravada é produzida separadamente pelo ElevenLabs.
 
-## Funcionalidades
+## Novidades da 0.7.0
 
-- Cinco jogos com quatro desafios cada: reconhecimento de letras, sons iniciais de palavras, montagem com sílabas, associação de palavra escrita e imagem, preenchimento de letras.
-- História original com três páginas, narração pelo dispositivo e perguntas de compreensão.
-- Registros independentes por perfil fictício, persistidos no navegador.
-- Painel da família, turma demonstrativa, sugestões de atividades e exportação CSV.
-- Atividade imprimível, áudio opcional, redução de movimento, texto maior, lembrete de pausa e cache offline.
-- Interface responsiva, instruções em português, alternativas a gestos de arrastar e navegação por teclado.
-- Prévia da voz feminina enviada do ElevenLabs, acessível em **Ouvir a voz da Lumi**.
-- Formulário de avaliação pedagógica em **Escola → Avaliar a prévia**, com download das observações.
+Veja `NOVIDADES_0.7.0.md`: trilha de hoje, jardim da Lumi, temas do mês, 4 atividades novas (3 histórias e o jogo das emoções), reconto gravado no aparelho e resumo da semana pelo WhatsApp. As 137 gravações foram preservadas; 21 falas novas aguardam geração.
 
-## Prévia para GitHub e avaliação
+## Novidades da 0.6.0
 
-Consulte `COMO_PUBLICAR_GITHUB.md` para publicar pelo GitHub Pages e `AVALIACAO_PROFESSORA.md` para o roteiro de avaliação. O workflow em `.github/workflows/pages.yml` publica `dist/`.
+Veja `NOVIDADES_0.6.0.md`. Em resumo:
 
-O pacote de entrega inclui `PREVIA_LOCAL.html`, com código, imagens e MP3 incorporados, para abrir no navegador do computador sem instalar dependências.
+- Botão **Continuar** sempre visível numa barra fixa depois do acerto, com a frase "Toque em Continuar.".
+- Novo visual, alvos de toque maiores, contraste revisado e textos legíveis no celular.
+- 9 atividades novas (sons dos bichos, figura diferente, sombras, memória, grande e pequeno, contar e 3 histórias) e 4 brincadeiras fora da tela.
+- Área Brincar organizada pela idade do perfil.
+- As 94 gravações existentes foram preservadas. 43 falas novas usam a voz do aparelho até serem geradas.
 
-A gravação foi incorporada integralmente como prévia independente. Nenhum trecho foi atribuído a uma instrução sem confirmar seu conteúdo. A estrutura aceita MP3 para cada fala e usa a voz do navegador quando o arquivo correspondente ainda não existe.
+## O que está incluído
 
-`node scripts/audio-catalog.mjs` produz o roteiro com as 39 falas únicas usadas nas atividades, dicas e retornos. Salve os MP3 com os nomes indicados em `dist/assets/audio/` e execute esse comando novamente para atualizar `audio-manifest.js`.
+- Hoje, Brincar, Descobertas e Perfil.
+- 27 experiências digitais (11 histórias) e 9 convites para brincar fora da tela.
+- Trilha de hoje, jardim da Lumi e temas do mês.
+- Reconto gravado (fica só no aparelho) e resumo da semana para compartilhar.
+- Sugestões por idade e interesses.
+- Celebração e botão Continuar após o acerto. O fim do áudio nunca troca a pergunta.
+- Apoios por perfil: toques maiores, menos movimento, mais contraste e modo sem som.
+- Resumo dos últimos sete dias, com registros do aplicativo separados dos relatos do responsável.
+- Cópia e restauração dos registros locais.
+- Área adulta de revisão de conteúdo e criação de atividades.
+- Mapeamento preliminar à BNCC em `BNCC_MAPEAMENTO.md` (códigos pendentes de conferência).
 
-Para gerar todas as falas de uma vez com a voz da Lumi, siga **GERAR_VOZ_ELEVENLABS.md**. O gerador local pede a chave de forma oculta, usa a assinatura do ElevenLabs, preserva o progresso em caso de erro e prepara o site, o HTML independente e um ZIP com os áudios. A chave não é incluída nos arquivos. Os MP3 gerados entram também no cache offline da versão publicada.
+## Testar e publicar
 
-## Limites da demonstração
+1. Para atualizar o repositório do GitHub, siga `ATUALIZAR_LUMI.md`. O conteúdo publicado é a pasta `dist`.
+2. Abra `PREVIA_LOCAL.html` para um teste rápido sem servidor.
+3. Siga `TESTAR_LUMI_v0.7.md` no teste com as famílias.
+4. Para gravar as 21 falas novas com a voz da Lumi, siga `GERAR_VOZ_ELEVENLABS.md`.
 
-Esta versão não deve coletar dados reais de crianças. Não possui autenticação de contas, banco de dados compartilhado, controle de permissões institucionais, sincronização entre aparelhos ou cobrança. A conta simples na transição de áreas é apenas uma barreira contra trocas acidentais e não um mecanismo de segurança.
+## Verificação de código
 
-Os painéis mostram participação em atividades; não medem domínio de leitura nem fornecem diagnóstico. A trilha e todos os enunciados necessitam de revisão por alfabetizador antes de um piloto com crianças. As falas com MP3 usam a voz gravada; quando não há gravação ou ela falha, a narração usa Web Speech, cuja voz portuguesa, pronúncia e funcionamento offline dependem do aparelho. Nenhum áudio infantil é gravado ou enviado.
-
-Os jogos de letras ensinam reconhecimento dos nomes das letras. O jogo de sons compara começos de palavras, sem usar voz sintetizada como demonstração isolada de fonemas.
-
-## Executar e verificar
-
-O diretório publicado é `dist/`. Não há dependências nem etapa de build. Servir esse diretório por HTTP/HTTPS para testar módulos e service worker.
+Node.js 24 LTS recomendado, mínimo 20, sem instalação de pacotes:
 
 ```sh
-npm run check
 npm test
+npm run check
+npm run audio:catalog
+npm run preview:export
 ```
 
-A verificação inicial inclui lógica de conteúdo, persistência e agregação de registros, conclusão de sugestões, exportação CSV e integridade de arquivos. A inspeção visual e os fluxos de browser precisam de verificação em celular e computador; o ambiente de criação não dispõe do controle de navegador exigido pelo fluxo Sites.
+## Limites desta etapa
 
-## Próxima versão para um piloto real
-
-1. Revisar conteúdo, sequência e adaptações com alfabetizador e especialista em acessibilidade.
-2. Implementar backend, autenticação de adultos, perfis vinculados a responsáveis, controle institucional e autorização do compartilhamento escola-família.
-3. Definir tratamento de dados, retenção, exclusão e consentimentos/bases aplicáveis com revisão jurídica de LGPD e ECA Digital.
-4. Gravar e revisar áudios em português brasileiro; testar acessibilidade e usabilidade com profissionais antes de envolver crianças.
-5. Validar preços e termos, depois integrar pagamentos de adultos e gestão de assinaturas.
-
-O código e as ilustrações SVG foram criados para este projeto. Não foram reutilizados personagens ou materiais didáticos de terceiros. O nome Lumi é uma identidade provisória; nenhuma disponibilidade de marca ou domínio é afirmada.
+Esta é uma prévia para validar a usabilidade. Não há backend, autenticação, sincronização entre aparelhos, assinatura paga nem app nas lojas. Os recontos gravados ficam só no navegador do aparelho e não entram na cópia dos registros. O conteúdo ainda precisa de revisão pedagógica profissional. As adaptações facilitam o acesso, mas não são avaliação clínica. O resumo descreve o uso do aplicativo e os relatos da família, sem medir o desenvolvimento global.

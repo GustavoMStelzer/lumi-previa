@@ -14,14 +14,15 @@ function fixture(t){
 }
 const options=root=>({root,voiceId:'LumiVoice123456',apiKey:'TEST_SECRET_NOT_REAL',log:()=>{}});
 
-test('geração usa a mesma voz e textos exatos; retomada não consome chamadas e chave não é gravada',async t=>{
+test('geração usa a mesma voz, pausas e velocidade configurada; retomada não consome chamadas e chave não é gravada',async t=>{
  const root=fixture(t),calls=[];
  const fetchImpl=async(url,request)=>{calls.push({url,request});return new Response(mp3,{headers:{'Content-Type':'audio/mpeg'}});};
  const first=await generateNarration({...options(root),fetchImpl});
  assert.equal(first.generated,2);assert.equal(calls.length,2);
  assert.ok(calls.every(c=>c.url==='https://api.elevenlabs.io/v1/text-to-speech/LumiVoice123456?output_format=mp3_44100_128'));
- assert.deepEqual(calls.map(c=>JSON.parse(c.request.body).text),['Encontre a letra A.','A palavra é BOLA.']);
+ assert.deepEqual(calls.map(c=>JSON.parse(c.request.body).text),['Encontre a letra <break time="0.35s" /> A.','A palavra é <break time="0.35s" /> bola.']);
  assert.ok(calls.every(c=>JSON.parse(c.request.body).model_id==='eleven_multilingual_v2'));
+ assert.ok(calls.every(c=>JSON.parse(c.request.body).voice_settings.speed===0.88));
  const second=await generateNarration({...options(root),fetchImpl});
  assert.equal(second.skipped,2);assert.equal(calls.length,2);
  const receipt=fs.readFileSync(path.join(root,'.lumi-audio-generation.json'),'utf8');

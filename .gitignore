@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+*.log
+.lumi-audio-generation.json
+.lumi-audio-generation.json.tmp
+outputs/
+PREVIA_LOCAL.html
+
+Lumi_Copia_Registros*.json
+
+runtime/

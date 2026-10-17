@@ -1,123 +1,638 @@
 LUMI — ROTEIRO DAS FALAS
 
-Use a mesma voz feminina brasileira em todos os arquivos.
+Use a mesma voz brasileira em todos os arquivos. Multilingual v2; velocidade 0,88; pausas curtas com SSML <break>.
 Gere cada fala separadamente e salve com o nome indicado.
 Revisar a pronúncia e o conteúdo antes de um piloto com crianças.
 O MP3 enviado é uma prévia independente; seu conteúdo não foi recortado ou associado automaticamente a instruções.
 
 audio-001.mp3 | Jardim das letras · instrução
-Encontre a letra A.
+Texto: Encontre a letra A.
+Enviar ao ElevenLabs: Encontre a letra <break time="0.35s" /> A.
 
 audio-002.mp3 | Jardim das letras · instrução
-Encontre a letra M.
+Texto: Encontre a letra M.
+Enviar ao ElevenLabs: Encontre a letra <break time="0.35s" /> M.
 
 audio-003.mp3 | Jardim das letras · instrução
-Encontre a letra B.
+Texto: Encontre a letra B.
+Enviar ao ElevenLabs: Encontre a letra <break time="0.35s" /> B.
 
 audio-004.mp3 | Jardim das letras · instrução
-Encontre a letra S.
+Texto: Encontre a letra S.
+Enviar ao ElevenLabs: Encontre a letra <break time="0.35s" /> S.
 
-audio-005.mp3 | Detetive dos sons · instrução
-Qual palavra começa como MALA?
+audio-060.mp3 | Detetive dos sons · instrução
+Texto: Ouça: mala. Qual nome começa com o mesmo som de mala?
+Enviar ao ElevenLabs: Ouça: mala. <break time="0.5s" /> Qual nome começa com o mesmo som de mala?
 
 audio-006.mp3 | Detetive dos sons · opção
-MACACO
+Texto: MACACO
+Enviar ao ElevenLabs: macaco
 
 audio-007.mp3 | Detetive dos sons · opção
-GATO
+Texto: GATO
+Enviar ao ElevenLabs: gato
 
 audio-008.mp3 | Detetive dos sons · opção
-BOLA
+Texto: BOLA
+Enviar ao ElevenLabs: bola
 
-audio-009.mp3 | Detetive dos sons · instrução
-Qual palavra começa como BOLA?
+audio-061.mp3 | Detetive dos sons · instrução
+Texto: Ouça: bola. Qual nome começa com o mesmo som de bola?
+Enviar ao ElevenLabs: Ouça: bola. <break time="0.5s" /> Qual nome começa com o mesmo som de bola?
 
 audio-010.mp3 | Detetive dos sons · opção
-BOTA
+Texto: BOTA
+Enviar ao ElevenLabs: bota
 
 audio-011.mp3 | Detetive dos sons · opção
-MALA
+Texto: MALA
+Enviar ao ElevenLabs: mala
 
 audio-012.mp3 | Detetive dos sons · opção
-SAPO
+Texto: SAPO
+Enviar ao ElevenLabs: sapo
 
-audio-013.mp3 | Detetive dos sons · instrução
-Qual palavra começa como PATO?
+audio-062.mp3 | Detetive dos sons · instrução
+Texto: Ouça: pato. Qual nome começa com o mesmo som de pato?
+Enviar ao ElevenLabs: Ouça: pato. <break time="0.5s" /> Qual nome começa com o mesmo som de pato?
 
 audio-014.mp3 | Detetive dos sons · opção
-PANELA
+Texto: PANELA
+Enviar ao ElevenLabs: panela
 
-audio-015.mp3 | Detetive dos sons · instrução
-Qual palavra começa como SAPO?
+audio-063.mp3 | Detetive dos sons · instrução
+Texto: Ouça: sapo. Qual nome começa com o mesmo som de sapo?
+Enviar ao ElevenLabs: Ouça: sapo. <break time="0.5s" /> Qual nome começa com o mesmo som de sapo?
 
 audio-016.mp3 | Detetive dos sons · opção
-SACOLA
+Texto: SACOLA
+Enviar ao ElevenLabs: sacola
 
 audio-017.mp3 | Detetive dos sons · opção
-PATO
+Texto: PATO
+Enviar ao ElevenLabs: pato
 
 audio-018.mp3 | Oficina de palavras · instrução
-Monte a palavra BOLA.
+Texto: Monte a palavra BOLA.
+Enviar ao ElevenLabs: Monte a palavra bola.
 
 audio-019.mp3 | Oficina de palavras · instrução
-Monte a palavra GATO.
+Texto: Monte a palavra GATO.
+Enviar ao ElevenLabs: Monte a palavra gato.
 
 audio-020.mp3 | Oficina de palavras · instrução
-Monte a palavra MALA.
+Texto: Monte a palavra MALA.
+Enviar ao ElevenLabs: Monte a palavra mala.
 
 audio-021.mp3 | Oficina de palavras · instrução
-Monte a palavra SAPO.
+Texto: Monte a palavra SAPO.
+Enviar ao ElevenLabs: Monte a palavra sapo.
 
 audio-022.mp3 | Caminho da leitura · instrução
-Qual figura combina com esta palavra?
+Texto: Qual figura combina com esta palavra?
+Enviar ao ElevenLabs: Qual figura combina com esta palavra?
 
 audio-023.mp3 | Caminho da leitura · dica
-A palavra é BOLA.
+Texto: A palavra é BOLA.
+Enviar ao ElevenLabs: A palavra é <break time="0.35s" /> bola.
 
 audio-024.mp3 | Caminho da leitura · retorno
-Isso! A palavra é BOLA.
+Texto: Isso! A palavra é BOLA.
+Enviar ao ElevenLabs: Isso! <break time="0.5s" /> A palavra é <break time="0.35s" /> bola.
 
 audio-025.mp3 | Caminho da leitura · dica
-A palavra é GATO.
+Texto: A palavra é GATO.
+Enviar ao ElevenLabs: A palavra é <break time="0.35s" /> gato.
 
 audio-026.mp3 | Caminho da leitura · retorno
-Isso! A palavra é GATO.
+Texto: Isso! A palavra é GATO.
+Enviar ao ElevenLabs: Isso! <break time="0.5s" /> A palavra é <break time="0.35s" /> gato.
 
 audio-027.mp3 | Caminho da leitura · dica
-A palavra é MALA.
+Texto: A palavra é MALA.
+Enviar ao ElevenLabs: A palavra é <break time="0.35s" /> mala.
 
 audio-028.mp3 | Caminho da leitura · retorno
-Isso! A palavra é MALA.
+Texto: Isso! A palavra é MALA.
+Enviar ao ElevenLabs: Isso! <break time="0.5s" /> A palavra é <break time="0.35s" /> mala.
 
 audio-029.mp3 | Caminho da leitura · dica
-A palavra é SAPO.
+Texto: A palavra é SAPO.
+Enviar ao ElevenLabs: A palavra é <break time="0.35s" /> sapo.
 
 audio-030.mp3 | Caminho da leitura · retorno
-Isso! A palavra é SAPO.
+Texto: Isso! A palavra é SAPO.
+Enviar ao ElevenLabs: Isso! <break time="0.5s" /> A palavra é <break time="0.35s" /> sapo.
 
 audio-031.mp3 | A letra escondida · instrução
-Qual letra completa BOLA?
+Texto: Qual letra completa BOLA?
+Enviar ao ElevenLabs: Qual letra completa bola?
 
 audio-032.mp3 | A letra escondida · instrução
-Qual letra completa GATO?
+Texto: Qual letra completa GATO?
+Enviar ao ElevenLabs: Qual letra completa gato?
 
 audio-033.mp3 | A letra escondida · instrução
-Qual letra completa MALA?
+Texto: Qual letra completa MALA?
+Enviar ao ElevenLabs: Qual letra completa mala?
 
 audio-034.mp3 | A letra escondida · instrução
-Qual letra completa SAPO?
+Texto: Qual letra completa SAPO?
+Enviar ao ElevenLabs: Qual letra completa sapo?
 
 audio-035.mp3 | Lumi e a sementinha · instrução
-Lumi encontrou uma semente no jardim. Ele colocou a semente na terra. O que Lumi encontrou?
+Texto: Lumi encontrou uma semente no jardim. Ele colocou a semente na terra. O que Lumi encontrou?
+Enviar ao ElevenLabs: Lumi encontrou uma semente no jardim. <break time="0.5s" /> Ele colocou a semente na terra. <break time="0.5s" /> O que Lumi encontrou?
 
 audio-036.mp3 | Lumi e a sementinha · instrução
-Lumi levou água para o jardim. A terra ficou molhada. O que Lumi levou para o jardim?
+Texto: Lumi levou água para o jardim. A terra ficou molhada. O que Lumi levou para o jardim?
+Enviar ao ElevenLabs: Lumi levou água para o jardim. <break time="0.5s" /> A terra ficou molhada. <break time="0.5s" /> O que Lumi levou para o jardim?
 
 audio-037.mp3 | Lumi e a sementinha · instrução
-Depois de alguns dias, nasceu uma planta. Lumi chamou seus amigos para olhar. O que nasceu no jardim?
+Texto: Depois de alguns dias, nasceu uma planta. Lumi chamou seus amigos para olhar. O que nasceu no jardim?
+Enviar ao ElevenLabs: Depois de alguns dias, nasceu uma planta. <break time="0.5s" /> Lumi chamou seus amigos para olhar. <break time="0.5s" /> O que nasceu no jardim?
+
+audio-050.mp3 | Amigos do jardim · instrução
+Texto: Encontre o gato.
+Enviar ao ElevenLabs: Encontre o gato.
+
+audio-051.mp3 | Amigos do jardim · instrução
+Texto: Encontre o pato.
+Enviar ao ElevenLabs: Encontre o pato.
+
+audio-052.mp3 | Amigos do jardim · instrução
+Texto: Encontre o sapo.
+Enviar ao ElevenLabs: Encontre o sapo.
+
+audio-053.mp3 | Amigos do jardim · instrução
+Texto: Encontre o macaco.
+Enviar ao ElevenLabs: Encontre o macaco.
+
+audio-054.mp3 | Palavras que rimam · instrução
+Texto: Qual palavra rima com BOLA?
+Enviar ao ElevenLabs: Qual palavra rima com bola?
+
+audio-055.mp3 | Palavras que rimam · instrução
+Texto: Qual palavra rima com GATO?
+Enviar ao ElevenLabs: Qual palavra rima com gato?
+
+audio-099.mp3 | Lumi e a borboleta · instrução
+Texto: Lumi passeava pelo jardim. Uma borboleta apareceu perto dele. Quem apareceu perto de Lumi?
+Enviar ao ElevenLabs: Lumi passeava pelo jardim. <break time="0.5s" /> Uma borboleta apareceu perto dele. <break time="0.5s" /> Quem apareceu perto de Lumi?
+
+audio-065.mp3 | Lumi e a borboleta · instrução
+Texto: A borboleta pousou em uma flor. Lumi ficou pertinho e olhou a visita. Onde a borboleta pousou?
+Enviar ao ElevenLabs: A borboleta pousou em uma flor. <break time="0.5s" /> Lumi ficou pertinho e olhou a visita. <break time="0.5s" /> Onde a borboleta pousou?
+
+audio-066.mp3 | Lumi e a borboleta · instrução
+Texto: Lumi chamou o pato para olhar. Os dois observaram a borboleta na flor. Quem Lumi chamou para olhar?
+Enviar ao ElevenLabs: Lumi chamou o pato para olhar. <break time="0.5s" /> Os dois observaram a borboleta na flor. <break time="0.5s" /> Quem Lumi chamou para olhar?
+
+audio-067.mp3 | Lumi e a borboleta · instrução
+Texto: Depois de um tempo, a borboleta voou para outra parte do jardim. Lumi e o pato continuaram olhando as flores. O que Lumi e o pato continuaram olhando?
+Enviar ao ElevenLabs: Depois de um tempo, a borboleta voou para outra parte do jardim. <break time="0.5s" /> Lumi e o pato continuaram olhando as flores. <break time="0.5s" /> O que Lumi e o pato continuaram olhando?
+
+audio-068.mp3 | O piquenique dos amigos · instrução
+Texto: Lumi preparou um piquenique no jardim. Ele colocou uma maçã dentro da cesta. Que fruta Lumi colocou na cesta?
+Enviar ao ElevenLabs: Lumi preparou um piquenique no jardim. <break time="0.5s" /> Ele colocou uma maçã dentro da cesta. <break time="0.5s" /> Que fruta Lumi colocou na cesta?
+
+audio-069.mp3 | O piquenique dos amigos · instrução
+Texto: O pato chegou para o encontro. Ele trouxe uma banana para o piquenique. O que o pato trouxe?
+Enviar ao ElevenLabs: O pato chegou para o encontro. <break time="0.5s" /> Ele trouxe uma banana para o piquenique. <break time="0.5s" /> O que o pato trouxe?
+
+audio-070.mp3 | O piquenique dos amigos · instrução
+Texto: O gato também chegou ao jardim. Ele trouxe água para os amigos beberem. O que o gato trouxe para beber?
+Enviar ao ElevenLabs: O gato também chegou ao jardim. <break time="0.5s" /> Ele trouxe água para os amigos beberem. <break time="0.5s" /> O que o gato trouxe para beber?
+
+audio-071.mp3 | O piquenique dos amigos · instrução
+Texto: Os amigos estenderam uma toalha no chão. Lumi tirou a maçã da cesta e colocou a fruta na toalha. De onde Lumi tirou a maçã?
+Enviar ao ElevenLabs: Os amigos estenderam uma toalha no chão. <break time="0.5s" /> Lumi tirou a maçã da cesta e colocou a fruta na toalha. <break time="0.5s" /> De onde Lumi tirou a maçã?
+
+audio-072.mp3 | A visita da chuva · instrução
+Texto: Lumi estava no jardim quando viu uma nuvem no céu. Logo, algumas gotas de chuva começaram a cair. O que Lumi viu no céu?
+Enviar ao ElevenLabs: Lumi estava no jardim quando viu uma nuvem no céu. <break time="0.5s" /> Logo, algumas gotas de chuva começaram a cair. <break time="0.5s" /> O que Lumi viu no céu?
+
+audio-073.mp3 | A visita da chuva · instrução
+Texto: A chuva ficou mais forte. Lumi entrou em casa e observou o jardim pela janela. Onde Lumi entrou quando a chuva ficou forte?
+Enviar ao ElevenLabs: A chuva ficou mais forte. <break time="0.5s" /> Lumi entrou em casa e observou o jardim pela janela. <break time="0.5s" /> Onde Lumi entrou quando a chuva ficou forte?
+
+audio-074.mp3 | A visita da chuva · instrução
+Texto: Quando a chuva parou, Lumi calçou as botas. Ele saiu para olhar as poças de água. O que Lumi calçou para sair?
+Enviar ao ElevenLabs: Quando a chuva parou, Lumi calçou as botas. <break time="0.5s" /> Ele saiu para olhar as poças de água. <break time="0.5s" /> O que Lumi calçou para sair?
+
+audio-075.mp3 | A visita da chuva · instrução
+Texto: A terra do jardim ficou molhada. As plantas receberam a água que veio da chuva. O que molhou a terra do jardim?
+Enviar ao ElevenLabs: A terra do jardim ficou molhada. <break time="0.5s" /> As plantas receberam a água que veio da chuva. <break time="0.5s" /> O que molhou a terra do jardim?
+
+audio-076.mp3 | A bola que sumiu · instrução
+Texto: Lumi queria brincar, mas não encontrou sua bola. Ele chamou o gato para ajudar a procurar. Quem Lumi chamou para ajudar?
+Enviar ao ElevenLabs: Lumi queria brincar, mas não encontrou sua bola. <break time="0.5s" /> Ele chamou o gato para ajudar a procurar. <break time="0.5s" /> Quem Lumi chamou para ajudar?
+
+audio-077.mp3 | A bola que sumiu · instrução
+Texto: O gato olhou perto da mala. Lumi procurou perto de uma bota. A bola ainda não apareceu. Perto de qual objeto o gato procurou?
+Enviar ao ElevenLabs: O gato olhou perto da mala. <break time="0.5s" /> Lumi procurou perto de uma bota. <break time="0.5s" /> A bola ainda não apareceu. <break time="0.5s" /> Perto de qual objeto o gato procurou?
+
+audio-078.mp3 | A bola que sumiu · instrução
+Texto: O pato encontrou a bola ao lado de uma planta. Ele chamou Lumi para mostrar onde ela estava. A bola estava ao lado de quê?
+Enviar ao ElevenLabs: O pato encontrou a bola ao lado de uma planta. <break time="0.5s" /> Ele chamou Lumi para mostrar onde ela estava. <break time="0.5s" /> A bola estava ao lado de quê?
+
+audio-079.mp3 | A bola que sumiu · instrução
+Texto: Lumi agradeceu aos amigos pela ajuda. Depois, todos foram brincar com a bola no jardim. Com o que os amigos foram brincar?
+Enviar ao ElevenLabs: Lumi agradeceu aos amigos pela ajuda. <break time="0.5s" /> Depois, todos foram brincar com a bola no jardim. <break time="0.5s" /> Com o que os amigos foram brincar?
+
+audio-080.mp3 | As cores do jardim · instrução
+Texto: Toque na cor vermelha.
+Enviar ao ElevenLabs: Toque na cor vermelha.
+
+audio-081.mp3 | As cores do jardim · opção
+Texto: VERMELHO
+Enviar ao ElevenLabs: vermelho
+
+audio-082.mp3 | As cores do jardim · opção
+Texto: AMARELO
+Enviar ao ElevenLabs: amarelo
+
+audio-083.mp3 | As cores do jardim · opção
+Texto: AZUL
+Enviar ao ElevenLabs: azul
+
+audio-084.mp3 | As cores do jardim · instrução
+Texto: Toque na cor azul.
+Enviar ao ElevenLabs: Toque na cor azul.
+
+audio-085.mp3 | As cores do jardim · opção
+Texto: VERDE
+Enviar ao ElevenLabs: verde
+
+audio-086.mp3 | As cores do jardim · instrução
+Texto: Toque na cor amarela.
+Enviar ao ElevenLabs: Toque na cor amarela.
+
+audio-087.mp3 | As cores do jardim · instrução
+Texto: Toque na cor verde.
+Enviar ao ElevenLabs: Toque na cor verde.
+
+audio-088.mp3 | Formas para descobrir · instrução
+Texto: Encontre o círculo.
+Enviar ao ElevenLabs: Encontre o círculo.
+
+audio-089.mp3 | Formas para descobrir · opção
+Texto: CÍRCULO
+Enviar ao ElevenLabs: círculo
+
+audio-090.mp3 | Formas para descobrir · opção
+Texto: TRIÂNGULO
+Enviar ao ElevenLabs: triângulo
+
+audio-091.mp3 | Formas para descobrir · opção
+Texto: QUADRADO
+Enviar ao ElevenLabs: quadrado
+
+audio-092.mp3 | Formas para descobrir · instrução
+Texto: Encontre o quadrado.
+Enviar ao ElevenLabs: Encontre o quadrado.
+
+audio-093.mp3 | Formas para descobrir · opção
+Texto: RETÂNGULO
+Enviar ao ElevenLabs: retângulo
+
+audio-094.mp3 | Formas para descobrir · instrução
+Texto: Encontre o triângulo.
+Enviar ao ElevenLabs: Encontre o triângulo.
+
+audio-095.mp3 | Formas para descobrir · instrução
+Texto: Encontre o retângulo.
+Enviar ao ElevenLabs: Encontre o retângulo.
+
+audio-100.mp3 | Quem faz esse som? · instrução
+Texto: Quem faz au au?
+Enviar ao ElevenLabs: Quem faz au au?
+
+audio-101.mp3 | Quem faz esse som? · opção
+Texto: CACHORRO
+Enviar ao ElevenLabs: cachorro
+
+audio-102.mp3 | Quem faz esse som? · opção
+Texto: VACA
+Enviar ao ElevenLabs: vaca
+
+audio-103.mp3 | Quem faz esse som? · instrução
+Texto: Quem faz miau?
+Enviar ao ElevenLabs: Quem faz miau?
+
+audio-104.mp3 | Quem faz esse som? · instrução
+Texto: Quem faz quá quá?
+Enviar ao ElevenLabs: Quem faz quá quá?
+
+audio-105.mp3 | Quem faz esse som? · instrução
+Texto: Quem faz muuu?
+Enviar ao ElevenLabs: Quem faz muuu?
+
+audio-106.mp3 | Qual é diferente? · instrução
+Texto: Qual figura é diferente das outras?
+Enviar ao ElevenLabs: Qual figura é diferente das outras?
+
+audio-107.mp3 | Sombras do jardim · instrução
+Texto: Encontre a sombra do gato.
+Enviar ao ElevenLabs: Encontre a sombra do gato.
+
+audio-108.mp3 | Sombras do jardim · instrução
+Texto: Encontre a sombra da borboleta.
+Enviar ao ElevenLabs: Encontre a sombra da borboleta.
+
+audio-109.mp3 | Sombras do jardim · instrução
+Texto: Encontre a sombra do barco.
+Enviar ao ElevenLabs: Encontre a sombra do barco.
+
+audio-110.mp3 | Sombras do jardim · instrução
+Texto: Encontre a sombra da estrela.
+Enviar ao ElevenLabs: Encontre a sombra da estrela.
+
+audio-111.mp3 | Memória da Lumi · instrução
+Texto: Vire as cartas e encontre os pares iguais.
+Enviar ao ElevenLabs: Vire as cartas e encontre os pares iguais.
+
+audio-112.mp3 | Memória da Lumi · nome da carta
+Texto: SOL
+Enviar ao ElevenLabs: sol
+
+audio-113.mp3 | Memória da Lumi · nome da carta
+Texto: LUA
+Enviar ao ElevenLabs: lua
+
+audio-114.mp3 | Memória da Lumi · nome da carta
+Texto: ESTRELA
+Enviar ao ElevenLabs: estrela
+
+audio-115.mp3 | Grande e pequeno · instrução
+Texto: Toque no peixe grande.
+Enviar ao ElevenLabs: Toque no peixe grande.
+
+audio-116.mp3 | Grande e pequeno · instrução
+Texto: Toque na bola pequena.
+Enviar ao ElevenLabs: Toque na bola pequena.
+
+audio-117.mp3 | Grande e pequeno · instrução
+Texto: Toque no balão grande.
+Enviar ao ElevenLabs: Toque no balão grande.
+
+audio-118.mp3 | Grande e pequeno · instrução
+Texto: Toque na estrela pequena.
+Enviar ao ElevenLabs: Toque na estrela pequena.
+
+audio-119.mp3 | Vamos contar · instrução
+Texto: Conte as estrelas. Qual cartão tem a mesma quantidade?
+Enviar ao ElevenLabs: Conte as estrelas. <break time="0.5s" /> Qual cartão tem a mesma quantidade?
+
+audio-120.mp3 | Vamos contar · ouvir a quantidade
+Texto: um
+Enviar ao ElevenLabs: um
+
+audio-121.mp3 | Vamos contar · ouvir a quantidade
+Texto: dois
+Enviar ao ElevenLabs: dois
+
+audio-122.mp3 | Vamos contar · ouvir a quantidade
+Texto: três
+Enviar ao ElevenLabs: três
+
+audio-123.mp3 | Vamos contar · instrução
+Texto: Conte as maçãs. Qual cartão tem a mesma quantidade?
+Enviar ao ElevenLabs: Conte as maçãs. <break time="0.5s" /> Qual cartão tem a mesma quantidade?
+
+audio-124.mp3 | Vamos contar · ouvir a quantidade
+Texto: quatro
+Enviar ao ElevenLabs: quatro
+
+audio-125.mp3 | Vamos contar · instrução
+Texto: Conte os balões. Qual cartão tem a mesma quantidade?
+Enviar ao ElevenLabs: Conte os balões. <break time="0.5s" /> Qual cartão tem a mesma quantidade?
+
+audio-126.mp3 | Vamos contar · instrução
+Texto: Conte os peixes. Qual cartão tem a mesma quantidade?
+Enviar ao ElevenLabs: Conte os peixes. <break time="0.5s" /> Qual cartão tem a mesma quantidade?
+
+audio-127.mp3 | O aniversário do gato · instrução
+Texto: Hoje é o aniversário do gato. Lumi preparou um bolo bem bonito. O que Lumi preparou?
+Enviar ao ElevenLabs: Hoje é o aniversário do gato. <break time="0.5s" /> Lumi preparou um bolo bem bonito. <break time="0.5s" /> O que Lumi preparou?
+
+audio-128.mp3 | O aniversário do gato · instrução
+Texto: O pato chegou com um balão amarelo. O balão balançava com o vento. O que o pato trouxe?
+Enviar ao ElevenLabs: O pato chegou com um balão amarelo. <break time="0.5s" /> O balão balançava com o vento. <break time="0.5s" /> O que o pato trouxe?
+
+audio-129.mp3 | O aniversário do gato · instrução
+Texto: O sapo trouxe um presente. Dentro da caixa tinha uma bola nova. O que tinha dentro do presente?
+Enviar ao ElevenLabs: O sapo trouxe um presente. <break time="0.5s" /> Dentro da caixa tinha uma bola nova. <break time="0.5s" /> O que tinha dentro do presente?
+
+audio-130.mp3 | O aniversário do gato · instrução
+Texto: Todos cantaram parabéns. O gato soprou a vela e ficou muito feliz. Quem soprou a vela?
+Enviar ao ElevenLabs: Todos cantaram parabéns. <break time="0.5s" /> O gato soprou a vela e ficou muito feliz. <break time="0.5s" /> Quem soprou a vela?
+
+audio-131.mp3 | Hora de dormir · instrução
+Texto: O céu ficou escuro. Lumi olhou pela janela e viu a lua. O que Lumi viu no céu?
+Enviar ao ElevenLabs: O céu ficou escuro. <break time="0.5s" /> Lumi olhou pela janela e viu a lua. <break time="0.5s" /> O que Lumi viu no céu?
+
+audio-132.mp3 | Hora de dormir · instrução
+Texto: Antes de dormir, Lumi tomou um copo de leite quentinho. O que Lumi tomou?
+Enviar ao ElevenLabs: Antes de dormir, Lumi tomou um copo de leite quentinho. <break time="0.5s" /> O que Lumi tomou?
+
+audio-133.mp3 | Hora de dormir · instrução
+Texto: Lumi escolheu um livro de histórias. Ele olhou as figuras bem devagar. O que Lumi escolheu?
+Enviar ao ElevenLabs: Lumi escolheu um livro de histórias. <break time="0.5s" /> Ele olhou as figuras bem devagar. <break time="0.5s" /> O que Lumi escolheu?
+
+audio-134.mp3 | Hora de dormir · instrução
+Texto: Lumi deitou na cama, fechou os olhos e dormiu. Boa noite, Lumi! Onde Lumi dormiu?
+Enviar ao ElevenLabs: Lumi deitou na cama, fechou os olhos e dormiu. <break time="0.5s" /> Boa noite, Lumi! <break time="0.5s" /> Onde Lumi dormiu?
+
+audio-143.mp3 | Como estou me sentindo? · instrução
+Texto: Encontre o rosto feliz.
+Enviar ao ElevenLabs: Encontre o rosto feliz.
+
+audio-144.mp3 | Como estou me sentindo? · opção
+Texto: FELIZ
+Enviar ao ElevenLabs: feliz
+
+audio-145.mp3 | Como estou me sentindo? · opção
+Texto: BRAVO
+Enviar ao ElevenLabs: bravo
+
+audio-146.mp3 | Como estou me sentindo? · opção
+Texto: TRISTE
+Enviar ao ElevenLabs: triste
+
+audio-147.mp3 | Como estou me sentindo? · instrução
+Texto: Encontre o rosto triste.
+Enviar ao ElevenLabs: Encontre o rosto triste.
+
+audio-148.mp3 | Como estou me sentindo? · opção
+Texto: ASSUSTADO
+Enviar ao ElevenLabs: assustado
+
+audio-149.mp3 | Como estou me sentindo? · instrução
+Texto: Encontre o rosto bravo.
+Enviar ao ElevenLabs: Encontre o rosto bravo.
+
+audio-150.mp3 | Como estou me sentindo? · instrução
+Texto: Encontre o rosto assustado.
+Enviar ao ElevenLabs: Encontre o rosto assustado.
+
+audio-151.mp3 | O gato ficou triste · instrução
+Texto: O gato estava triste. O vento levou o balão dele para longe. O que o vento levou?
+Enviar ao ElevenLabs: O gato estava triste. <break time="0.5s" /> O vento levou o balão dele para longe. <break time="0.5s" /> O que o vento levou?
+
+audio-152.mp3 | O gato ficou triste · instrução
+Texto: Lumi sentou perto do gato e deu um abraço bem apertado. Quem deu um abraço no gato?
+Enviar ao ElevenLabs: Lumi sentou perto do gato e deu um abraço bem apertado. <break time="0.5s" /> Quem deu um abraço no gato?
+
+audio-153.mp3 | O gato ficou triste · instrução
+Texto: O pato trouxe uma flor amarela para alegrar o gato. O que o pato trouxe?
+Enviar ao ElevenLabs: O pato trouxe uma flor amarela para alegrar o gato. <break time="0.5s" /> O que o pato trouxe?
+
+audio-154.mp3 | O gato ficou triste · instrução
+Texto: O gato sorriu. Com os amigos por perto, o gato ficou feliz de novo. Quem ficou feliz de novo?
+Enviar ao ElevenLabs: O gato sorriu. <break time="0.5s" /> Com os amigos por perto, o gato ficou feliz de novo. <break time="0.5s" /> Quem ficou feliz de novo?
+
+audio-155.mp3 | Hora do banho · instrução
+Texto: Lumi brincou no jardim e ficou sujinho. Ele entrou na banheira com água quentinha. Onde Lumi entrou?
+Enviar ao ElevenLabs: Lumi brincou no jardim e ficou sujinho. <break time="0.5s" /> Ele entrou na banheira com água quentinha. <break time="0.5s" /> Onde Lumi entrou?
+
+audio-156.mp3 | Hora do banho · instrução
+Texto: Lumi usou o sabonete e fez muita espuma. O que Lumi usou para fazer espuma?
+Enviar ao ElevenLabs: Lumi usou o sabonete e fez muita espuma. <break time="0.5s" /> O que Lumi usou para fazer espuma?
+
+audio-157.mp3 | Hora do banho · instrução
+Texto: Um pato de borracha boiava na água da banheira. Quem boiava na água?
+Enviar ao ElevenLabs: Um pato de borracha boiava na água da banheira. <break time="0.5s" /> Quem boiava na água?
+
+audio-158.mp3 | Hora do banho · instrução
+Texto: No fim, Lumi se enxugou com uma toalha macia. Com o que Lumi se enxugou?
+Enviar ao ElevenLabs: No fim, Lumi se enxugou com uma toalha macia. <break time="0.5s" /> Com o que Lumi se enxugou?
+
+audio-159.mp3 | A horta da coruja · instrução
+Texto: Lumi foi visitar a horta da coruja. Lá cresciam muitas cenouras. O que crescia na horta?
+Enviar ao ElevenLabs: Lumi foi visitar a horta da coruja. <break time="0.5s" /> Lá cresciam muitas cenouras. <break time="0.5s" /> O que crescia na horta?
+
+audio-160.mp3 | A horta da coruja · instrução
+Texto: A coruja deu um regador para Lumi molhar as plantas. O que a coruja deu para Lumi?
+Enviar ao ElevenLabs: A coruja deu um regador para Lumi molhar as plantas. <break time="0.5s" /> O que a coruja deu para Lumi?
+
+audio-161.mp3 | A horta da coruja · instrução
+Texto: Na terra molhada, Lumi viu uma minhoca bem comprida. O que Lumi viu na terra?
+Enviar ao ElevenLabs: Na terra molhada, Lumi viu uma minhoca bem comprida. <break time="0.5s" /> O que Lumi viu na terra?
+
+audio-162.mp3 | A horta da coruja · instrução
+Texto: Depois, os dois cozinharam as cenouras em uma panela. Onde eles cozinharam as cenouras?
+Enviar ao ElevenLabs: Depois, os dois cozinharam as cenouras em uma panela. <break time="0.5s" /> Onde eles cozinharam as cenouras?
+
+audio-135.mp3 | Um passeio no lago · instrução
+Texto: Lumi e o pato foram passear perto do lago. A água estava calminha. Quem foi passear com Lumi?
+Enviar ao ElevenLabs: Lumi e o pato foram passear perto do lago. <break time="0.5s" /> A água estava calminha. <break time="0.5s" /> Quem foi passear com Lumi?
+
+audio-136.mp3 | Um passeio no lago · instrução
+Texto: Dentro do lago, Lumi viu um peixe laranja nadando. O que Lumi viu nadando?
+Enviar ao ElevenLabs: Dentro do lago, Lumi viu um peixe laranja nadando. <break time="0.5s" /> O que Lumi viu nadando?
+
+audio-137.mp3 | Um passeio no lago · instrução
+Texto: Um barco de folha passou pela água. O pato empurrou o barco com o bico. O que passou pela água?
+Enviar ao ElevenLabs: Um barco de folha passou pela água. <break time="0.5s" /> O pato empurrou o barco com o bico. <break time="0.5s" /> O que passou pela água?
+
+audio-138.mp3 | Um passeio no lago · instrução
+Texto: No fim do passeio, o sol foi embora. Lumi e o pato voltaram para casa. Para onde Lumi e o pato voltaram?
+Enviar ao ElevenLabs: No fim do passeio, o sol foi embora. <break time="0.5s" /> Lumi e o pato voltaram para casa. <break time="0.5s" /> Para onde Lumi e o pato voltaram?
 
 audio-038.mp3 | Retorno positivo
-Isso! Vamos para a próxima descoberta.
+Texto: Isso! Vamos para a próxima descoberta.
+Enviar ao ElevenLabs: Isso! <break time="0.5s" /> Vamos para a próxima descoberta.
 
 audio-039.mp3 | Encerramento
-Aventura concluída! Agora, que tal brincar um pouco fora da tela?
+Texto: Aventura concluída! Agora, que tal brincar um pouco fora da tela?
+Enviar ao ElevenLabs: Aventura concluída! <break time="0.5s" /> Agora, que tal brincar um pouco fora da tela?
+
+audio-040.mp3 | Orientação após uma tentativa
+Texto: Vamos olhar de novo? Você pode ouvir a dica e tentar outra vez.
+Enviar ao ElevenLabs: Vamos olhar de novo? <break time="0.5s" /> Você pode ouvir a dica e tentar outra vez.
+
+audio-041.mp3 | Orientação para ajustar as sílabas
+Texto: Vamos ajustar as sílabas? Você pode desfazer e ouvir a palavra.
+Enviar ao ElevenLabs: Vamos ajustar as sílabas? <break time="0.5s" /> Você pode desfazer e ouvir a palavra.
+
+audio-042.mp3 | Sílabas · ouvir sem selecionar
+Texto: bo
+Enviar ao ElevenLabs: bo
+
+audio-043.mp3 | Sílabas · ouvir sem selecionar
+Texto: to
+Enviar ao ElevenLabs: to
+
+audio-044.mp3 | Sílabas · ouvir sem selecionar
+Texto: la
+Enviar ao ElevenLabs: la
+
+audio-045.mp3 | Sílabas · ouvir sem selecionar
+Texto: ma
+Enviar ao ElevenLabs: ma
+
+audio-046.mp3 | Sílabas · ouvir sem selecionar
+Texto: ga
+Enviar ao ElevenLabs: ga
+
+audio-047.mp3 | Sílabas · ouvir sem selecionar
+Texto: pa
+Enviar ao ElevenLabs: pa
+
+audio-048.mp3 | Sílabas · ouvir sem selecionar
+Texto: po
+Enviar ao ElevenLabs: po
+
+audio-049.mp3 | Sílabas · ouvir sem selecionar
+Texto: sa
+Enviar ao ElevenLabs: sa
+
+audio-096.mp3 | Detetive dos sons · exemplo sem registro
+Texto: Vamos escutar o comecinho dos nomes. Bola. Bota. Os dois nomes começam de um jeito parecido. Ouça cada opção antes de escolher. Vamos experimentar?
+Enviar ao ElevenLabs: Vamos escutar o comecinho dos nomes. <break time="0.5s" /> Bola. <break time="0.5s" /> Bota. <break time="0.5s" /> Os dois nomes começam de um jeito parecido. Ouça cada opção antes de escolher. Vamos experimentar?
+
+audio-056.mp3 | Boas-vindas em família
+Texto: Olá! Eu sou a Lumi. Que bom brincar com você e sua família! Vamos descobrir uma coisa de cada vez.
+Enviar ao ElevenLabs: Olá! <break time="0.5s" /> Eu sou a Lumi. <break time="0.5s" /> Que bom brincar com você e sua família! <break time="0.5s" /> Vamos descobrir uma coisa de cada vez.
+
+audio-163.mp3 | Pedido para gravar o reconto
+Texto: Conte para a Lumi: do que você mais gostou na história?
+Enviar ao ElevenLabs: Conte para a Lumi: do que você mais gostou na história?
+
+audio-057.mp3 | Uma palavra, um objeto · convite fora da tela
+Texto: Vamos descobrir um objeto da nossa casa? Escolham um objeto juntos. Conversem sobre o nome dele e para que ele serve. Você pode falar, apontar ou pedir ajuda.
+Enviar ao ElevenLabs: Vamos descobrir um objeto da nossa casa? <break time="0.5s" /> Escolham um objeto juntos. <break time="0.5s" /> Conversem sobre o nome dele e para que ele serve. <break time="0.5s" /> Você pode falar, apontar ou pedir ajuda.
+
+audio-058.mp3 | Uma história de brinquedos · convite fora da tela
+Texto: Vamos inventar uma história? Escolham dois brinquedos. Um adulto começa a contar. Depois, você pode escolher o que acontece na história. Vamos imaginar juntos!
+Enviar ao ElevenLabs: Vamos inventar uma história? <break time="0.5s" /> Escolham dois brinquedos. <break time="0.5s" /> Um adulto começa a contar. <break time="0.5s" /> Depois, você pode escolher o que acontece na história. Vamos imaginar juntos!
+
+audio-059.mp3 | Palavras que brincam juntas · convite fora da tela
+Texto: Vamos brincar com as palavras? Gato e pato têm finais parecidos. Com um adulto, escolham uma cantiga. Depois, descubram palavras que combinam no final.
+Enviar ao ElevenLabs: Vamos brincar com as palavras? <break time="0.5s" /> Gato e pato têm finais parecidos. <break time="0.5s" /> Com um adulto, escolham uma cantiga. <break time="0.5s" /> Depois, descubram palavras que combinam no final.
+
+audio-097.mp3 | Caça às cores · convite fora da tela
+Texto: Vamos encontrar uma cor? Com um adulto, escolham alguns objetos da casa. Digam os nomes das cores. Depois, escolha um objeto da cor combinada. Você pode apontar ou pedir ajuda.
+Enviar ao ElevenLabs: Vamos encontrar uma cor? <break time="0.5s" /> Com um adulto, escolham alguns objetos da casa. <break time="0.5s" /> Digam os nomes das cores. <break time="0.5s" /> Depois, escolha um objeto da cor combinada. Você pode apontar ou pedir ajuda.
+
+audio-139.mp3 | Dança das cores · convite fora da tela
+Texto: Vamos dançar? Quando a música parar, escute a cor. Depois, toque em alguma coisa dessa cor. Vamos de novo!
+Enviar ao ElevenLabs: Vamos dançar? <break time="0.5s" /> Quando a música parar, escute a cor. <break time="0.5s" /> Depois, toque em alguma coisa dessa cor. <break time="0.5s" /> Vamos de novo!
+
+audio-140.mp3 | Imitar os bichos · convite fora da tela
+Texto: Vamos imitar os bichos? Pule como o sapo. Ande como o pato. Agora, você escolhe o próximo bicho!
+Enviar ao ElevenLabs: Vamos imitar os bichos? <break time="0.5s" /> Pule como o sapo. <break time="0.5s" /> Ande como o pato. <break time="0.5s" /> Agora, você escolhe o próximo bicho!
+
+audio-141.mp3 | Contar em casa · convite fora da tela
+Texto: Vamos contar? Toque em um objeto de cada vez e conte junto com um adulto. Depois, contem de novo!
+Enviar ao ElevenLabs: Vamos contar? <break time="0.5s" /> Toque em um objeto de cada vez e conte junto com um adulto. <break time="0.5s" /> Depois, contem de novo!
+
+audio-142.mp3 | Desenhar a história · convite fora da tela
+Texto: Qual parte da história você mais gostou? Faça um desenho. Depois, conte para um adulto o que você desenhou.
+Enviar ao ElevenLabs: Qual parte da história você mais gostou? <break time="0.5s" /> Faça um desenho. <break time="0.5s" /> Depois, conte para um adulto o que você desenhou.
+
+audio-098.mp3 | Que som é esse? · convite fora da tela
+Texto: Que som é esse? Um adulto vai mostrar dois objetos e fazer um som suave com cada um. Depois, você pode mostrar qual objeto fez o som. Vamos escutar juntos, sem pressa.
+Enviar ao ElevenLabs: Que som é esse? <break time="0.5s" /> Um adulto vai mostrar dois objetos e fazer um som suave com cada um. <break time="0.5s" /> Depois, você pode mostrar qual objeto fez o som. <break time="0.5s" /> Vamos escutar juntos, sem pressa.

@@ -2,196 +2,949 @@
   {
     "text": "Encontre a letra A.",
     "context": "Jardim das letras · instrução",
+    "synthesisText": "Encontre a letra <break time=\"0.35s\" /> A.",
     "file": "audio-001.mp3"
   },
   {
     "text": "Encontre a letra M.",
     "context": "Jardim das letras · instrução",
+    "synthesisText": "Encontre a letra <break time=\"0.35s\" /> M.",
     "file": "audio-002.mp3"
   },
   {
     "text": "Encontre a letra B.",
     "context": "Jardim das letras · instrução",
+    "synthesisText": "Encontre a letra <break time=\"0.35s\" /> B.",
     "file": "audio-003.mp3"
   },
   {
     "text": "Encontre a letra S.",
     "context": "Jardim das letras · instrução",
+    "synthesisText": "Encontre a letra <break time=\"0.35s\" /> S.",
     "file": "audio-004.mp3"
   },
   {
-    "text": "Qual palavra começa como MALA?",
+    "text": "Ouça: mala. Qual nome começa com o mesmo som de mala?",
     "context": "Detetive dos sons · instrução",
-    "file": "audio-005.mp3"
+    "synthesisText": "Ouça: mala. <break time=\"0.5s\" /> Qual nome começa com o mesmo som de mala?",
+    "file": "audio-060.mp3"
   },
   {
     "text": "MACACO",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "macaco",
     "file": "audio-006.mp3"
   },
   {
     "text": "GATO",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "gato",
     "file": "audio-007.mp3"
   },
   {
     "text": "BOLA",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "bola",
     "file": "audio-008.mp3"
   },
   {
-    "text": "Qual palavra começa como BOLA?",
+    "text": "Ouça: bola. Qual nome começa com o mesmo som de bola?",
     "context": "Detetive dos sons · instrução",
-    "file": "audio-009.mp3"
+    "synthesisText": "Ouça: bola. <break time=\"0.5s\" /> Qual nome começa com o mesmo som de bola?",
+    "file": "audio-061.mp3"
   },
   {
     "text": "BOTA",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "bota",
     "file": "audio-010.mp3"
   },
   {
     "text": "MALA",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "mala",
     "file": "audio-011.mp3"
   },
   {
     "text": "SAPO",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "sapo",
     "file": "audio-012.mp3"
   },
   {
-    "text": "Qual palavra começa como PATO?",
+    "text": "Ouça: pato. Qual nome começa com o mesmo som de pato?",
     "context": "Detetive dos sons · instrução",
-    "file": "audio-013.mp3"
+    "synthesisText": "Ouça: pato. <break time=\"0.5s\" /> Qual nome começa com o mesmo som de pato?",
+    "file": "audio-062.mp3"
   },
   {
     "text": "PANELA",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "panela",
     "file": "audio-014.mp3"
   },
   {
-    "text": "Qual palavra começa como SAPO?",
+    "text": "Ouça: sapo. Qual nome começa com o mesmo som de sapo?",
     "context": "Detetive dos sons · instrução",
-    "file": "audio-015.mp3"
+    "synthesisText": "Ouça: sapo. <break time=\"0.5s\" /> Qual nome começa com o mesmo som de sapo?",
+    "file": "audio-063.mp3"
   },
   {
     "text": "SACOLA",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "sacola",
     "file": "audio-016.mp3"
   },
   {
     "text": "PATO",
     "context": "Detetive dos sons · opção",
+    "synthesisText": "pato",
     "file": "audio-017.mp3"
   },
   {
     "text": "Monte a palavra BOLA.",
     "context": "Oficina de palavras · instrução",
+    "synthesisText": "Monte a palavra bola.",
     "file": "audio-018.mp3"
   },
   {
     "text": "Monte a palavra GATO.",
     "context": "Oficina de palavras · instrução",
+    "synthesisText": "Monte a palavra gato.",
     "file": "audio-019.mp3"
   },
   {
     "text": "Monte a palavra MALA.",
     "context": "Oficina de palavras · instrução",
+    "synthesisText": "Monte a palavra mala.",
     "file": "audio-020.mp3"
   },
   {
     "text": "Monte a palavra SAPO.",
     "context": "Oficina de palavras · instrução",
+    "synthesisText": "Monte a palavra sapo.",
     "file": "audio-021.mp3"
   },
   {
     "text": "Qual figura combina com esta palavra?",
     "context": "Caminho da leitura · instrução",
+    "synthesisText": "Qual figura combina com esta palavra?",
     "file": "audio-022.mp3"
   },
   {
     "text": "A palavra é BOLA.",
     "context": "Caminho da leitura · dica",
+    "synthesisText": "A palavra é <break time=\"0.35s\" /> bola.",
     "file": "audio-023.mp3"
   },
   {
     "text": "Isso! A palavra é BOLA.",
     "context": "Caminho da leitura · retorno",
+    "synthesisText": "Isso! <break time=\"0.5s\" /> A palavra é <break time=\"0.35s\" /> bola.",
     "file": "audio-024.mp3"
   },
   {
     "text": "A palavra é GATO.",
     "context": "Caminho da leitura · dica",
+    "synthesisText": "A palavra é <break time=\"0.35s\" /> gato.",
     "file": "audio-025.mp3"
   },
   {
     "text": "Isso! A palavra é GATO.",
     "context": "Caminho da leitura · retorno",
+    "synthesisText": "Isso! <break time=\"0.5s\" /> A palavra é <break time=\"0.35s\" /> gato.",
     "file": "audio-026.mp3"
   },
   {
     "text": "A palavra é MALA.",
     "context": "Caminho da leitura · dica",
+    "synthesisText": "A palavra é <break time=\"0.35s\" /> mala.",
     "file": "audio-027.mp3"
   },
   {
     "text": "Isso! A palavra é MALA.",
     "context": "Caminho da leitura · retorno",
+    "synthesisText": "Isso! <break time=\"0.5s\" /> A palavra é <break time=\"0.35s\" /> mala.",
     "file": "audio-028.mp3"
   },
   {
     "text": "A palavra é SAPO.",
     "context": "Caminho da leitura · dica",
+    "synthesisText": "A palavra é <break time=\"0.35s\" /> sapo.",
     "file": "audio-029.mp3"
   },
   {
     "text": "Isso! A palavra é SAPO.",
     "context": "Caminho da leitura · retorno",
+    "synthesisText": "Isso! <break time=\"0.5s\" /> A palavra é <break time=\"0.35s\" /> sapo.",
     "file": "audio-030.mp3"
   },
   {
     "text": "Qual letra completa BOLA?",
     "context": "A letra escondida · instrução",
+    "synthesisText": "Qual letra completa bola?",
     "file": "audio-031.mp3"
   },
   {
     "text": "Qual letra completa GATO?",
     "context": "A letra escondida · instrução",
+    "synthesisText": "Qual letra completa gato?",
     "file": "audio-032.mp3"
   },
   {
     "text": "Qual letra completa MALA?",
     "context": "A letra escondida · instrução",
+    "synthesisText": "Qual letra completa mala?",
     "file": "audio-033.mp3"
   },
   {
     "text": "Qual letra completa SAPO?",
     "context": "A letra escondida · instrução",
+    "synthesisText": "Qual letra completa sapo?",
     "file": "audio-034.mp3"
   },
   {
     "text": "Lumi encontrou uma semente no jardim. Ele colocou a semente na terra. O que Lumi encontrou?",
     "context": "Lumi e a sementinha · instrução",
+    "synthesisText": "Lumi encontrou uma semente no jardim. <break time=\"0.5s\" /> Ele colocou a semente na terra. <break time=\"0.5s\" /> O que Lumi encontrou?",
     "file": "audio-035.mp3"
   },
   {
     "text": "Lumi levou água para o jardim. A terra ficou molhada. O que Lumi levou para o jardim?",
     "context": "Lumi e a sementinha · instrução",
+    "synthesisText": "Lumi levou água para o jardim. <break time=\"0.5s\" /> A terra ficou molhada. <break time=\"0.5s\" /> O que Lumi levou para o jardim?",
     "file": "audio-036.mp3"
   },
   {
     "text": "Depois de alguns dias, nasceu uma planta. Lumi chamou seus amigos para olhar. O que nasceu no jardim?",
     "context": "Lumi e a sementinha · instrução",
+    "synthesisText": "Depois de alguns dias, nasceu uma planta. <break time=\"0.5s\" /> Lumi chamou seus amigos para olhar. <break time=\"0.5s\" /> O que nasceu no jardim?",
     "file": "audio-037.mp3"
+  },
+  {
+    "text": "Encontre o gato.",
+    "context": "Amigos do jardim · instrução",
+    "synthesisText": "Encontre o gato.",
+    "file": "audio-050.mp3"
+  },
+  {
+    "text": "Encontre o pato.",
+    "context": "Amigos do jardim · instrução",
+    "synthesisText": "Encontre o pato.",
+    "file": "audio-051.mp3"
+  },
+  {
+    "text": "Encontre o sapo.",
+    "context": "Amigos do jardim · instrução",
+    "synthesisText": "Encontre o sapo.",
+    "file": "audio-052.mp3"
+  },
+  {
+    "text": "Encontre o macaco.",
+    "context": "Amigos do jardim · instrução",
+    "synthesisText": "Encontre o macaco.",
+    "file": "audio-053.mp3"
+  },
+  {
+    "text": "Qual palavra rima com BOLA?",
+    "context": "Palavras que rimam · instrução",
+    "synthesisText": "Qual palavra rima com bola?",
+    "file": "audio-054.mp3"
+  },
+  {
+    "text": "Qual palavra rima com GATO?",
+    "context": "Palavras que rimam · instrução",
+    "synthesisText": "Qual palavra rima com gato?",
+    "file": "audio-055.mp3"
+  },
+  {
+    "text": "Lumi passeava pelo jardim. Uma borboleta apareceu perto dele. Quem apareceu perto de Lumi?",
+    "context": "Lumi e a borboleta · instrução",
+    "synthesisText": "Lumi passeava pelo jardim. <break time=\"0.5s\" /> Uma borboleta apareceu perto dele. <break time=\"0.5s\" /> Quem apareceu perto de Lumi?",
+    "file": "audio-099.mp3"
+  },
+  {
+    "text": "A borboleta pousou em uma flor. Lumi ficou pertinho e olhou a visita. Onde a borboleta pousou?",
+    "context": "Lumi e a borboleta · instrução",
+    "synthesisText": "A borboleta pousou em uma flor. <break time=\"0.5s\" /> Lumi ficou pertinho e olhou a visita. <break time=\"0.5s\" /> Onde a borboleta pousou?",
+    "file": "audio-065.mp3"
+  },
+  {
+    "text": "Lumi chamou o pato para olhar. Os dois observaram a borboleta na flor. Quem Lumi chamou para olhar?",
+    "context": "Lumi e a borboleta · instrução",
+    "synthesisText": "Lumi chamou o pato para olhar. <break time=\"0.5s\" /> Os dois observaram a borboleta na flor. <break time=\"0.5s\" /> Quem Lumi chamou para olhar?",
+    "file": "audio-066.mp3"
+  },
+  {
+    "text": "Depois de um tempo, a borboleta voou para outra parte do jardim. Lumi e o pato continuaram olhando as flores. O que Lumi e o pato continuaram olhando?",
+    "context": "Lumi e a borboleta · instrução",
+    "synthesisText": "Depois de um tempo, a borboleta voou para outra parte do jardim. <break time=\"0.5s\" /> Lumi e o pato continuaram olhando as flores. <break time=\"0.5s\" /> O que Lumi e o pato continuaram olhando?",
+    "file": "audio-067.mp3"
+  },
+  {
+    "text": "Lumi preparou um piquenique no jardim. Ele colocou uma maçã dentro da cesta. Que fruta Lumi colocou na cesta?",
+    "context": "O piquenique dos amigos · instrução",
+    "synthesisText": "Lumi preparou um piquenique no jardim. <break time=\"0.5s\" /> Ele colocou uma maçã dentro da cesta. <break time=\"0.5s\" /> Que fruta Lumi colocou na cesta?",
+    "file": "audio-068.mp3"
+  },
+  {
+    "text": "O pato chegou para o encontro. Ele trouxe uma banana para o piquenique. O que o pato trouxe?",
+    "context": "O piquenique dos amigos · instrução",
+    "synthesisText": "O pato chegou para o encontro. <break time=\"0.5s\" /> Ele trouxe uma banana para o piquenique. <break time=\"0.5s\" /> O que o pato trouxe?",
+    "file": "audio-069.mp3"
+  },
+  {
+    "text": "O gato também chegou ao jardim. Ele trouxe água para os amigos beberem. O que o gato trouxe para beber?",
+    "context": "O piquenique dos amigos · instrução",
+    "synthesisText": "O gato também chegou ao jardim. <break time=\"0.5s\" /> Ele trouxe água para os amigos beberem. <break time=\"0.5s\" /> O que o gato trouxe para beber?",
+    "file": "audio-070.mp3"
+  },
+  {
+    "text": "Os amigos estenderam uma toalha no chão. Lumi tirou a maçã da cesta e colocou a fruta na toalha. De onde Lumi tirou a maçã?",
+    "context": "O piquenique dos amigos · instrução",
+    "synthesisText": "Os amigos estenderam uma toalha no chão. <break time=\"0.5s\" /> Lumi tirou a maçã da cesta e colocou a fruta na toalha. <break time=\"0.5s\" /> De onde Lumi tirou a maçã?",
+    "file": "audio-071.mp3"
+  },
+  {
+    "text": "Lumi estava no jardim quando viu uma nuvem no céu. Logo, algumas gotas de chuva começaram a cair. O que Lumi viu no céu?",
+    "context": "A visita da chuva · instrução",
+    "synthesisText": "Lumi estava no jardim quando viu uma nuvem no céu. <break time=\"0.5s\" /> Logo, algumas gotas de chuva começaram a cair. <break time=\"0.5s\" /> O que Lumi viu no céu?",
+    "file": "audio-072.mp3"
+  },
+  {
+    "text": "A chuva ficou mais forte. Lumi entrou em casa e observou o jardim pela janela. Onde Lumi entrou quando a chuva ficou forte?",
+    "context": "A visita da chuva · instrução",
+    "synthesisText": "A chuva ficou mais forte. <break time=\"0.5s\" /> Lumi entrou em casa e observou o jardim pela janela. <break time=\"0.5s\" /> Onde Lumi entrou quando a chuva ficou forte?",
+    "file": "audio-073.mp3"
+  },
+  {
+    "text": "Quando a chuva parou, Lumi calçou as botas. Ele saiu para olhar as poças de água. O que Lumi calçou para sair?",
+    "context": "A visita da chuva · instrução",
+    "synthesisText": "Quando a chuva parou, Lumi calçou as botas. <break time=\"0.5s\" /> Ele saiu para olhar as poças de água. <break time=\"0.5s\" /> O que Lumi calçou para sair?",
+    "file": "audio-074.mp3"
+  },
+  {
+    "text": "A terra do jardim ficou molhada. As plantas receberam a água que veio da chuva. O que molhou a terra do jardim?",
+    "context": "A visita da chuva · instrução",
+    "synthesisText": "A terra do jardim ficou molhada. <break time=\"0.5s\" /> As plantas receberam a água que veio da chuva. <break time=\"0.5s\" /> O que molhou a terra do jardim?",
+    "file": "audio-075.mp3"
+  },
+  {
+    "text": "Lumi queria brincar, mas não encontrou sua bola. Ele chamou o gato para ajudar a procurar. Quem Lumi chamou para ajudar?",
+    "context": "A bola que sumiu · instrução",
+    "synthesisText": "Lumi queria brincar, mas não encontrou sua bola. <break time=\"0.5s\" /> Ele chamou o gato para ajudar a procurar. <break time=\"0.5s\" /> Quem Lumi chamou para ajudar?",
+    "file": "audio-076.mp3"
+  },
+  {
+    "text": "O gato olhou perto da mala. Lumi procurou perto de uma bota. A bola ainda não apareceu. Perto de qual objeto o gato procurou?",
+    "context": "A bola que sumiu · instrução",
+    "synthesisText": "O gato olhou perto da mala. <break time=\"0.5s\" /> Lumi procurou perto de uma bota. <break time=\"0.5s\" /> A bola ainda não apareceu. <break time=\"0.5s\" /> Perto de qual objeto o gato procurou?",
+    "file": "audio-077.mp3"
+  },
+  {
+    "text": "O pato encontrou a bola ao lado de uma planta. Ele chamou Lumi para mostrar onde ela estava. A bola estava ao lado de quê?",
+    "context": "A bola que sumiu · instrução",
+    "synthesisText": "O pato encontrou a bola ao lado de uma planta. <break time=\"0.5s\" /> Ele chamou Lumi para mostrar onde ela estava. <break time=\"0.5s\" /> A bola estava ao lado de quê?",
+    "file": "audio-078.mp3"
+  },
+  {
+    "text": "Lumi agradeceu aos amigos pela ajuda. Depois, todos foram brincar com a bola no jardim. Com o que os amigos foram brincar?",
+    "context": "A bola que sumiu · instrução",
+    "synthesisText": "Lumi agradeceu aos amigos pela ajuda. <break time=\"0.5s\" /> Depois, todos foram brincar com a bola no jardim. <break time=\"0.5s\" /> Com o que os amigos foram brincar?",
+    "file": "audio-079.mp3"
+  },
+  {
+    "text": "Toque na cor vermelha.",
+    "context": "As cores do jardim · instrução",
+    "synthesisText": "Toque na cor vermelha.",
+    "file": "audio-080.mp3"
+  },
+  {
+    "text": "VERMELHO",
+    "context": "As cores do jardim · opção",
+    "synthesisText": "vermelho",
+    "file": "audio-081.mp3"
+  },
+  {
+    "text": "AMARELO",
+    "context": "As cores do jardim · opção",
+    "synthesisText": "amarelo",
+    "file": "audio-082.mp3"
+  },
+  {
+    "text": "AZUL",
+    "context": "As cores do jardim · opção",
+    "synthesisText": "azul",
+    "file": "audio-083.mp3"
+  },
+  {
+    "text": "Toque na cor azul.",
+    "context": "As cores do jardim · instrução",
+    "synthesisText": "Toque na cor azul.",
+    "file": "audio-084.mp3"
+  },
+  {
+    "text": "VERDE",
+    "context": "As cores do jardim · opção",
+    "synthesisText": "verde",
+    "file": "audio-085.mp3"
+  },
+  {
+    "text": "Toque na cor amarela.",
+    "context": "As cores do jardim · instrução",
+    "synthesisText": "Toque na cor amarela.",
+    "file": "audio-086.mp3"
+  },
+  {
+    "text": "Toque na cor verde.",
+    "context": "As cores do jardim · instrução",
+    "synthesisText": "Toque na cor verde.",
+    "file": "audio-087.mp3"
+  },
+  {
+    "text": "Encontre o círculo.",
+    "context": "Formas para descobrir · instrução",
+    "synthesisText": "Encontre o círculo.",
+    "file": "audio-088.mp3"
+  },
+  {
+    "text": "CÍRCULO",
+    "context": "Formas para descobrir · opção",
+    "synthesisText": "círculo",
+    "file": "audio-089.mp3"
+  },
+  {
+    "text": "TRIÂNGULO",
+    "context": "Formas para descobrir · opção",
+    "synthesisText": "triângulo",
+    "file": "audio-090.mp3"
+  },
+  {
+    "text": "QUADRADO",
+    "context": "Formas para descobrir · opção",
+    "synthesisText": "quadrado",
+    "file": "audio-091.mp3"
+  },
+  {
+    "text": "Encontre o quadrado.",
+    "context": "Formas para descobrir · instrução",
+    "synthesisText": "Encontre o quadrado.",
+    "file": "audio-092.mp3"
+  },
+  {
+    "text": "RETÂNGULO",
+    "context": "Formas para descobrir · opção",
+    "synthesisText": "retângulo",
+    "file": "audio-093.mp3"
+  },
+  {
+    "text": "Encontre o triângulo.",
+    "context": "Formas para descobrir · instrução",
+    "synthesisText": "Encontre o triângulo.",
+    "file": "audio-094.mp3"
+  },
+  {
+    "text": "Encontre o retângulo.",
+    "context": "Formas para descobrir · instrução",
+    "synthesisText": "Encontre o retângulo.",
+    "file": "audio-095.mp3"
+  },
+  {
+    "text": "Quem faz au au?",
+    "context": "Quem faz esse som? · instrução",
+    "synthesisText": "Quem faz au au?",
+    "file": "audio-100.mp3"
+  },
+  {
+    "text": "CACHORRO",
+    "context": "Quem faz esse som? · opção",
+    "synthesisText": "cachorro",
+    "file": "audio-101.mp3"
+  },
+  {
+    "text": "VACA",
+    "context": "Quem faz esse som? · opção",
+    "synthesisText": "vaca",
+    "file": "audio-102.mp3"
+  },
+  {
+    "text": "Quem faz miau?",
+    "context": "Quem faz esse som? · instrução",
+    "synthesisText": "Quem faz miau?",
+    "file": "audio-103.mp3"
+  },
+  {
+    "text": "Quem faz quá quá?",
+    "context": "Quem faz esse som? · instrução",
+    "synthesisText": "Quem faz quá quá?",
+    "file": "audio-104.mp3"
+  },
+  {
+    "text": "Quem faz muuu?",
+    "context": "Quem faz esse som? · instrução",
+    "synthesisText": "Quem faz muuu?",
+    "file": "audio-105.mp3"
+  },
+  {
+    "text": "Qual figura é diferente das outras?",
+    "context": "Qual é diferente? · instrução",
+    "synthesisText": "Qual figura é diferente das outras?",
+    "file": "audio-106.mp3"
+  },
+  {
+    "text": "Encontre a sombra do gato.",
+    "context": "Sombras do jardim · instrução",
+    "synthesisText": "Encontre a sombra do gato.",
+    "file": "audio-107.mp3"
+  },
+  {
+    "text": "Encontre a sombra da borboleta.",
+    "context": "Sombras do jardim · instrução",
+    "synthesisText": "Encontre a sombra da borboleta.",
+    "file": "audio-108.mp3"
+  },
+  {
+    "text": "Encontre a sombra do barco.",
+    "context": "Sombras do jardim · instrução",
+    "synthesisText": "Encontre a sombra do barco.",
+    "file": "audio-109.mp3"
+  },
+  {
+    "text": "Encontre a sombra da estrela.",
+    "context": "Sombras do jardim · instrução",
+    "synthesisText": "Encontre a sombra da estrela.",
+    "file": "audio-110.mp3"
+  },
+  {
+    "text": "Vire as cartas e encontre os pares iguais.",
+    "context": "Memória da Lumi · instrução",
+    "synthesisText": "Vire as cartas e encontre os pares iguais.",
+    "file": "audio-111.mp3"
+  },
+  {
+    "text": "SOL",
+    "context": "Memória da Lumi · nome da carta",
+    "synthesisText": "sol",
+    "file": "audio-112.mp3"
+  },
+  {
+    "text": "LUA",
+    "context": "Memória da Lumi · nome da carta",
+    "synthesisText": "lua",
+    "file": "audio-113.mp3"
+  },
+  {
+    "text": "ESTRELA",
+    "context": "Memória da Lumi · nome da carta",
+    "synthesisText": "estrela",
+    "file": "audio-114.mp3"
+  },
+  {
+    "text": "Toque no peixe grande.",
+    "context": "Grande e pequeno · instrução",
+    "synthesisText": "Toque no peixe grande.",
+    "file": "audio-115.mp3"
+  },
+  {
+    "text": "Toque na bola pequena.",
+    "context": "Grande e pequeno · instrução",
+    "synthesisText": "Toque na bola pequena.",
+    "file": "audio-116.mp3"
+  },
+  {
+    "text": "Toque no balão grande.",
+    "context": "Grande e pequeno · instrução",
+    "synthesisText": "Toque no balão grande.",
+    "file": "audio-117.mp3"
+  },
+  {
+    "text": "Toque na estrela pequena.",
+    "context": "Grande e pequeno · instrução",
+    "synthesisText": "Toque na estrela pequena.",
+    "file": "audio-118.mp3"
+  },
+  {
+    "text": "Conte as estrelas. Qual cartão tem a mesma quantidade?",
+    "context": "Vamos contar · instrução",
+    "synthesisText": "Conte as estrelas. <break time=\"0.5s\" /> Qual cartão tem a mesma quantidade?",
+    "file": "audio-119.mp3"
+  },
+  {
+    "text": "um",
+    "context": "Vamos contar · ouvir a quantidade",
+    "synthesisText": "um",
+    "file": "audio-120.mp3"
+  },
+  {
+    "text": "dois",
+    "context": "Vamos contar · ouvir a quantidade",
+    "synthesisText": "dois",
+    "file": "audio-121.mp3"
+  },
+  {
+    "text": "três",
+    "context": "Vamos contar · ouvir a quantidade",
+    "synthesisText": "três",
+    "file": "audio-122.mp3"
+  },
+  {
+    "text": "Conte as maçãs. Qual cartão tem a mesma quantidade?",
+    "context": "Vamos contar · instrução",
+    "synthesisText": "Conte as maçãs. <break time=\"0.5s\" /> Qual cartão tem a mesma quantidade?",
+    "file": "audio-123.mp3"
+  },
+  {
+    "text": "quatro",
+    "context": "Vamos contar · ouvir a quantidade",
+    "synthesisText": "quatro",
+    "file": "audio-124.mp3"
+  },
+  {
+    "text": "Conte os balões. Qual cartão tem a mesma quantidade?",
+    "context": "Vamos contar · instrução",
+    "synthesisText": "Conte os balões. <break time=\"0.5s\" /> Qual cartão tem a mesma quantidade?",
+    "file": "audio-125.mp3"
+  },
+  {
+    "text": "Conte os peixes. Qual cartão tem a mesma quantidade?",
+    "context": "Vamos contar · instrução",
+    "synthesisText": "Conte os peixes. <break time=\"0.5s\" /> Qual cartão tem a mesma quantidade?",
+    "file": "audio-126.mp3"
+  },
+  {
+    "text": "Hoje é o aniversário do gato. Lumi preparou um bolo bem bonito. O que Lumi preparou?",
+    "context": "O aniversário do gato · instrução",
+    "synthesisText": "Hoje é o aniversário do gato. <break time=\"0.5s\" /> Lumi preparou um bolo bem bonito. <break time=\"0.5s\" /> O que Lumi preparou?",
+    "file": "audio-127.mp3"
+  },
+  {
+    "text": "O pato chegou com um balão amarelo. O balão balançava com o vento. O que o pato trouxe?",
+    "context": "O aniversário do gato · instrução",
+    "synthesisText": "O pato chegou com um balão amarelo. <break time=\"0.5s\" /> O balão balançava com o vento. <break time=\"0.5s\" /> O que o pato trouxe?",
+    "file": "audio-128.mp3"
+  },
+  {
+    "text": "O sapo trouxe um presente. Dentro da caixa tinha uma bola nova. O que tinha dentro do presente?",
+    "context": "O aniversário do gato · instrução",
+    "synthesisText": "O sapo trouxe um presente. <break time=\"0.5s\" /> Dentro da caixa tinha uma bola nova. <break time=\"0.5s\" /> O que tinha dentro do presente?",
+    "file": "audio-129.mp3"
+  },
+  {
+    "text": "Todos cantaram parabéns. O gato soprou a vela e ficou muito feliz. Quem soprou a vela?",
+    "context": "O aniversário do gato · instrução",
+    "synthesisText": "Todos cantaram parabéns. <break time=\"0.5s\" /> O gato soprou a vela e ficou muito feliz. <break time=\"0.5s\" /> Quem soprou a vela?",
+    "file": "audio-130.mp3"
+  },
+  {
+    "text": "O céu ficou escuro. Lumi olhou pela janela e viu a lua. O que Lumi viu no céu?",
+    "context": "Hora de dormir · instrução",
+    "synthesisText": "O céu ficou escuro. <break time=\"0.5s\" /> Lumi olhou pela janela e viu a lua. <break time=\"0.5s\" /> O que Lumi viu no céu?",
+    "file": "audio-131.mp3"
+  },
+  {
+    "text": "Antes de dormir, Lumi tomou um copo de leite quentinho. O que Lumi tomou?",
+    "context": "Hora de dormir · instrução",
+    "synthesisText": "Antes de dormir, Lumi tomou um copo de leite quentinho. <break time=\"0.5s\" /> O que Lumi tomou?",
+    "file": "audio-132.mp3"
+  },
+  {
+    "text": "Lumi escolheu um livro de histórias. Ele olhou as figuras bem devagar. O que Lumi escolheu?",
+    "context": "Hora de dormir · instrução",
+    "synthesisText": "Lumi escolheu um livro de histórias. <break time=\"0.5s\" /> Ele olhou as figuras bem devagar. <break time=\"0.5s\" /> O que Lumi escolheu?",
+    "file": "audio-133.mp3"
+  },
+  {
+    "text": "Lumi deitou na cama, fechou os olhos e dormiu. Boa noite, Lumi! Onde Lumi dormiu?",
+    "context": "Hora de dormir · instrução",
+    "synthesisText": "Lumi deitou na cama, fechou os olhos e dormiu. <break time=\"0.5s\" /> Boa noite, Lumi! <break time=\"0.5s\" /> Onde Lumi dormiu?",
+    "file": "audio-134.mp3"
+  },
+  {
+    "text": "Encontre o rosto feliz.",
+    "context": "Como estou me sentindo? · instrução",
+    "synthesisText": "Encontre o rosto feliz.",
+    "file": "audio-143.mp3"
+  },
+  {
+    "text": "FELIZ",
+    "context": "Como estou me sentindo? · opção",
+    "synthesisText": "feliz",
+    "file": "audio-144.mp3"
+  },
+  {
+    "text": "BRAVO",
+    "context": "Como estou me sentindo? · opção",
+    "synthesisText": "bravo",
+    "file": "audio-145.mp3"
+  },
+  {
+    "text": "TRISTE",
+    "context": "Como estou me sentindo? · opção",
+    "synthesisText": "triste",
+    "file": "audio-146.mp3"
+  },
+  {
+    "text": "Encontre o rosto triste.",
+    "context": "Como estou me sentindo? · instrução",
+    "synthesisText": "Encontre o rosto triste.",
+    "file": "audio-147.mp3"
+  },
+  {
+    "text": "ASSUSTADO",
+    "context": "Como estou me sentindo? · opção",
+    "synthesisText": "assustado",
+    "file": "audio-148.mp3"
+  },
+  {
+    "text": "Encontre o rosto bravo.",
+    "context": "Como estou me sentindo? · instrução",
+    "synthesisText": "Encontre o rosto bravo.",
+    "file": "audio-149.mp3"
+  },
+  {
+    "text": "Encontre o rosto assustado.",
+    "context": "Como estou me sentindo? · instrução",
+    "synthesisText": "Encontre o rosto assustado.",
+    "file": "audio-150.mp3"
+  },
+  {
+    "text": "O gato estava triste. O vento levou o balão dele para longe. O que o vento levou?",
+    "context": "O gato ficou triste · instrução",
+    "synthesisText": "O gato estava triste. <break time=\"0.5s\" /> O vento levou o balão dele para longe. <break time=\"0.5s\" /> O que o vento levou?",
+    "file": "audio-151.mp3"
+  },
+  {
+    "text": "Lumi sentou perto do gato e deu um abraço bem apertado. Quem deu um abraço no gato?",
+    "context": "O gato ficou triste · instrução",
+    "synthesisText": "Lumi sentou perto do gato e deu um abraço bem apertado. <break time=\"0.5s\" /> Quem deu um abraço no gato?",
+    "file": "audio-152.mp3"
+  },
+  {
+    "text": "O pato trouxe uma flor amarela para alegrar o gato. O que o pato trouxe?",
+    "context": "O gato ficou triste · instrução",
+    "synthesisText": "O pato trouxe uma flor amarela para alegrar o gato. <break time=\"0.5s\" /> O que o pato trouxe?",
+    "file": "audio-153.mp3"
+  },
+  {
+    "text": "O gato sorriu. Com os amigos por perto, o gato ficou feliz de novo. Quem ficou feliz de novo?",
+    "context": "O gato ficou triste · instrução",
+    "synthesisText": "O gato sorriu. <break time=\"0.5s\" /> Com os amigos por perto, o gato ficou feliz de novo. <break time=\"0.5s\" /> Quem ficou feliz de novo?",
+    "file": "audio-154.mp3"
+  },
+  {
+    "text": "Lumi brincou no jardim e ficou sujinho. Ele entrou na banheira com água quentinha. Onde Lumi entrou?",
+    "context": "Hora do banho · instrução",
+    "synthesisText": "Lumi brincou no jardim e ficou sujinho. <break time=\"0.5s\" /> Ele entrou na banheira com água quentinha. <break time=\"0.5s\" /> Onde Lumi entrou?",
+    "file": "audio-155.mp3"
+  },
+  {
+    "text": "Lumi usou o sabonete e fez muita espuma. O que Lumi usou para fazer espuma?",
+    "context": "Hora do banho · instrução",
+    "synthesisText": "Lumi usou o sabonete e fez muita espuma. <break time=\"0.5s\" /> O que Lumi usou para fazer espuma?",
+    "file": "audio-156.mp3"
+  },
+  {
+    "text": "Um pato de borracha boiava na água da banheira. Quem boiava na água?",
+    "context": "Hora do banho · instrução",
+    "synthesisText": "Um pato de borracha boiava na água da banheira. <break time=\"0.5s\" /> Quem boiava na água?",
+    "file": "audio-157.mp3"
+  },
+  {
+    "text": "No fim, Lumi se enxugou com uma toalha macia. Com o que Lumi se enxugou?",
+    "context": "Hora do banho · instrução",
+    "synthesisText": "No fim, Lumi se enxugou com uma toalha macia. <break time=\"0.5s\" /> Com o que Lumi se enxugou?",
+    "file": "audio-158.mp3"
+  },
+  {
+    "text": "Lumi foi visitar a horta da coruja. Lá cresciam muitas cenouras. O que crescia na horta?",
+    "context": "A horta da coruja · instrução",
+    "synthesisText": "Lumi foi visitar a horta da coruja. <break time=\"0.5s\" /> Lá cresciam muitas cenouras. <break time=\"0.5s\" /> O que crescia na horta?",
+    "file": "audio-159.mp3"
+  },
+  {
+    "text": "A coruja deu um regador para Lumi molhar as plantas. O que a coruja deu para Lumi?",
+    "context": "A horta da coruja · instrução",
+    "synthesisText": "A coruja deu um regador para Lumi molhar as plantas. <break time=\"0.5s\" /> O que a coruja deu para Lumi?",
+    "file": "audio-160.mp3"
+  },
+  {
+    "text": "Na terra molhada, Lumi viu uma minhoca bem comprida. O que Lumi viu na terra?",
+    "context": "A horta da coruja · instrução",
+    "synthesisText": "Na terra molhada, Lumi viu uma minhoca bem comprida. <break time=\"0.5s\" /> O que Lumi viu na terra?",
+    "file": "audio-161.mp3"
+  },
+  {
+    "text": "Depois, os dois cozinharam as cenouras em uma panela. Onde eles cozinharam as cenouras?",
+    "context": "A horta da coruja · instrução",
+    "synthesisText": "Depois, os dois cozinharam as cenouras em uma panela. <break time=\"0.5s\" /> Onde eles cozinharam as cenouras?",
+    "file": "audio-162.mp3"
+  },
+  {
+    "text": "Lumi e o pato foram passear perto do lago. A água estava calminha. Quem foi passear com Lumi?",
+    "context": "Um passeio no lago · instrução",
+    "synthesisText": "Lumi e o pato foram passear perto do lago. <break time=\"0.5s\" /> A água estava calminha. <break time=\"0.5s\" /> Quem foi passear com Lumi?",
+    "file": "audio-135.mp3"
+  },
+  {
+    "text": "Dentro do lago, Lumi viu um peixe laranja nadando. O que Lumi viu nadando?",
+    "context": "Um passeio no lago · instrução",
+    "synthesisText": "Dentro do lago, Lumi viu um peixe laranja nadando. <break time=\"0.5s\" /> O que Lumi viu nadando?",
+    "file": "audio-136.mp3"
+  },
+  {
+    "text": "Um barco de folha passou pela água. O pato empurrou o barco com o bico. O que passou pela água?",
+    "context": "Um passeio no lago · instrução",
+    "synthesisText": "Um barco de folha passou pela água. <break time=\"0.5s\" /> O pato empurrou o barco com o bico. <break time=\"0.5s\" /> O que passou pela água?",
+    "file": "audio-137.mp3"
+  },
+  {
+    "text": "No fim do passeio, o sol foi embora. Lumi e o pato voltaram para casa. Para onde Lumi e o pato voltaram?",
+    "context": "Um passeio no lago · instrução",
+    "synthesisText": "No fim do passeio, o sol foi embora. <break time=\"0.5s\" /> Lumi e o pato voltaram para casa. <break time=\"0.5s\" /> Para onde Lumi e o pato voltaram?",
+    "file": "audio-138.mp3"
   },
   {
     "text": "Isso! Vamos para a próxima descoberta.",
     "context": "Retorno positivo",
+    "synthesisText": "Isso! <break time=\"0.5s\" /> Vamos para a próxima descoberta.",
     "file": "audio-038.mp3"
   },
   {
     "text": "Aventura concluída! Agora, que tal brincar um pouco fora da tela?",
     "context": "Encerramento",
+    "synthesisText": "Aventura concluída! <break time=\"0.5s\" /> Agora, que tal brincar um pouco fora da tela?",
     "file": "audio-039.mp3"
+  },
+  {
+    "text": "Vamos olhar de novo? Você pode ouvir a dica e tentar outra vez.",
+    "context": "Orientação após uma tentativa",
+    "synthesisText": "Vamos olhar de novo? <break time=\"0.5s\" /> Você pode ouvir a dica e tentar outra vez.",
+    "file": "audio-040.mp3"
+  },
+  {
+    "text": "Vamos ajustar as sílabas? Você pode desfazer e ouvir a palavra.",
+    "context": "Orientação para ajustar as sílabas",
+    "synthesisText": "Vamos ajustar as sílabas? <break time=\"0.5s\" /> Você pode desfazer e ouvir a palavra.",
+    "file": "audio-041.mp3"
+  },
+  {
+    "text": "bo",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "bo",
+    "file": "audio-042.mp3"
+  },
+  {
+    "text": "to",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "to",
+    "file": "audio-043.mp3"
+  },
+  {
+    "text": "la",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "la",
+    "file": "audio-044.mp3"
+  },
+  {
+    "text": "ma",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "ma",
+    "file": "audio-045.mp3"
+  },
+  {
+    "text": "ga",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "ga",
+    "file": "audio-046.mp3"
+  },
+  {
+    "text": "pa",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "pa",
+    "file": "audio-047.mp3"
+  },
+  {
+    "text": "po",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "po",
+    "file": "audio-048.mp3"
+  },
+  {
+    "text": "sa",
+    "context": "Sílabas · ouvir sem selecionar",
+    "synthesisText": "sa",
+    "file": "audio-049.mp3"
+  },
+  {
+    "text": "Vamos escutar o comecinho dos nomes. Bola. Bota. Os dois nomes começam de um jeito parecido. Ouça cada opção antes de escolher. Vamos experimentar?",
+    "context": "Detetive dos sons · exemplo sem registro",
+    "synthesisText": "Vamos escutar o comecinho dos nomes. <break time=\"0.5s\" /> Bola. <break time=\"0.5s\" /> Bota. <break time=\"0.5s\" /> Os dois nomes começam de um jeito parecido. Ouça cada opção antes de escolher. Vamos experimentar?",
+    "file": "audio-096.mp3"
+  },
+  {
+    "text": "Olá! Eu sou a Lumi. Que bom brincar com você e sua família! Vamos descobrir uma coisa de cada vez.",
+    "context": "Boas-vindas em família",
+    "synthesisText": "Olá! <break time=\"0.5s\" /> Eu sou a Lumi. <break time=\"0.5s\" /> Que bom brincar com você e sua família! <break time=\"0.5s\" /> Vamos descobrir uma coisa de cada vez.",
+    "file": "audio-056.mp3"
+  },
+  {
+    "text": "Conte para a Lumi: do que você mais gostou na história?",
+    "context": "Pedido para gravar o reconto",
+    "synthesisText": "Conte para a Lumi: do que você mais gostou na história?",
+    "file": "audio-163.mp3"
+  },
+  {
+    "text": "Vamos descobrir um objeto da nossa casa? Escolham um objeto juntos. Conversem sobre o nome dele e para que ele serve. Você pode falar, apontar ou pedir ajuda.",
+    "context": "Uma palavra, um objeto · convite fora da tela",
+    "synthesisText": "Vamos descobrir um objeto da nossa casa? <break time=\"0.5s\" /> Escolham um objeto juntos. <break time=\"0.5s\" /> Conversem sobre o nome dele e para que ele serve. <break time=\"0.5s\" /> Você pode falar, apontar ou pedir ajuda.",
+    "file": "audio-057.mp3"
+  },
+  {
+    "text": "Vamos inventar uma história? Escolham dois brinquedos. Um adulto começa a contar. Depois, você pode escolher o que acontece na história. Vamos imaginar juntos!",
+    "context": "Uma história de brinquedos · convite fora da tela",
+    "synthesisText": "Vamos inventar uma história? <break time=\"0.5s\" /> Escolham dois brinquedos. <break time=\"0.5s\" /> Um adulto começa a contar. <break time=\"0.5s\" /> Depois, você pode escolher o que acontece na história. Vamos imaginar juntos!",
+    "file": "audio-058.mp3"
+  },
+  {
+    "text": "Vamos brincar com as palavras? Gato e pato têm finais parecidos. Com um adulto, escolham uma cantiga. Depois, descubram palavras que combinam no final.",
+    "context": "Palavras que brincam juntas · convite fora da tela",
+    "synthesisText": "Vamos brincar com as palavras? <break time=\"0.5s\" /> Gato e pato têm finais parecidos. <break time=\"0.5s\" /> Com um adulto, escolham uma cantiga. <break time=\"0.5s\" /> Depois, descubram palavras que combinam no final.",
+    "file": "audio-059.mp3"
+  },
+  {
+    "text": "Vamos encontrar uma cor? Com um adulto, escolham alguns objetos da casa. Digam os nomes das cores. Depois, escolha um objeto da cor combinada. Você pode apontar ou pedir ajuda.",
+    "context": "Caça às cores · convite fora da tela",
+    "synthesisText": "Vamos encontrar uma cor? <break time=\"0.5s\" /> Com um adulto, escolham alguns objetos da casa. <break time=\"0.5s\" /> Digam os nomes das cores. <break time=\"0.5s\" /> Depois, escolha um objeto da cor combinada. Você pode apontar ou pedir ajuda.",
+    "file": "audio-097.mp3"
+  },
+  {
+    "text": "Vamos dançar? Quando a música parar, escute a cor. Depois, toque em alguma coisa dessa cor. Vamos de novo!",
+    "context": "Dança das cores · convite fora da tela",
+    "synthesisText": "Vamos dançar? <break time=\"0.5s\" /> Quando a música parar, escute a cor. <break time=\"0.5s\" /> Depois, toque em alguma coisa dessa cor. <break time=\"0.5s\" /> Vamos de novo!",
+    "file": "audio-139.mp3"
+  },
+  {
+    "text": "Vamos imitar os bichos? Pule como o sapo. Ande como o pato. Agora, você escolhe o próximo bicho!",
+    "context": "Imitar os bichos · convite fora da tela",
+    "synthesisText": "Vamos imitar os bichos? <break time=\"0.5s\" /> Pule como o sapo. <break time=\"0.5s\" /> Ande como o pato. <break time=\"0.5s\" /> Agora, você escolhe o próximo bicho!",
+    "file": "audio-140.mp3"
+  },
+  {
+    "text": "Vamos contar? Toque em um objeto de cada vez e conte junto com um adulto. Depois, contem de novo!",
+    "context": "Contar em casa · convite fora da tela",
+    "synthesisText": "Vamos contar? <break time=\"0.5s\" /> Toque em um objeto de cada vez e conte junto com um adulto. <break time=\"0.5s\" /> Depois, contem de novo!",
+    "file": "audio-141.mp3"
+  },
+  {
+    "text": "Qual parte da história você mais gostou? Faça um desenho. Depois, conte para um adulto o que você desenhou.",
+    "context": "Desenhar a história · convite fora da tela",
+    "synthesisText": "Qual parte da história você mais gostou? <break time=\"0.5s\" /> Faça um desenho. <break time=\"0.5s\" /> Depois, conte para um adulto o que você desenhou.",
+    "file": "audio-142.mp3"
+  },
+  {
+    "text": "Que som é esse? Um adulto vai mostrar dois objetos e fazer um som suave com cada um. Depois, você pode mostrar qual objeto fez o som. Vamos escutar juntos, sem pressa.",
+    "context": "Que som é esse? · convite fora da tela",
+    "synthesisText": "Que som é esse? <break time=\"0.5s\" /> Um adulto vai mostrar dois objetos e fazer um som suave com cada um. <break time=\"0.5s\" /> Depois, você pode mostrar qual objeto fez o som. <break time=\"0.5s\" /> Vamos escutar juntos, sem pressa.",
+    "file": "audio-098.mp3"
   }
 ]

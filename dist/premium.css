@@ -1,0 +1,270 @@
+/* Lumi 0.6.0 — camada visual "livro ilustrado".
+   Carregada por último: ajusta tipografia, cores, alvos de toque e a tela de jogo.
+   Sem fontes externas: usa fontes arredondadas do aparelho, por privacidade das crianças. */
+:root{
+ --paper:#f6f5ec;--surface:#fffdf6;--ink:#1d382e;--muted:#4c5c53;--green:#1f6f55;--green-dark:#145340;
+ --line:#dfe3d3;--mint:#dcecdc;--peach:#f9e0cb;--butter:#f8ecbb;--lilac:#e6e1f4;--sky:#d9eaf2;--rose:#f6dfdb;
+ --sun:#f6c445;--sun-deep:#d9a21f;--fox:#e3874d;
+ --shadow:0 1px 0 #ffffff inset,0 10px 30px -12px #1d382e33;--shadow-lift:0 18px 40px -16px #1d382e55;
+ --round:26px;
+ --font:ui-rounded,"SF Pro Rounded","Nunito","Varela Round","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;
+}
+body{font-family:var(--font);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+ radial-gradient(60rem 30rem at 110% -10%,#e4efdc 0,transparent 60%),
+ radial-gradient(40rem 26rem at -20% 110%,#f7ead2 0,transparent 60%),var(--paper)}
+h1,h2,h3{font-family:var(--font);font-weight:800;color:var(--ink)}
+p{color:var(--muted)}
+
+/* Rótulos pequenos: sem caixa-alta gritante, mais legíveis */
+.eyebrow,.game-eyebrow{text-transform:lowercase;letter-spacing:0!important;font-size:13px!important;font-weight:700;color:var(--green)}
+.eyebrow::first-letter,.game-eyebrow::first-letter{text-transform:uppercase}
+
+/* Botões: alvos generosos e foco bem visível */
+button,a,input,select{min-height:44px}
+.primary{background:var(--green);border:0;border-radius:999px;box-shadow:0 4px 0 var(--green-dark);padding:14px 24px;font-size:16px;font-weight:800;min-height:52px}
+.primary:hover{background:#1a6650}
+.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-dark)}
+.secondary{border-radius:999px;min-height:48px;font-weight:800}
+.quiet{min-height:48px;font-weight:800;color:var(--green-dark)}
+.text-button{min-height:44px;padding:10px 6px;font-weight:700;color:var(--green-dark)}
+.icon-button{width:48px;height:48px;min-width:48px;border-radius:50%}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:4px solid #f0a63a;outline-offset:3px;border-radius:14px}
+
+/* Barra superior e navegação */
+.family-topbar{min-height:84px;border-bottom:0}
+.family-topbar .brand-sub{letter-spacing:0;font-size:12px;color:var(--muted);font-weight:700}
+.profile-button{min-height:48px;border-radius:999px}
+.family-nav{border-bottom:0}
+.family-nav-item{color:var(--muted);font-size:14px;border-radius:999px}
+.family-nav-item.active{background:var(--ink);color:#fff}
+.family-nav-item.active svg{stroke:#fff}
+@media(max-width:760px){
+ .family-nav{background:#fffdf6f2;border-top:0;box-shadow:0 -10px 30px -18px #1d382e66;border-radius:24px 24px 0 0}
+ .family-nav-item{font-size:12px;min-height:58px;border-radius:18px}
+ .family-topbar{min-height:72px}
+}
+.family-app-footer{font-size:13px;color:var(--muted)}
+
+/* Cartões de atividade */
+.activity-card{border:0;border-radius:var(--round);background:var(--surface);box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease}
+.activity-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
+.activity-card h3{font-size:19px;letter-spacing:-.3px}
+.activity-card p{font-size:14px;color:var(--muted)}
+.activity-tag{font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px}
+.activity-age{display:inline-block;font-size:13px!important;font-weight:800;color:var(--ink);background:var(--mint);border-radius:999px;padding:3px 10px;margin-top:6px}
+.activity-meta{font-size:13px!important;color:var(--muted)}
+.activity-art{border-radius:20px}
+.family-story-shelf .activity-copy p,.family-story-shelf .activity-meta{font-size:13px!important}
+.family-story-shelf .activity-copy h3{font-size:17px!important}
+.library-group-title{font-size:22px;margin:28px 0 12px;letter-spacing:-.4px}
+.library-group-note{margin:-4px 0 14px;font-size:15px;max-width:60ch}
+.library-grid.is-later .activity-card{background:#fbf9f1}
+.tab{min-height:44px;border-radius:999px;font-weight:800}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Página inicial */
+.family-welcome h1{font-size:clamp(32px,7.5vw,52px);letter-spacing:-1.4px;line-height:1.02}
+.family-hero{border:0;border-radius:32px;background:linear-gradient(160deg,#e3efdd,#d4e7d6);box-shadow:var(--shadow)}
+.family-hero h2{letter-spacing:-1px}
+.family-hero .quiet{color:var(--green-dark)}
+.setup-callout{border:0;border-radius:28px;background:#fbefcf;box-shadow:var(--shadow)}
+.setup-callout p,.family-quick-summary p,.family-hero p{color:#3f4f46}
+.family-quick-summary p{font-size:14px}
+.panel,.family-metric{border:0;border-radius:var(--round);box-shadow:var(--shadow);background:var(--surface)}
+
+/* ——— Tela de jogo ——— */
+.is-playing .family-topbar{min-height:68px}
+.game-wrap{max-width:640px;padding-bottom:24px}
+.game-wrap.has-dock{padding-bottom:150px}
+.game-header{gap:10px}
+.game-header .quiet{min-height:48px;padding:10px 14px;border-radius:999px;background:var(--surface);box-shadow:var(--shadow)}
+.game-title{font-size:16px;font-weight:800}
+.game-header .text-muted{font-weight:800;color:var(--ink);font-size:15px}
+/* progresso como um caminho de folhas */
+.game-progress{display:flex;gap:6px;margin:14px 0 16px}
+.game-progress span{flex:1;height:12px;border-radius:999px;background:#e3e6d6;position:relative;overflow:hidden}
+.game-progress span.done{background:var(--green)}
+.game-progress span.current{background:linear-gradient(90deg,var(--sun) 0 55%,#efe2b0 55%)}
+.game-card{border:0;border-radius:32px;background:var(--surface);box-shadow:var(--shadow-lift);padding:26px 18px 22px}
+.game-card h1{font-size:clamp(23px,5.6vw,30px);letter-spacing:-.6px;line-height:1.15;margin-bottom:14px}
+.game-hint{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--green-dark);background:var(--mint);border-radius:999px;padding:6px 14px;margin-bottom:12px}
+.game-hint svg{width:18px;height:18px}
+.audio-prompt{min-height:52px;border-radius:999px;font-size:16px;font-weight:800;padding:10px 20px;background:var(--sky);color:#123c4f;border:0}
+.audio-prompt svg{stroke:#123c4f}
+.story-text{font-size:clamp(19px,4.6vw,23px);line-height:1.45;color:var(--ink);font-weight:700}
+.story-question{font-size:20px;font-weight:800;color:var(--ink)}
+
+/* Opções grandes, com espaço entre elas */
+.answer-options{gap:14px}
+.answer-button{border:3px solid transparent;background:#f3f5ea;border-radius:24px;min-height:140px;box-shadow:0 4px 0 #dfe4d0;color:var(--ink)}
+.answer-button:hover:not(:disabled){background:#eef4e6;border-color:#bcd2b4;transform:translateY(-2px)}
+.answer-button:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #dfe4d0}
+.answer-button.correct{background:#e2f2dd;border-color:var(--green);box-shadow:0 4px 0 #9fc79f}
+.answer-button.wrong{background:#fbf1de;border-color:#e6b65c;box-shadow:0 4px 0 #ecd29b}
+.answer-button:disabled:not(.correct){opacity:.55}
+.option-text{font-size:16px;font-weight:800;letter-spacing:.2px}
+.option-sound{min-height:48px;min-width:48px;font-size:14px;font-weight:800;color:#2f5d4b;border-radius:999px;padding:8px 14px}
+.option-sound svg{width:18px;height:18px}
+.story-options .answer-button{min-height:126px}
+.story-options .option-text{font-size:14px}
+.feedback{min-height:32px;margin-top:16px;font-size:16px;font-weight:700}
+.feedback .text-muted{color:var(--muted)}
+.game-footer{font-size:14px;color:var(--muted)}
+.syllable-button,.build-slot{min-height:64px;border-radius:20px}
+.syllable-sound{min-height:48px}
+
+/* Brincadeiras por imagem */
+.see-options.options-2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:460px}
+.see-button{min-height:150px}
+.see-art{display:grid;place-items:center;width:100%;height:110px}
+.see-art .word-picture{width:96px;height:96px;margin:0}
+.see-art.mode-big .word-picture{width:120px;height:120px}
+.see-art.mode-small .word-picture{width:48px;height:48px}
+.see-art.mode-shadow .word-picture{filter:brightness(0) saturate(0);opacity:.78}
+.high-contrast .see-art.mode-shadow .word-picture{opacity:1}
+.see-reference{display:grid;place-items:center;margin:4px auto 12px;padding:14px;width:min(100%,280px);border-radius:28px;background:#fdf6e3;box-shadow:inset 0 0 0 3px #f2e2b5}
+.see-reference .see-art{height:auto}
+.see-reference .see-art .word-picture{width:120px;height:120px}
+.count-group{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.count-group .word-picture{width:72px;height:72px;margin:0}
+.dot-card{display:grid;grid-template-columns:repeat(2,26px);gap:10px;justify-content:center;align-content:center;min-height:96px;position:relative;padding-bottom:26px}
+.dot-card .dot{width:26px;height:26px;border-radius:50%;background:var(--fox);box-shadow:inset 0 -3px 0 #c76c34}
+.dot-card .dot-number{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:20px;font-weight:800;color:var(--ink)}
+
+/* Memória */
+.memory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:380px;margin:8px auto 0}
+.memory-grid.cards-6{grid-template-columns:repeat(3,minmax(0,1fr));max-width:460px}
+.memory-card{position:relative;aspect-ratio:3/4;min-height:118px;border:0;border-radius:22px;padding:0;background:transparent;perspective:800px;cursor:pointer}
+.memory-card>span{position:absolute;inset:0;display:grid;place-items:center;border-radius:22px;backface-visibility:hidden;transition:transform .45s cubic-bezier(.3,.7,.3,1.2)}
+.memory-back{background:repeating-linear-gradient(135deg,#2a7a5f 0 12px,#246d55 12px 24px);box-shadow:0 5px 0 var(--green-dark)}
+.memory-back img{width:48%;filter:drop-shadow(0 3px 0 #0003)}
+.memory-front{background:#fffaf0;box-shadow:inset 0 0 0 3px #efe3c4,0 5px 0 #e2d6b4;transform:rotateY(180deg)}
+.memory-front .word-picture{width:70%;height:auto;margin:0}
+.memory-card.is-open .memory-back{transform:rotateY(-180deg)}
+.memory-card.is-open .memory-front{transform:rotateY(0)}
+.memory-card.is-matched .memory-front{box-shadow:inset 0 0 0 4px var(--green),0 5px 0 #9fc79f;background:#eef7ea}
+
+/* Celebração e o botão Continuar fixo no rodapé */
+.continue-dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;width:min(620px,calc(100% - 24px));display:flex;align-items:center;gap:12px;padding:12px 12px 12px 14px;border-radius:28px;background:#1d382e;color:#fff;box-shadow:0 20px 40px -14px #1d382e99;animation:dock-in .45s cubic-bezier(.2,.9,.3,1.25) both}
+.continue-lumi{width:52px;height:58px;flex:none;animation:lumi-hop .9s ease .2s 1 both}
+.continue-copy{display:flex;flex-direction:column;line-height:1.2;min-width:0;flex:1}
+.continue-copy strong{font-size:18px;color:#fff}
+.continue-copy span{font-size:15px;color:#d8e6dc}
+.continue-button{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:64px;padding:0 26px;border:0;border-radius:999px;background:var(--sun);color:#1d2a20;font:inherit;font-size:20px;font-weight:900;box-shadow:0 5px 0 var(--sun-deep);cursor:pointer;animation:nudge 1.8s ease-in-out 1.2s 3}
+.continue-button svg{width:24px;height:24px;stroke-width:2.6}
+.continue-button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--sun-deep)}
+.continue-button:focus-visible{outline:4px solid #fff;outline-offset:3px}
+.celebrating{animation:card-glow 1.2s ease 1}
+@keyframes dock-in{from{opacity:0;transform:translate(-50%,40px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lumi-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px) rotate(-6deg)}70%{transform:translateY(0) rotate(3deg)}}
+@keyframes nudge{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes card-glow{0%{box-shadow:0 0 0 0 #f6c44599,var(--shadow-lift)}100%{box-shadow:0 0 0 18px #f6c44500,var(--shadow-lift)}}
+@media(max-width:400px){.continue-dock{gap:8px;padding:10px}.continue-lumi{width:40px;height:45px}.continue-copy strong{font-size:16px}.continue-copy span{font-size:13px}.continue-button{padding:0 18px;font-size:18px;min-height:60px}}
+@media(max-width:760px){
+ .story-scene.story-panorama{margin-bottom:8px}
+ .story-scene.story-panorama .story-landscape{max-height:150px!important;width:100%;object-fit:cover;border-radius:20px}
+ .story-text{font-size:18px;line-height:1.4;margin:6px 0 10px}
+ .is-story .audio-prompt{min-height:48px;padding:8px 18px;font-size:15px}
+ .story-question{font-size:18px;margin:12px 0 10px}
+ .story-options .answer-button{min-height:112px;padding:10px 6px}
+ .game-card{padding:20px 14px 18px}
+ .game-hint{font-size:13px;padding:5px 12px;margin-bottom:8px}
+}
+
+/* Preferências: menos movimento, mais contraste, toques maiores */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.reduced-motion *,.reduced-motion *::before,.reduced-motion *::after{animation:none!important;transition:none!important}
+.high-contrast{--muted:#2c3a33;--line:#7a8a7f}
+.high-contrast .answer-button,.high-contrast .memory-front{border:3px solid #1d382e}
+.high-contrast .option-sound,.high-contrast .audio-prompt{outline:2px solid #1d382e}
+.large-targets .answer-button{min-height:170px}
+.large-targets .memory-card{min-height:140px}
+.large-targets .option-sound{min-height:56px;font-size:16px}
+.large-targets .answer-options{gap:20px}
+.option-text{word-break:keep-all;overflow-wrap:normal;hyphens:none}
+@media(max-width:400px){.option-text{font-size:13px;letter-spacing:0}.story-options .option-text{font-size:12px}}
+
+/* Legibilidade mínima no celular (13 px) e alvos de toque restantes */
+.family-child-chip,.family-quick-summary .quiet,.family-hero .quiet{min-height:48px}
+.completion-offline{color:#3a4a41}
+.completion-offline p,.completion-offline{color:#3a4a41}
+.session-note{color:#3a4a41;font-size:13px}
+@media(max-width:760px){
+ .tab,.profile-button,.profile-name,.family-child-chip,.pill,.quiet,.text-button,.game-header .quiet,.feedback .text-muted,.family-app-footer,.family-app-footer button,.completion-note,.family-section-heading .quiet{font-size:13px!important}
+ .session-note{font-size:13px}
+}
+
+/* Avisos não cobrem o botão Continuar */
+body:has(.continue-dock) .toast{bottom:calc(118px + env(safe-area-inset-bottom,0px))!important}
+.toast{font-size:14px}
+
+/* ——— 0.7: trilha do dia ——— */
+.trail-card{margin:18px 0;padding:22px 18px 14px;border-radius:32px;background:linear-gradient(165deg,#1f6f55,#1a5c47);color:#fff;box-shadow:var(--shadow-lift)}
+.trail-card h2{color:#fff;font-size:clamp(24px,6vw,30px);letter-spacing:-.6px}
+.trail-card p{color:#d6e8dd;font-size:15px;margin-top:4px}
+.trail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.trail-count{flex:none;min-width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:#1d2a20;font-weight:900;font-size:18px;box-shadow:0 4px 0 var(--sun-deep)}
+.trail-steps{list-style:none;margin:16px 0 4px;padding:0;display:grid;gap:10px;counter-reset:trail}
+.trail-step button{width:100%;display:flex;align-items:center;gap:12px;min-height:76px;padding:10px 14px 10px 10px;border:0;border-radius:22px;background:#fffdf6;color:var(--ink);font:inherit;text-align:left;cursor:pointer;box-shadow:0 4px 0 #0f3e30}
+.trail-step button:active{transform:translateY(3px);box-shadow:0 1px 0 #0f3e30}
+.trail-art{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;overflow:hidden;background:var(--mint)}
+.trail-art.peach{background:var(--peach)}.trail-art.butter{background:var(--butter)}.trail-art.lilac{background:var(--lilac)}.trail-art.sky{background:var(--sky)}.trail-art.rose{background:var(--rose)}
+.trail-art img{width:100%;height:100%;object-fit:cover}
+.trail-art svg{width:28px;height:28px}
+.trail-copy{flex:1;display:flex;flex-direction:column;min-width:0}
+.trail-copy small{font-size:13px;font-weight:800;color:var(--green)}
+.trail-copy strong{font-size:17px;line-height:1.2}
+.trail-status{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#eef3e7}
+.trail-status svg{width:20px;height:20px}
+.trail-step.is-done button{background:#e6f3e0}
+.trail-step.is-done .trail-status{background:var(--green);color:#fff}
+.trail-step.is-done .trail-status svg{stroke:#fff;stroke-width:3}
+.trail-step.is-done .trail-copy strong{text-decoration:line-through;text-decoration-color:#1f6f5577;text-decoration-thickness:2px}
+.trail-card .trail-listen{color:#fff;margin-top:6px}
+.trail-card .trail-listen svg{stroke:#fff}
+.trail-card.is-complete{background:linear-gradient(165deg,#2a7a5f,#1f6f55 60%,#3a7b4d)}
+
+/* ——— jardim ——— */
+.garden-card{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:center;margin:18px 0;padding:14px;border-radius:30px;background:var(--surface);box-shadow:var(--shadow)}
+.garden-preview{border:0;padding:0;background:none;border-radius:18px;cursor:pointer;min-height:auto}
+.garden-svg{display:block;width:100%;height:auto}
+.garden-copy h2{font-size:22px;letter-spacing:-.4px}
+.garden-copy p{font-size:15px;margin:4px 0 10px}
+@media(max-width:560px){.garden-card{grid-template-columns:1fr}}
+.garden-plant.is-new{animation:sprout .9s cubic-bezier(.3,1.4,.5,1) both;transform-box:fill-box;transform-origin:bottom center}
+@keyframes sprout{from{opacity:0;scale:.2}to{opacity:1;scale:1}}
+.garden-stage{border-radius:32px;overflow:hidden;box-shadow:var(--shadow-lift);margin:12px 0 16px}
+.garden-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.garden-stats article{background:var(--surface);border-radius:22px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.garden-stats strong{display:block;font-size:28px;color:var(--ink)}
+.garden-stats span{font-size:14px;color:var(--muted);font-weight:700}
+.garden-legend{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.garden-legend li{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--ink)}
+.garden-legend svg{width:26px;height:40px;flex:none}
+.theme-section{margin-top:8px}
+
+/* ——— conclusão: jardim e reconto ——— */
+.completion-garden{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;text-align:left;background:#eef6ea;border-radius:22px;padding:10px;margin:14px 0}
+.completion-garden strong{display:block;font-size:16px;color:var(--ink)}
+.completion-garden span{font-size:14px;color:#3a4a41}
+.retell-callout{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;text-align:left;background:#fdf3dc;border-radius:22px;padding:14px;margin:0 0 14px}
+.retell-callout strong{display:block;color:var(--ink)}
+.retell-callout span{font-size:14px;color:#4a4636}
+.retell-modal{text-align:center}
+.retell-modal>img{width:64px;height:72px;margin:0 auto 8px;display:block}
+.retell-actions{justify-content:center;margin-top:14px}
+.record-button{display:inline-flex;align-items:center;gap:8px;min-height:64px;padding:0 26px;border:0;border-radius:999px;background:#d9534f;color:#fff;font:inherit;font-size:18px;font-weight:900;box-shadow:0 5px 0 #a8322f;cursor:pointer}
+.record-button svg{stroke:#fff;width:22px;height:22px}
+.record-button.is-stop{background:var(--ink);box-shadow:0 5px 0 #0f241c}
+.recording-live{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0;font-size:17px;color:var(--ink)}
+.rec-dot{width:16px;height:16px;border-radius:50%;background:#d9534f;animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.retell-modal audio,.voices-list audio{width:100%;max-width:360px;margin:12px auto 0;display:block}
+.voices-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.voices-list li{display:grid;gap:6px;padding:12px;border-radius:18px;background:#f6f5ec}
+.voices-list small{display:block;color:var(--muted);font-size:13px}
+.voices-list audio{margin:0;max-width:none}
+.voices-list .quiet{justify-self:start}
+@media(max-width:560px){.completion-garden{grid-template-columns:1fr;text-align:center}.completion-garden .garden-svg{max-width:240px;margin:0 auto}}
+#main:focus{outline:none}

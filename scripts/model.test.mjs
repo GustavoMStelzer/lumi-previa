@@ -6,12 +6,13 @@ import {ACTIVITIES,makeQuestions,answerIsCorrect} from '../dist/content.js';
 import {createState,restoreState,recordSession,profileStats,nextActivity,addAssignment,sessionsCSV,csvCell} from '../dist/model.js';
 const sampleRounds=[{prompt:'Teste',answer:'A',attempts:1,helps:0},{prompt:'Teste 2',answer:'B',attempts:2,helps:1}];
 
-test('seis atividades com respostas válidas e distratores, sem alterar o conteúdo original',()=>{
- assert.equal(ACTIVITIES.length,6);
+test('vinte e sete atividades com respostas válidas e distratores, sem alterar o conteúdo original',()=>{
+ assert.equal(ACTIVITIES.length,27);
  for(const activity of ACTIVITIES){
   const questions=makeQuestions(activity.id,()=>.25);
-  assert.equal(questions.length,activity.id==='story'?3:4);
+  assert.equal(questions.length,activity.id==='story'?3:['rhymes','memory'].includes(activity.id)?2:4);
   for(const q of questions){
+   if(q.type==='memory'){assert.equal(q.cards.length,q.pairs.length*2);for(const key of q.pairs)assert.equal(q.cards.filter(c=>c.split('~')[0]===key).length,2);continue;}
    assert.ok(answerIsCorrect(q,q.correct));
    if(Array.isArray(q.correct)){
     assert.equal(q.correct.join(''),q.target);

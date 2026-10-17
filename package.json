@@ -1,1 +1,13 @@
-{"name":"lumi-leitura-demo","private":true,"type":"module","scripts":{"test":"node --test scripts/*.test.mjs","check":"node --check dist/app.js && node --check dist/content.js && node --check dist/model.js && node --check dist/narration.js && node --check dist/audio-manifest.js && node --check dist/audio-cache.js && node --check dist/sw.js && node --check scripts/elevenlabs-generate.mjs && node --check scripts/elevenlabs-http.mjs && node --check scripts/export-preview.mjs","audio:catalog":"node scripts/audio-catalog.mjs","audio:generate":"node scripts/elevenlabs-generate.mjs","audio:diagnose":"node scripts/elevenlabs-generate.mjs --diagnose","preview:export":"node scripts/export-preview.mjs"}}
+{
+  "name": "lumi-familia-previa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/content.js && node --check dist/model.js && node --check dist/narration.js && node --check dist/audio-manifest.js && node --check dist/audio-cache.js && node --check dist/sw.js && node --check scripts/elevenlabs-generate.mjs && node --check scripts/elevenlabs-http.mjs && node --check scripts/export-preview.mjs && node --check dist/teaching.js && node --check dist/studio.js && node --check dist/family-data.js && node --check dist/family-model.js && node --check dist/family-ui.js && node --check scripts/narration-settings.mjs && node --check dist/illustrations.js && node --check dist/recorder.js && node --check scripts/story-art.mjs",
+    "audio:catalog": "node scripts/audio-catalog.mjs",
+    "audio:generate": "node scripts/elevenlabs-generate.mjs",
+    "audio:diagnose": "node scripts/elevenlabs-generate.mjs --diagnose",
+    "preview:export": "node scripts/export-preview.mjs"
+  }
+}

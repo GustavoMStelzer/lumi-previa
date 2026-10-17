@@ -1,0 +1,29 @@
+// Ilustrações vetoriais da Lumi: mesmos objetos das opções, sem fontes externas.
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {WORD_ART} from '../dist/illustrations.js';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const fox=fs.readFileSync(path.join(root,'dist/assets/lumi.svg'),'utf8').replace(/^<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
+const object=(word,x,y,size)=>`<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 100 100" fill="none">${WORD_ART[word]}</svg>`;
+const lumi=(x=72,y=152,size=130)=>`<svg x="${x}" y="${y}" width="${size}" height="${size*200/180}" viewBox="0 0 180 200" fill="none">${fox}</svg>`;
+const tree=`<path d="M688 253V113" stroke="#B3936D" stroke-width="17" stroke-linecap="round"/><path d="m689 161-35-30m35 53 36-33" stroke="#B3936D" stroke-width="10" stroke-linecap="round"/><ellipse cx="684" cy="83" rx="73" ry="62" fill="#BBCDA4"/><ellipse cx="635" cy="117" rx="42" ry="39" fill="#C4D4AF"/><ellipse cx="728" cy="116" rx="40" ry="39" fill="#AFC69B"/>`;
+function scene(name,props,{sky='#EDF2E7',rain=false,sun=true,night=false}={}){
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" fill="none" role="img" aria-label="${name}"><rect width="800" height="340" rx="26" fill="${sky}"/>${sun?'<circle cx="108" cy="64" r="32" fill="#F2DA97"/>':''}<path d="M0 242q175-105 372-9 211-66 428 4v103H0Z" fill="#D7E3C7"/><path d="M0 292q250-70 419-12 238-69 381 6v54H0Z" fill="#CCDDB8"/>${tree}<g opacity=".5" stroke="#90AF7F" stroke-width="3" stroke-linecap="round"><path d="m34 305 3-11 5 9m170 10 4-13 5 10m388 1 3-13 6 11m122-5 4-10 4 10"/></g>${night?'<rect width="800" height="340" rx="26" fill="#22324A" opacity=".32"/>':''}${rain?'<g stroke="#A4C1CE" stroke-width="3" stroke-linecap="round"><path d="m220 110-5 12m39-25-5 12m58 14-5 12m214-20-5 12m54-20-5 12m40 13-5 12"/></g>':''}${props}</svg>`;
+}
+const scenes={
+ 'sementinha.svg':scene('Lumi e a sementinha',lumi()+object('SEMENTE',268,204,62)+object('ÁGUA',362,178,88)+object('PLANTA',510,173,124)+object('FLOR',720,243,53)),
+ 'borboleta.svg':scene('Lumi e a borboleta',lumi()+object('PATO',270,204,100)+object('BORBOLETA',382,80,98)+object('FLOR',506,181,116)+object('FLOR',720,232,65)),
+ 'piquenique.svg':scene('O piquenique dos amigos',`<path d="m238 239 316-10 70 89H207Z" fill="#F3E5C5" stroke="#E0CAA3" stroke-width="2"/><path d="m264 243-21 68m98-71 2 72m91-76 25 75m-236-32h374" stroke="#DDA58D" stroke-width="5" opacity=".4"/>`+lumi(55,141,130)+object('GATO',554,176,104)+object('PATO',664,224,92)+object('CESTA',259,189,93)+object('MAÇÃ',387,226,66)+object('BANANA',466,235,64)+object('ÁGUA',335,221,67),{sky:'#F5F0DF'}),
+ 'chuva.svg':scene('A visita da chuva',lumi(64,151,125)+object('CASA',278,128,198)+object('NUVEM',259,18,122)+object('NUVEM',441,31,100)+object('BOTA',199,242,67)+object('PLANTA',539,193,112)+'<ellipse cx="492" cy="306" rx="62" ry="10" fill="#A9CDD0"/>',{sky:'#E6EEF0',rain:true}),
+ 'aniversario.svg':scene('O aniversário do gato',`<path d="M150 40q120 40 250 0t250 0" stroke="#E7B9A5" stroke-width="3"/><path d="m180 50 10 22 12-18m70 6 10 22 12-18m90-12 10 22 12-18m90 0 10 22 12-18m90 6 10 22 12-18" fill="#F3C9B5" stroke="#E7B9A5" stroke-width="2"/><rect x="300" y="262" width="210" height="14" rx="7" fill="#C9A27C"/>`+lumi(58,150,125)+object('BOLO',352,182,104)+object('GATO',214,206,96)+object('PATO',540,214,90)+object('SAPO',624,238,80)+object('BALÃO',478,74,92)+object('BALÃO',560,60,76),{sky:'#F6EEE8'}),
+ 'noite.svg':scene('Hora de dormir',`<rect x="250" y="70" width="170" height="130" rx="14" fill="#F4E9C8" stroke="#A88C66" stroke-width="5"/><path d="M335 70v130M250 135h170" stroke="#A88C66" stroke-width="5"/>`+object('LUA',268,82,58)+object('ESTRELA',360,84,34)+object('ESTRELA',378,146,26)+object('ESTRELA',540,40,40)+object('ESTRELA',170,32,30)+lumi(64,150,125)+object('CAMA',440,190,150)+object('LIVRO',300,236,76)+object('LEITE',225,224,64),{sky:'#3C4E6E',sun:false,night:true}),
+ 'lago.svg':scene('Um passeio no lago','<ellipse cx="430" cy="276" rx="210" ry="44" fill="#A9CDD8"/><path d="M280 270q20-6 40 0m140 12q20-6 40 0m-110 20q20-6 40 0" stroke="#E7F3F6" stroke-width="4" stroke-linecap="round"/>'+lumi(56,150,125)+object('PATO',196,214,92)+object('PEIXE',410,262,58)+object('BARCO',500,200,96)+object('CASA',740,186,58)+object('SOL',430,26,72),{sky:'#E8F1EC',sun:false}),
+ 'triste.svg':scene('O gato ficou triste',lumi(64,150,125)+object('GATO',236,214,96)+object('PATO',352,222,86)+object('FLOR',450,214,84)+object('BALÃO',560,30,58),{sky:'#EAF0F2'}),
+ 'banho.svg':scene('Hora do banho',`<rect x="190" y="70" width="430" height="230" rx="30" fill="#EAF3F6" opacity=".9"/><path d="M190 250h430" stroke="#CFE0E8" stroke-width="4"/>`+lumi(64,150,125)+object('BANHEIRA',300,130,170)+object('PATO',420,150,58)+object('SABONETE',496,226,70)+object('TOALHA',560,120,92),{sky:'#F3EEE6'}),
+ 'horta.svg':scene('A horta da coruja','<path d="M210 262h360v40H210Z" fill="#B78E63" opacity=".55"/><path d="M230 270h320M230 290h320" stroke="#9C7550" stroke-width="3" opacity=".6"/>'+lumi(64,150,125)+object('CENOURA',236,206,66)+object('CENOURA',300,206,66)+object('CENOURA',364,206,66)+object('REGADOR',446,196,90)+object('MINHOCA',326,276,58)+object('PANELA',548,214,82),{sky:'#EEF2E3'}),
+ 'bola.svg':scene('A bola que sumiu',lumi(63,154,125)+object('GATO',242,215,94)+object('PATO',651,226,88)+object('MALA',355,219,76)+object('BOTA',216,145,64)+object('PLANTA',546,188,115))
+};
+const folder=path.join(root,'dist/assets/stories');fs.mkdirSync(folder,{recursive:true});
+for(const [name,svg] of Object.entries(scenes))fs.writeFileSync(path.join(folder,name),svg+'\n');
+console.log(`${Object.keys(scenes).length} ilustrações de histórias preparadas.`);

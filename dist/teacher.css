@@ -1,0 +1,47 @@
+.teacher-manager{margin-bottom:22px}
+.availability-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.activity-toggle{display:flex;align-items:center;gap:12px;min-height:85px;border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;background:#fafbf4}
+.activity-toggle:has(input:checked){border-color:#88b098;background:#eef6e9}
+.activity-toggle input{width:21px;height:21px;flex:none;accent-color:var(--green)}
+.activity-toggle strong,.teacher-activity-description strong{display:block;font-size:13px;color:var(--ink)}
+.activity-toggle small,.teacher-activity-description small{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
+.activity-toggle .icon-circle{width:35px;height:35px;flex:none}
+.manager-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:18px}
+.manager-footer p{font-size:12px;line-height:1.6}
+.template-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:23px 0}
+.template-card{text-align:left;border:1px solid var(--line);border-radius:19px;padding:23px 18px;display:flex;align-items:flex-start;flex-direction:column;gap:12px;min-height:180px;color:var(--ink);background:#f6f7eb;transition:transform .15s,border-color .15s}
+.template-card:hover{transform:translateY(-3px);border-color:#87ac90}
+.template-card.peach{background:var(--peach)}.template-card.butter{background:var(--butter)}.template-card.rose{background:var(--rose)}
+.template-card>.icon{width:33px;height:33px;color:var(--green)}
+.template-card strong{font-size:15px}.template-card span{font-size:12px;line-height:1.7;color:var(--muted)}
+.teacher-activity-row{display:flex;align-items:center;gap:14px;padding:17px 0;border-bottom:1px solid var(--line)}
+.teacher-activity-description{flex:1;min-width:0;overflow-wrap:anywhere}
+.pack-toolbar{display:flex;gap:18px;align-items:center;justify-content:space-between;margin-top:23px;padding:19px;border-radius:16px;background:#f3f5e9}
+.pack-toolbar strong{font-size:13px}.pack-toolbar p{font-size:11px;line-height:1.7;max-width:430px;margin-top:6px}
+.pack-toolbar .button-row{flex:none}.pack-toolbar button{font-size:12px;min-height:44px}
+.editor-intro{max-width:650px;line-height:1.8;margin:16px 0}
+.teacher-editor{max-width:980px}.editor-metadata{margin-bottom:28px}.editor-two-columns{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.compact-field{display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:700;margin-bottom:16px}
+.compact-field input,.compact-field select{font:inherit;font-weight:400;width:100%;padding:12px;border:1px solid #cbd6c3;border-radius:12px;background:#fff;color:var(--ink);min-height:47px}
+.question-editor{margin-bottom:18px}.question-editor .panel-heading{margin-bottom:22px}
+.form-field small{font-size:11px;color:var(--muted);font-weight:400;line-height:1.6}
+.editor-options{display:grid;gap:12px;margin:17px 0}.editor-option{display:grid;grid-template-columns:1.3fr 1fr;gap:15px;padding:14px 14px 0;border:1px solid var(--line);border-radius:15px;background:#f7f9ef}
+.editor-action-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;border:1px solid var(--line);background:var(--surface);padding:22px;border-radius:19px;margin-top:24px}
+.editor-action-bar strong{font-size:13px}.editor-action-bar p{font-size:11px;line-height:1.7;margin-top:7px;max-width:470px}.editor-action-bar .form-error{margin-top:10px;margin-bottom:0}
+.import-preview{padding-left:20px;line-height:1.9;font-size:12px;max-height:250px;overflow:auto;margin-bottom:23px}
+.preview-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #dbc997;background:var(--butter);padding:13px 17px;border-radius:13px;font-size:12px;margin-bottom:20px;color:#786540}
+.game-card{position:relative}.game-card.celebrating{border-color:#79af86;box-shadow:0 0 0 4px #dcecd7,var(--shadow)}
+.game-card.celebrating .correct,.game-card.celebrating .build-slots{animation:discovery-bounce .7s ease both}
+.discovery-sparkles{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
+.discovery-sparkles span{position:absolute;top:15%;left:calc(7% + var(--sparkle)*17%);color:#bca14d;animation:discovery-sparkle 1.25s ease-out both;animation-delay:calc(var(--sparkle)*40ms)}
+.discovery-sparkles span:nth-child(even){top:68%;color:#72a77c}.discovery-sparkles .icon{width:22px;height:22px}
+.syllable-card{display:flex;flex-direction:column;align-items:center;min-width:76px}.syllable-sound{margin-top:2px;min-height:42px;color:var(--green);font-size:12px}
+.build-slot{font-family:inherit}.build-slot.filled{cursor:pointer}.build-slot.filled:hover:not(:disabled){border-color:#639a73}.build-slot:disabled{opacity:1}
+.build-instruction{font-size:11px;line-height:1.7;max-width:450px;margin:15px auto 0;color:var(--muted)}
+.emoji-picture{font-size:60px;line-height:1;display:grid;place-items:center}.option-text{overflow-wrap:anywhere;line-height:1.4;max-width:100%}
+@keyframes discovery-bounce{0%,100%{transform:scale(1)}45%{transform:scale(1.045)}}
+@keyframes discovery-sparkle{0%{opacity:0;transform:translateY(12px) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translateY(-60px) rotate(24deg) scale(1.1)}}
+@media(max-width:1050px){.pack-toolbar{flex-direction:column;align-items:flex-start}.template-grid{gap:10px}.template-card{padding:18px 14px}.teacher-activity-row{flex-wrap:wrap}}
+@media(max-width:740px){.availability-grid,.editor-two-columns,.editor-option,.template-grid{grid-template-columns:1fr}.template-card{min-height:130px}.template-grid{gap:13px}.activity-toggle{padding:12px;gap:10px}.teacher-manager .panel-heading{align-items:flex-start;gap:13px;flex-wrap:wrap}.manager-footer,.preview-banner{flex-direction:column;align-items:flex-start}.manager-footer button{width:100%}.teacher-activity-row>.button-row{width:100%;justify-content:flex-end}.editor-action-bar{padding:18px}.editor-action-bar>.button-row{width:100%}.editor-action-bar button{flex:1;min-width:140px}.editor-option{gap:0}.pack-toolbar{padding:16px}.pack-toolbar>.button-row{width:100%}.pack-toolbar button{flex:1}.emoji-picture{font-size:48px}.preview-banner .text-button{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.game-card.celebrating .correct,.game-card.celebrating .build-slots{animation:none}.discovery-sparkles{display:none}}
+.reduced-motion .discovery-sparkles{display:none}
